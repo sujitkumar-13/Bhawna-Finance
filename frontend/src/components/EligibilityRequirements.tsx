@@ -129,9 +129,9 @@ export const EligibilityRequirements = () => {
                                 ))}
                             </div>
                             <div className="box-border caret-transparent text-center mt-8">
-                                <button className="text-white font-bold bg-[#111F3B] caret-transparent w-full px-0 py-4 rounded-lg hover:bg-slate-800 transition-colors duration-300 cursor-pointer">
+                                <a href="#EligibilityCalculator" className="text-white font-bold bg-[#111F3B] caret-transparent block w-full px-0 py-4 rounded-lg hover:bg-slate-800 transition-colors duration-300 cursor-pointer text-center">
                                     {category.buttonText}
-                                </button>
+                                </a>
                             </div>
                         </motion.div>
                     ))}

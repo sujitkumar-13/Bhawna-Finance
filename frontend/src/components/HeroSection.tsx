@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import homeImage from "../assets/Home1.jpg"
 
 export const HeroSection = () => {
@@ -27,12 +28,18 @@ export const HeroSection = () => {
                             individuals and businesses seeking financial solutions.
                         </p>
                         <div className="box-border caret-transparent gap-x-4 flex flex-col gap-y-4 mt-6 pt-6 md:flex-row">
-                            <button className="text-white text-lg font-medium items-center bg-orange-400 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.05)_0px_1px_2px_0px] caret-transparent flex h-14 justify-center leading-7 text-center text-nowrap w-full px-8 py-4 rounded-bl rounded-br rounded-tl rounded-tr md:w-auto hover:bg-orange-500 hover:shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
+                            <Link
+                                to="/apply-now"
+                                className="text-white text-lg font-medium items-center bg-orange-400 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.05)_0px_1px_2px_0px] caret-transparent flex h-14 justify-center leading-7 text-center text-nowrap w-full px-8 py-4 rounded-bl rounded-br rounded-tl rounded-tr md:w-auto hover:bg-orange-500 hover:shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]"
+                            >
                                 Apply for Loan
-                            </button>
-                            <button className="text-slate-900 text-lg font-medium items-center bg-white caret-transparent flex h-14 justify-center leading-7 text-center text-nowrap w-full border border-slate-900 px-8 py-4 rounded-bl rounded-br rounded-tl rounded-tr border-solid md:w-auto hover:text-white hover:bg-slate-900">
+                            </Link>
+                            <Link
+                                to="/track-application"
+                                className="text-slate-900 text-lg font-medium items-center bg-white caret-transparent flex h-14 justify-center leading-7 text-center text-nowrap w-full border border-slate-900 px-8 py-4 rounded-bl rounded-br rounded-tl rounded-tr border-solid md:w-auto hover:text-white hover:bg-slate-900"
+                            >
                                 Track Application Status
-                            </button>
+                            </Link>
                         </div>
                     </motion.div>
                     {/* HeroImage */}

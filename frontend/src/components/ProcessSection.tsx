@@ -1,5 +1,6 @@
 import { Check } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export const ProcessSection = () => {
     const eligibilityRequirements = [
@@ -152,9 +153,12 @@ export const ProcessSection = () => {
                     viewport={{ once: true }}
                     className="box-border caret-transparent text-center mt-16"
                 >
-                    <button className="text-white text-lg font-medium items-center bg-orange-400 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.05)_0px_1px_2px_0px] caret-transparent inline-flex h-14 justify-center leading-7 text-nowrap px-8 py-4 rounded-bl rounded-br rounded-tl rounded-tr hover:bg-orange-500 hover:shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
+                    <Link
+                        to="/eligibility"
+                        className="text-white text-lg font-medium items-center bg-orange-400 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.05)_0px_1px_2px_0px] caret-transparent inline-flex h-14 justify-center leading-7 text-nowrap px-8 py-4 rounded-bl rounded-br rounded-tl rounded-tr hover:bg-orange-500 hover:shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]"
+                    >
                         Check Your Eligibility
-                    </button>
+                    </Link>
                 </motion.div>
             </div>
         </section>

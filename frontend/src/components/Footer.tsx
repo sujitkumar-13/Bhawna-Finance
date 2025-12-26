@@ -35,7 +35,7 @@ export const Footer = () => {
                                 { to: "/loan-products", text: "Loan Products" },
                                 { to: "/eligibility", text: "Eligibility" },
                                 { to: "/contact", text: "Contact" },
-                                { to: "/", text: "Careers" },
+                                { to: "/apply-now", text: "Apply for Loan" },
                             ].map((link, index) => (
                                 <li
                                     key={index}
@@ -64,10 +64,8 @@ export const Footer = () => {
                         <div className="box-border caret-transparent list-none pl-0">
                             {[
                                 { to: "/", text: "FAQs" },
-                                { to: "/", text: "EMI Calculator" },
                                 { to: "/", text: "Terms & Conditions" },
                                 { to: "/", text: "Privacy Policy" },
-                                { to: "/", text: "Grievance Redressal" },
                             ].map((link, index) => (
                                 <li
                                     key={index}

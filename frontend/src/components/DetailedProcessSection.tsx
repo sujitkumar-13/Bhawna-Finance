@@ -2,6 +2,7 @@ import { SectionHeader } from "./SectionHeader";
 import { Monitor, CloudUpload, Search, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Counter } from "./Counter";
+import { Link } from "react-router-dom";
 
 export const DetailedProcessSection = () => {
     const steps = [
@@ -179,9 +180,9 @@ export const DetailedProcessSection = () => {
                                 loans through our platform. Start your application today and get
                                 approved quickly.
                             </p>
-                            <button className="font-bold bg-[#C59D4F] hover:bg-[#B38C3D] transition-all duration-300 transform hover:scale-105 caret-transparent text-nowrap px-8 md:px-10 py-3 md:py-4 rounded-xl shadow-lg cursor-pointer text-base md:text-lg">
+                            <Link to="/apply-now" className="font-bold bg-[#C59D4F] hover:bg-[#B38C3D] transition-all duration-300 transform hover:scale-105 caret-transparent text-nowrap px-8 md:px-10 py-3 md:py-4 rounded-xl shadow-lg cursor-pointer text-base md:text-lg">
                                 Start Application Now
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </motion.div>

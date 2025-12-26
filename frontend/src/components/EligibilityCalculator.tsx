@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export const EligibilityCalculator = () => {
     return (
-        <section className="bg-gray-50/50 box-border caret-transparent py-16 md:py-24">
+        <section className="bg-gray-50/50 box-border caret-transparent py-16 md:py-24" id="EligibilityCalculator">
             <div className="box-border caret-transparent max-w-screen-xl mx-auto px-6 md:px-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

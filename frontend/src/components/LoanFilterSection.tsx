@@ -2,6 +2,7 @@ import { useState } from "react";
 import { User, Briefcase, Home, Coins, Check, ChevronRight, FileText } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Counter } from "./Counter";
+import { Link } from "react-router-dom";
 
 const LOAN_DATA = {
     personal: {
@@ -227,9 +228,9 @@ export const LoanFilterSection = () => {
                                         transition={{ delay: 0.5 }}
                                         className="box-border caret-transparent mt-10"
                                     >
-                                        <button className="text-white cursor-pointer text-lg font-bold items-center bg-[#C59D4F] hover:bg-[#B38C3D] transition-all duration-300 shadow-md caret-transparent inline-flex h-14 justify-center leading-7 text-center text-nowrap w-full px-8 py-4 rounded-xl">
+                                        <Link to="/apply-now" className="text-white cursor-pointer text-lg font-bold items-center bg-[#C59D4F] hover:bg-[#B38C3D] transition-all duration-300 shadow-md caret-transparent inline-flex h-14 justify-center leading-7 text-center text-nowrap w-full px-8 py-4 rounded-xl">
                                             Apply for {activeData.title}
-                                        </button>
+                                        </Link>
                                     </motion.div>
                                 </div>
                             </div>

@@ -1,21 +1,70 @@
-import { SocialIcons } from "./SocialIcons";
+import { motion } from "framer-motion";
+import { ArrowRight, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const CTASection = () => {
     return (
-        <section className="bg-white box-border caret-transparent py-20">
-            <div className="box-border caret-transparent max-w-4xl text-center mx-auto px-8">
-                <h2 className="text-slate-900 text-4xl font-bold box-border caret-transparent leading-10 mb-6 font-inter md:text-5xl md:leading-[48px]">
-                    Ready to Apply for a Loan?
-                </h2>
-                <p className="text-gray-400 text-lg box-border caret-transparent leading-[29.25px] max-w-2xl mb-10 mx-auto">
-                    Get started with a simple application process and receive approval
-                    within 48 hours. Our team is ready to help you achieve your financial
-                    goals.
-                </p>
-                <button className="text-white text-lg font-medium items-center bg-orange-400 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.05)_0px_1px_2px_0px] caret-transparent inline-flex h-14 justify-center leading-7 text-nowrap mb-16 px-8 py-4 rounded-bl rounded-br rounded-tl rounded-tr hover:bg-orange-500 hover:shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
-                    Start Your Application
-                </button>
-                <SocialIcons />
+        <section className="relative  py-24 overflow-hidden">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-orange-100/50 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-slate-100 rounded-full blur-[120px]" />
+            </div>
+
+            <div className="relative z-10 max-w-7xl mx-auto px-8">
+                <div className="bg-slate-900 rounded-3xl p-12 md:p-20 text-center shadow-2xl overflow-hidden relative group">
+                    {/* Inner glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-orange-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        viewport={{ once: true }}
+                        className="flex justify-center mb-6"
+                    >
+                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-orange-400 text-sm font-medium border border-white/10 backdrop-blur-sm">
+                            <Sparkles className="w-4 h-4" />
+                            Fast-Track Your Dreams
+                        </span>
+                    </motion.div>
+
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.1 }}
+                        viewport={{ once: true }}
+                        className="text-white text-4xl md:text-6xl font-bold mb-8 leading-[1.1] font-inter tracking-tight"
+                    >
+                        Ready to Apply for a <span className="text-orange-400">Loan?</span>
+                    </motion.h2>
+
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        viewport={{ once: true }}
+                        className="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed"
+                    >
+                        Get started with a simple application process and receive approval
+                        within <span className="text-white font-semibold">48 hours</span>. Our team is ready to help you
+                        achieve your financial goals with ease.
+                    </motion.p>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
+                        viewport={{ once: true }}
+                    >
+                        <Link
+                            to="/apply-now"
+                            className="group relative inline-flex items-center justify-center gap-3 bg-orange-400 text-white text-lg font-semibold px-10 py-5 rounded-2xl hover:bg-orange-500 transition-all duration-300 shadow-xl shadow-orange-400/20 hover:shadow-orange-400/40 hover:-translate-y-1 active:scale-95"
+                        >
+                            Start Your Application
+                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    </motion.div>
+                </div>
             </div>
         </section>
     );
