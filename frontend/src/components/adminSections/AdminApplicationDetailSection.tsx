@@ -16,7 +16,7 @@ export const AdminApplicationDetailSection = () => {
 
     const fetchApplication = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/applications/${id}`);
+            const response = await axios.get(`https://bhawna-finance-dimq.vercel.app/api/applications/${id}`);
             setApplication(response.data.data);
         } catch (error) {
             console.error("Error fetching application details:", error);
@@ -32,7 +32,7 @@ export const AdminApplicationDetailSection = () => {
 
     const handleStatusUpdate = async (newStatus: string) => {
         try {
-            const response = await axios.put(`http://localhost:5000/api/applications/${id}/status`, { status: newStatus });
+            const response = await axios.put(`https://bhawna-finance-dimq.vercel.app/api/applications/${id}/status`, { status: newStatus });
             if (response.data.success) {
                 toast.success("Status updated successfully");
                 setApplication(response.data.data);
@@ -47,7 +47,7 @@ export const AdminApplicationDetailSection = () => {
         if (!noteText.trim()) return;
         setIsSubmittingNote(true);
         try {
-            const response = await axios.post(`http://localhost:5000/api/applications/${id}/notes`, {
+            const response = await axios.post(`https://bhawna-finance-dimq.vercel.app/api/applications/${id}/notes`, {
                 text: noteText,
                 role: noteCategory,
                 user: "Rajesh Kumar", // Hardcoded for demo, usually from Auth

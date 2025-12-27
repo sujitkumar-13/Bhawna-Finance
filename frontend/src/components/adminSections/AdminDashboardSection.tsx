@@ -11,7 +11,7 @@ export const AdminDashboardSection = () => {
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/applications/stats");
+                const response = await axios.get("https://bhawna-finance-dimq.vercel.app/api/applications/stats");
                 setData(response.data.data);
             } catch (error) {
                 console.error("Error fetching dashboard data:", error);

@@ -71,7 +71,7 @@ export const LoanApplicationFormSection = () => {
     const handleSubmit = async () => {
         setIsSubmitting(true);
         try {
-            const response = await axios.post("http://localhost:5000/api/applications", formData);
+            const response = await axios.post("https://bhawna-finance-dimq.vercel.app/api/applications", formData);
             if (response.data.success) {
                 toast.success("Application Submitted Successfully!");
                 setCurrentStep(1);
