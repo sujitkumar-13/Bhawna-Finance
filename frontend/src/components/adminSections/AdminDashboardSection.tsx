@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export const AdminDashboardSection = () => {
     const navigate = useNavigate();
@@ -17,11 +18,40 @@ export const AdminDashboardSection = () => {
         { id: "BF2024153", name: "Rahul Singh", initials: "RS", type: "Property Loan", amount: "₹25,00,000", status: "Under Review", time: "8 hours ago", statusClass: "text-yellow-800 bg-yellow-100" }
     ];
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.5 }
+        }
+    };
+
     return (
-        <main className="box-border caret-transparent p-4 md:p-6 bg-gray-50 min-h-screen">
+        <motion.main
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="box-border caret-transparent p-4 md:p-6 bg-gray-50 min-h-screen"
+        >
             <div className="box-border caret-transparent ">
                 {/* Dashboard Header */}
-                <div className="items-center box-border caret-transparent flex flex-wrap justify-between gap-y-4">
+                <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="items-center box-border caret-transparent flex flex-wrap justify-between gap-y-4"
+                >
                     <div className="box-border caret-transparent">
                         <h2 className="text-slate-900 text-xl md:text-2xl font-bold box-border caret-transparent leading-8 font-inter">
                             Dashboard Overview
@@ -31,21 +61,31 @@ export const AdminDashboardSection = () => {
                         </p>
                     </div>
                     <div className="items-center box-border caret-transparent flex gap-3">
-                        <select className="text-xs md:text-sm bg-zinc-100 caret-transparent block leading-[normal] border-gray-300 px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-orange-400">
+                        <select className="text-xs md:text-sm bg-zinc-100 caret-transparent block leading-[normal] border-gray-300 px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-orange-400 font-inter transition-all">
                             <option>Last 30 days</option>
                             <option>Last 7 days</option>
                             <option>Today</option>
                         </select>
-                        <button className="text-white text-xs md:text-sm bg-orange-400 caret-transparent block leading-5 text-center px-4 py-2 rounded-lg hover:bg-orange-500 transition-colors cursor-pointer font-inter">
+                        <button className="text-white text-xs md:text-sm bg-orange-400 caret-transparent block leading-5 text-center px-4 py-2 rounded-lg hover:bg-orange-500 transition-colors cursor-pointer font-inter shadow-sm">
                             Refresh Data
                         </button>
                     </div>
-                </div>
+                </motion.div>
 
-                {/* Stats Grid Inlined */}
-                <div className="box-border caret-transparent gap-x-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-6 mt-6">
+                {/* Stats Grid */}
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="box-border caret-transparent gap-x-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-6 mt-6"
+                >
                     {stats.map((stat, idx) => (
-                        <div key={idx} className="bg-white box-border caret-transparent border border-gray-200 p-6 rounded-lg border-solid hover:shadow-md transition-shadow duration-300">
+                        <motion.div
+                            key={idx}
+                            variants={itemVariants}
+                            whileHover={{ y: -5, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }}
+                            className="bg-white box-border caret-transparent border border-gray-200 p-6 rounded-lg border-solid transition-all duration-300"
+                        >
                             <div className="items-center box-border caret-transparent flex justify-between">
                                 <div className="box-border caret-transparent">
                                     <p className="text-gray-600 text-sm font-medium box-border caret-transparent leading-5 font-inter">
@@ -58,18 +98,23 @@ export const AdminDashboardSection = () => {
                                         {stat.change}
                                     </p>
                                 </div>
-                                <div className="items-center bg-slate-900 box-border caret-transparent flex h-12 justify-center w-12 rounded-lg shrink-0 ml-4">
+                                <div className="items-center bg-slate-900 box-border caret-transparent flex h-12 justify-center w-12 rounded-lg shrink-0 ml-4 shadow-inner">
                                     <i className={`text-white text-xl box-border caret-transparent block leading-none font-remixicon ${stat.icon}`}></i>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
 
                 {/* Content Grid */}
                 <div className="box-border caret-transparent grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-                    {/* Recent Applications Inlined */}
-                    <div className="bg-white box-border caret-transparent border border-gray-200 rounded-lg border-solid overflow-hidden lg:col-span-2">
+                    {/* Recent Applications */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        className="bg-white box-border caret-transparent border border-gray-200 rounded-lg border-solid overflow-hidden lg:col-span-2 shadow-sm"
+                    >
                         <div className="box-border caret-transparent border-gray-200 p-6 border-b border-solid">
                             <div className="items-center box-border caret-transparent flex justify-between">
                                 <h3 className="text-slate-900 text-lg font-semibold box-border caret-transparent leading-7 font-inter">
@@ -77,7 +122,7 @@ export const AdminDashboardSection = () => {
                                 </h3>
                                 <button
                                     onClick={() => navigate("/admin/applications")}
-                                    className="text-orange-400 text-sm font-medium bg-transparent caret-transparent block leading-5 text-center p-0 hover:text-orange-500 transition-colors cursor-pointer"
+                                    className="text-orange-400 text-sm font-medium bg-transparent caret-transparent block leading-5 text-center p-0 hover:text-orange-500 transition-colors cursor-pointer font-inter"
                                 >
                                     View All
                                 </button>
@@ -86,9 +131,13 @@ export const AdminDashboardSection = () => {
                         <div className="box-border caret-transparent p-6">
                             <div className="box-border caret-transparent space-y-4">
                                 {applications.map((app, idx) => (
-                                    <div key={idx} className="items-center box-border caret-transparent flex justify-between border border-gray-100 p-4 rounded-lg border-solid hover:bg-gray-50 transition-colors cursor-pointer">
+                                    <motion.div
+                                        key={idx}
+                                        whileHover={{ x: 5, backgroundColor: "#F9FAFB" }}
+                                        className="items-center box-border caret-transparent flex justify-between border border-gray-100 p-4 rounded-lg border-solid transition-colors cursor-pointer group"
+                                    >
                                         <div className="items-center box-border caret-transparent flex min-w-0">
-                                            <div className="items-center bg-slate-900 box-border caret-transparent flex h-10 w-10 shrink-0 justify-center rounded-full">
+                                            <div className="items-center bg-slate-900 box-border caret-transparent flex h-10 w-10 shrink-0 justify-center rounded-full group-hover:scale-110 transition-transform">
                                                 <span className="text-white text-sm font-medium box-border caret-transparent block leading-5">
                                                     {app.initials}
                                                 </span>
@@ -115,15 +164,20 @@ export const AdminDashboardSection = () => {
                                                 </span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </motion.div>
                                 ))}
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
 
-                    {/* Quick Actions Inlined */}
+                    {/* Quick Actions & System Alerts */}
                     <div className="box-border caret-transparent space-y-6 lg:col-span-1">
-                        <div className="bg-white box-border caret-transparent border border-gray-200 p-6 rounded-lg border-solid">
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.6, delay: 0.6 }}
+                            className="bg-white box-border caret-transparent border border-gray-200 p-6 rounded-lg border-solid shadow-sm"
+                        >
                             <h3 className="text-slate-900 text-lg font-semibold box-border caret-transparent leading-7 mb-4 font-inter">
                                 Quick Actions
                             </h3>
@@ -158,10 +212,14 @@ export const AdminDashboardSection = () => {
                                     <i className="ri-arrow-right-s-line text-gray-400 text-lg group-hover:translate-x-1 transition-transform"></i>
                                 </button>
                             </div>
-                        </div>
+                        </motion.div>
 
-                        {/* System Alerts Inlined */}
-                        <div className="bg-white box-border caret-transparent border border-gray-200 p-6 rounded-lg border-solid">
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.6, delay: 0.7 }}
+                            className="bg-white box-border caret-transparent border border-gray-200 p-6 rounded-lg border-solid shadow-sm"
+                        >
                             <h3 className="text-slate-900 text-lg font-semibold box-border caret-transparent leading-7 mb-4 font-inter">
                                 System Alerts
                             </h3>
@@ -193,10 +251,10 @@ export const AdminDashboardSection = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </div>
-        </main>
+        </motion.main>
     );
 };
