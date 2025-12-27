@@ -30,9 +30,9 @@ export const AdminDashboardSection = () => {
     };
 
     const stats = [
-        { title: "Total Applications", value: data?.summary?.totalApplications || 0, change: "Since last month", color: "text-green-600", icon: "ri-article-line" },
-        { title: "Pending Review", value: data?.summary?.pendingCount || 0, change: "Requires action", color: "text-gray-600", icon: "ri-time-line" },
-        { title: "Total Approved", value: data?.summary?.approvedCount || 0, change: "Successful loans", color: "text-green-600", icon: "ri-checkbox-line" },
+        { title: "Total Applications", value: data?.summary?.totalApplications || 0, change: "Since last month", color: "text-green-600", icon: "ri-article-line", path: "/admin/applications" },
+        { title: "Under Review", value: data?.summary?.pendingCount || 0, change: "Requires action", color: "text-gray-600", icon: "ri-time-line", path: "/admin/applications?status=Under Review" },
+        { title: "Total Approved", value: data?.summary?.approvedCount || 0, change: "Successful loans", color: "text-green-600", icon: "ri-checkbox-line", path: "/admin/applications?status=Approved" },
         { title: "Total Amount", value: formatCurrency(data?.summary?.totalAmount || 0), change: "Cumulative value", color: "text-green-600", icon: "ri-refund-2-line" }
     ];
 
@@ -127,7 +127,8 @@ export const AdminDashboardSection = () => {
                             key={idx}
                             variants={itemVariants}
                             whileHover={{ y: -5, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }}
-                            className="bg-white box-border caret-transparent border border-gray-200 p-6 rounded-lg border-solid transition-all duration-300"
+                            onClick={() => (stat as any).path && navigate((stat as any).path)}
+                            className={`bg-white box-border caret-transparent border border-gray-200 p-6 rounded-lg border-solid transition-all duration-300 ${(stat as any).path ? 'cursor-pointer' : ''}`}
                         >
                             <div className="items-center box-border caret-transparent flex justify-between">
                                 <div className="box-border caret-transparent">
@@ -236,7 +237,10 @@ export const AdminDashboardSection = () => {
                                 Quick Actions
                             </h3>
                             <div className="box-border caret-transparent space-y-3">
-                                <button className="items-center bg-transparent caret-transparent flex justify-between text-center w-full border border-gray-200 p-3 rounded-lg border-solid hover:bg-gray-50 transition-colors group cursor-pointer">
+                                <button
+                                    onClick={() => navigate("/admin/applications?status=Under Review")}
+                                    className="items-center bg-transparent caret-transparent flex justify-between text-center w-full border border-gray-200 p-3 rounded-lg border-solid hover:bg-gray-50 transition-colors group cursor-pointer"
+                                >
                                     <div className="items-center box-border caret-transparent flex">
                                         <i className="ri-eye-line text-orange-400 text-lg mr-3"></i>
                                         <span className="text-slate-900 text-sm font-medium box-border caret-transparent block leading-5 font-inter">
@@ -244,7 +248,7 @@ export const AdminDashboardSection = () => {
                                         </span>
                                     </div>
                                     <span className="text-red-800 text-xs bg-red-100 box-border caret-transparent block leading-4 px-2 py-1 rounded-full font-bold">
-                                        156
+                                        {data?.summary?.pendingCount || 0}
                                     </span>
                                 </button>
                                 <button className="items-center bg-transparent caret-transparent flex justify-between text-center w-full border border-gray-200 p-3 rounded-lg border-solid hover:bg-gray-50 transition-colors group cursor-pointer">
@@ -286,7 +290,7 @@ export const AdminDashboardSection = () => {
                                                 High Volume Alert
                                             </div>
                                             <div className="text-yellow-700 text-xs box-border caret-transparent leading-4 mt-1 font-inter">
-                                                156 applications pending review
+                                                {data?.summary?.pendingCount || 0} applications pending review
                                             </div>
                                         </div>
                                     </div>

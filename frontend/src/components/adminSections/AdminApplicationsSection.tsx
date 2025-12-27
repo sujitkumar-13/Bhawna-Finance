@@ -12,6 +12,9 @@ export const AdminApplicationsSection = () => {
     const [selectedRows, setSelectedRows] = useState<string[]>([]);
     const [applications, setApplications] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [loanTypeFilter, setLoanTypeFilter] = useState("All Types");
+    const [dateFilter, setDateFilter] = useState("All Time");
 
     const fetchApplications = async () => {
         try {
@@ -89,6 +92,37 @@ export const AdminApplicationsSection = () => {
         }
     };
 
+    const filteredApplications = applications.filter(app => {
+        const matchesStatus = statusFilter === "All Status" || app.status === statusFilter;
+        const matchesLoanType = loanTypeFilter === "All Types" || app.loanType === loanTypeFilter;
+
+        // Date match
+        let matchesDate = true;
+        if (dateFilter !== "All Time") {
+            const appDate = new Date(app.createdAt);
+            const now = new Date();
+            if (dateFilter === "Last 7 days") {
+                const sevenDaysAgo = new Date(now.setDate(now.getDate() - 7));
+                matchesDate = appDate >= sevenDaysAgo;
+            } else if (dateFilter === "Last 30 days") {
+                const thirtyDaysAgo = new Date(now.setDate(now.getDate() - 30));
+                matchesDate = appDate >= thirtyDaysAgo;
+            } else if (dateFilter === "Last 3 months") {
+                const threeMonthsAgo = new Date(now.setMonth(now.getMonth() - 3));
+                matchesDate = appDate >= threeMonthsAgo;
+            }
+        }
+
+        const searchLower = searchTerm.toLowerCase();
+        const matchesSearch = !searchTerm ||
+            app.firstName.toLowerCase().includes(searchLower) ||
+            app.lastName.toLowerCase().includes(searchLower) ||
+            app.phone.includes(searchTerm) ||
+            app._id.toLowerCase().includes(searchLower);
+
+        return matchesStatus && matchesLoanType && matchesDate && matchesSearch;
+    });
+
     const rowVariants = {
         hidden: { opacity: 0, x: -10 },
         visible: {
@@ -146,6 +180,8 @@ export const AdminApplicationsSection = () => {
                             <input
                                 placeholder="Name, ID, or phone..."
                                 type="text"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
                                 className="w-full border border-gray-300 pl-10 pr-4 py-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition-all font-inter"
                             />
                         </div>
@@ -179,12 +215,16 @@ export const AdminApplicationsSection = () => {
                     <div>
                         <label className="text-slate-700 text-sm font-semibold block mb-2 font-inter">Loan Type</label>
                         <div className="relative">
-                            <select className="w-full bg-slate-50 border border-gray-300 px-4 py-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none appearance-none cursor-pointer font-inter">
-                                <option>All Types</option>
-                                <option>Personal Loan</option>
-                                <option>Business Loan</option>
-                                <option>Property Loan</option>
-                                <option>Gold Loan</option>
+                            <select
+                                value={loanTypeFilter}
+                                onChange={(e) => setLoanTypeFilter(e.target.value)}
+                                className="w-full bg-slate-50 border border-gray-300 px-4 py-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none appearance-none cursor-pointer font-inter"
+                            >
+                                <option value="All Types">All Types</option>
+                                <option value="personal-loan">Personal Loan</option>
+                                <option value="business-loan">Business Loan</option>
+                                <option value="property-loan">Property Loan</option>
+                                <option value="gold-loan">Gold Loan</option>
                             </select>
                             <i className="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-lg"></i>
                         </div>
@@ -192,11 +232,15 @@ export const AdminApplicationsSection = () => {
                     <div>
                         <label className="text-slate-700 text-sm font-semibold block mb-2 font-inter">Date Range</label>
                         <div className="relative">
-                            <select className="w-full bg-slate-50 border border-gray-300 px-4 py-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none appearance-none cursor-pointer font-inter">
-                                <option>Last 7 days</option>
-                                <option>Last 30 days</option>
-                                <option>Last 3 months</option>
-                                <option>Custom Range</option>
+                            <select
+                                value={dateFilter}
+                                onChange={(e) => setDateFilter(e.target.value)}
+                                className="w-full bg-slate-50 border border-gray-300 px-4 py-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none appearance-none cursor-pointer font-inter"
+                            >
+                                <option value="All Time">All Time</option>
+                                <option value="Last 7 days">Last 7 days</option>
+                                <option value="Last 30 days">Last 30 days</option>
+                                <option value="Last 3 months">Last 3 months</option>
                             </select>
                             <i className="ri-calendar-line absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-lg"></i>
                         </div>
@@ -204,27 +248,24 @@ export const AdminApplicationsSection = () => {
                 </div>
             </motion.div>
 
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
+            <div
                 className="bg-white border border-gray-200 overflow-hidden rounded-xl shadow-sm"
             >
                 {/* TableHeader */}
-                <div className="box-border caret-transparent border-gray-200 p-6 border-b border-solid bg-white">
-                    <div className="items-center box-border caret-transparent flex justify-between">
-                        <h3 className="text-slate-900 text-lg font-semibold box-border caret-transparent leading-7 font-inter">
-                            Applications ({applications.filter(app => statusFilter === "All Status" || app.status === statusFilter).length})
+                <div className="border-gray-200 p-6 border-b border-solid bg-white">
+                    <div className="items-center flex justify-between">
+                        <h3 className="text-slate-900 text-lg font-semibold leading-7 font-inter">
+                            Applications ({filteredApplications.length})
                         </h3>
                     </div>
                 </div>
 
                 {/* TableWrapper */}
-                <div className="box-border caret-transparent overflow-x-auto">
-                    <table className="caret-transparent w-full border-collapse">
+                <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
                         <thead className="bg-gray-50 border-b border-gray-200">
-                            <tr className="box-border caret-transparent align-middle">
-                                <th className="font-bold box-border caret-transparent text-left align-middle px-6 py-4">
+                            <tr className="align-middle">
+                                <th className="font-bold text-left align-middle px-6 py-4">
                                     <input
                                         type="checkbox"
                                         className="accent-slate-900 h-4 w-4 cursor-pointer"
@@ -252,12 +293,7 @@ export const AdminApplicationsSection = () => {
                                 </th>
                             </tr>
                         </thead>
-                        <motion.tbody
-                            variants={containerVariants}
-                            initial="hidden"
-                            animate="visible"
-                            className="bg-white divide-y divide-gray-200"
-                        >
+                        <tbody className="bg-white divide-y divide-gray-200">
                             {loading ? (
                                 <tr>
                                     <td colSpan={7} className="px-6 py-20 text-center">
@@ -267,99 +303,90 @@ export const AdminApplicationsSection = () => {
                                         </div>
                                     </td>
                                 </tr>
-                            ) : applications.filter(app => statusFilter === "All Status" || app.status === statusFilter).length > 0 ? (
-                                applications
-                                    .filter(app => statusFilter === "All Status" || app.status === statusFilter)
-                                    .map((app) => (
-                                        <motion.tr
-                                            key={app._id}
-                                            variants={rowVariants}
-                                            className={`hover:bg-gray-50 transition-colors ${selectedRows.includes(app._id) ? 'bg-orange-50/20' : ''}`}
-                                        >
-                                            <td className="px-6 py-4 align-middle text-center">
-                                                <input
-                                                    type="checkbox"
-                                                    className="accent-orange-400 h-4 w-4 cursor-pointer"
-                                                    checked={selectedRows.includes(app._id)}
-                                                    onChange={() => toggleRow(app._id)}
-                                                />
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="text-slate-900 text-sm font-semibold font-inter uppercase">
-                                                    {app._id.slice(-8)}
+                            ) : filteredApplications.length > 0 ? (
+                                filteredApplications.map((app) => (
+                                    <tr
+                                        key={app._id}
+                                        className={`hover:bg-gray-50 transition-colors ${selectedRows.includes(app._id) ? 'bg-orange-50/20' : ''}`}
+                                    >
+                                        <td className="px-6 py-4 align-middle text-center">
+                                            <input
+                                                type="checkbox"
+                                                className="accent-orange-400 h-4 w-4 cursor-pointer"
+                                                checked={selectedRows.includes(app._id)}
+                                                onChange={() => toggleRow(app._id)}
+                                            />
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="text-slate-900 text-base font-bold font-inter uppercase">
+                                                {app._id.slice(-8)}
+                                            </div>
+                                            <div className="text-gray-500 text-xs mt-1 font-inter">{formatDate(app.createdAt)}</div>
+                                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider mt-2 font-inter bg-blue-100 text-blue-800`}>
+                                                Medium
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="text-slate-900 text-base font-bold font-inter">{app.firstName} {app.lastName}</div>
+                                            <div className="text-gray-500 text-sm mt-1 font-inter">{app.phone}</div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="text-slate-900 text-sm font-medium font-inter capitalize">{app.loanType}</div>
+                                            <div className="text-slate-900 text-base font-bold mt-1 font-inter">
+                                                ₹{new Intl.NumberFormat('en-IN').format(app.loanAmount)}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="inline-block">
+                                                <select
+                                                    value={app.status}
+                                                    onChange={(e) => handleStatusUpdate(app._id, e.target.value)}
+                                                    className={`text-xs font-semibold px-3 py-1.5 rounded-full border-none focus:ring-2 focus:ring-orange-400 font-inter cursor-pointer transition-all ${getStatusClass(app.status)}`}
+                                                >
+                                                    <option value="Under Review">Under Review</option>
+                                                    <option value="Document Pending">Document Pending</option>
+                                                    <option value="Approved">Approved</option>
+                                                    <option value="Rejected">Rejected</option>
+                                                    <option value="Disbursed">Disbursed</option>
+                                                </select>
+                                            </div>
+                                            <div className="text-gray-400 text-[10px] mt-2 block font-inter">
+                                                Last update: {formatDate(app.createdAt)}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center">
+                                                <div className="h-7 w-7 rounded-full bg-slate-100 flex items-center justify-center mr-2">
+                                                    <i className="ri-user-line text-slate-500 text-xs"></i>
                                                 </div>
-                                                <div className="text-gray-500 text-xs mt-1 font-inter">{formatDate(app.createdAt)}</div>
-                                                <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider mt-2 font-inter bg-blue-100 text-blue-800`}>
-                                                    Medium
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="text-slate-900 text-sm font-medium font-inter">{app.firstName} {app.lastName}</div>
-                                                <div className="text-gray-500 text-xs mt-1 font-inter">{app.phone}</div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="text-slate-900 text-sm font-medium font-inter capitalize">{app.loanType}</div>
-                                                <div className="text-slate-900 text-sm font-bold mt-1 font-inter">
-                                                    ₹{new Intl.NumberFormat('en-IN').format(app.loanAmount)}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="inline-block">
-                                                    <select
-                                                        value={app.status}
-                                                        onChange={(e) => handleStatusUpdate(app._id, e.target.value)}
-                                                        className={`text-xs font-semibold px-3 py-1.5 rounded-full border-none focus:ring-2 focus:ring-orange-400 font-inter cursor-pointer transition-all ${getStatusClass(app.status)}`}
-                                                    >
-                                                        <option value="Under Review">Under Review</option>
-                                                        <option value="Document Pending">Document Pending</option>
-                                                        <option value="Approved">Approved</option>
-                                                        <option value="Rejected">Rejected</option>
-                                                        <option value="Disbursed">Disbursed</option>
-                                                    </select>
-                                                </div>
-                                                <div className="text-gray-400 text-[10px] mt-2 block font-inter">
-                                                    Last update: {formatDate(app.createdAt)}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center">
-                                                    <div className="h-7 w-7 rounded-full bg-slate-100 flex items-center justify-center mr-2">
-                                                        <i className="ri-user-line text-slate-500 text-xs"></i>
-                                                    </div>
-                                                    <span className="text-slate-700 text-sm font-medium font-inter">{app.assignedTo}</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 text-right">
-                                                <div className="flex items-center justify-end space-x-2">
-                                                    <motion.button
-                                                        whileHover={{ scale: 1.1 }}
-                                                        whileTap={{ scale: 0.9 }}
-                                                        onClick={() => navigate(`/admin/applications/${app._id}`)}
-                                                        title="View Details"
-                                                        className="p-2 text-slate-600 hover:text-white hover:bg-slate-900 rounded-lg transition-all cursor-pointer shadow-sm"
-                                                    >
-                                                        <i className="ri-eye-line text-lg"></i>
-                                                    </motion.button>
-                                                    <motion.button
-                                                        whileHover={{ scale: 1.1 }}
-                                                        whileTap={{ scale: 0.9 }}
-                                                        title="Edit"
-                                                        className="p-2 text-orange-500 hover:text-white hover:bg-orange-500 rounded-lg transition-all shadow-sm"
-                                                    >
-                                                        <i className="ri-edit-line text-lg"></i>
-                                                    </motion.button>
-                                                    <motion.button
-                                                        whileHover={{ scale: 1.1 }}
-                                                        whileTap={{ scale: 0.9 }}
-                                                        title="Download Documents"
-                                                        className="p-2 text-blue-600 hover:text-white hover:bg-blue-600 rounded-lg transition-all shadow-sm"
-                                                    >
-                                                        <i className="ri-download-line text-lg"></i>
-                                                    </motion.button>
-                                                </div>
-                                            </td>
-                                        </motion.tr>
-                                    ))
+                                                <span className="text-slate-700 text-sm font-medium font-inter">{app.assignedTo}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 text-right">
+                                            <div className="flex items-center justify-end space-x-2">
+                                                <button
+                                                    onClick={() => navigate(`/admin/applications/${app._id}`)}
+                                                    title="View Details"
+                                                    className="p-2 text-slate-600 hover:text-white hover:bg-slate-900 rounded-lg transition-all cursor-pointer shadow-sm"
+                                                >
+                                                    <i className="ri-eye-line text-lg"></i>
+                                                </button>
+                                                <button
+                                                    title="Edit"
+                                                    className="p-2 text-orange-500 hover:text-white hover:bg-orange-500 rounded-lg transition-all shadow-sm"
+                                                >
+                                                    <i className="ri-edit-line text-lg"></i>
+                                                </button>
+                                                <button
+                                                    title="Download Documents"
+                                                    className="p-2 text-blue-600 hover:text-white hover:bg-blue-600 rounded-lg transition-all shadow-sm"
+                                                >
+                                                    <i className="ri-download-line text-lg"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
                             ) : (
                                 <tr>
                                     <td colSpan={7} className="px-6 py-20 text-center text-gray-500 font-inter">
@@ -367,7 +394,7 @@ export const AdminApplicationsSection = () => {
                                     </td>
                                 </tr>
                             )}
-                        </motion.tbody>
+                        </tbody>
                     </table>
                 </div>
 
@@ -375,7 +402,7 @@ export const AdminApplicationsSection = () => {
                 <div className="box-border caret-transparent border-gray-200 px-6 py-4 border-t border-solid bg-white">
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                         <div className="text-gray-700 text-sm box-border caret-transparent leading-5 font-inter">
-                            Showing 1 to {applications.length} of {applications.length} results
+                            Showing 1 to {filteredApplications.length} of {applications.length} results
                         </div>
                         <div className="items-center box-border caret-transparent flex space-x-2">
                             <button className="text-sm bg-transparent border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors font-inter">
@@ -390,7 +417,7 @@ export const AdminApplicationsSection = () => {
                         </div>
                     </div>
                 </div>
-            </motion.div>
+            </div>
         </motion.div>
     );
 };

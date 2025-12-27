@@ -10,6 +10,9 @@ export const AdminApplicationDetailSection = () => {
     const [activeTab, setActiveTab] = useState("Overview");
     const [application, setApplication] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [noteText, setNoteText] = useState("");
+    const [noteCategory, setNoteCategory] = useState("General");
+    const [isSubmittingNote, setIsSubmittingNote] = useState(false);
 
     const fetchApplication = async () => {
         try {
@@ -32,11 +35,34 @@ export const AdminApplicationDetailSection = () => {
             const response = await axios.put(`http://localhost:5000/api/applications/${id}/status`, { status: newStatus });
             if (response.data.success) {
                 toast.success("Status updated successfully");
-                setApplication({ ...application, status: newStatus });
+                setApplication(response.data.data);
             }
         } catch (error) {
             console.error("Error updating status:", error);
             toast.error("Failed to update status");
+        }
+    };
+
+    const handleAddNote = async () => {
+        if (!noteText.trim()) return;
+        setIsSubmittingNote(true);
+        try {
+            const response = await axios.post(`http://localhost:5000/api/applications/${id}/notes`, {
+                text: noteText,
+                role: noteCategory,
+                user: "Rajesh Kumar", // Hardcoded for demo, usually from Auth
+                color: noteCategory === "Risk Assessment" ? "bg-slate-700" : "bg-blue-600"
+            });
+            if (response.data.success) {
+                toast.success("Note added successfully");
+                setApplication(response.data.data);
+                setNoteText("");
+            }
+        } catch (error) {
+            console.error("Error adding note:", error);
+            toast.error("Failed to add note");
+        } finally {
+            setIsSubmittingNote(false);
         }
     };
 
@@ -66,25 +92,6 @@ export const AdminApplicationDetailSection = () => {
         { name: "Documents", icon: "ri-file-list-3-line" },
         { name: "Internal Notes", icon: "ri-chat-history-line" },
         { name: "Status History", icon: "ri-history-line" }
-    ];
-
-    const docs = [
-        { name: "PAN Card", category: "Identity", date: "15 Jan 2024, 04:05 pm", status: "Verified", statusClass: "bg-green-100 text-green-700" },
-        { name: "Aadhar Card", category: "Identity", date: "15 Jan 2024, 04:06 pm", status: "Verified", statusClass: "bg-green-100 text-green-700" },
-        { name: "Salary Slips (3 months)", category: "Income", date: "15 Jan 2024, 04:08 pm", status: "Uploaded", statusClass: "bg-blue-100 text-blue-700" },
-        { name: "Bank Statements (6 months)", category: "Financial", date: "15 Jan 2024, 04:10 pm", status: "Pending", statusClass: "bg-orange-100 text-orange-700" },
-        { name: "Form 16", category: "Income", date: "15 Jan 2024, 04:12 pm", status: "Uploaded", statusClass: "bg-blue-100 text-blue-700" },
-    ];
-
-    const notes = [
-        { user: "Rajesh Kumar", role: "Document Review", time: "15 Jan 2024, 07:50 pm", text: "Initial review completed. All identity documents are verified. Waiting for bank statements.", color: "bg-blue-600" },
-        { user: "Sunita Devi", role: "Risk Assessment", time: "15 Jan 2024, 05:45 pm", text: "Credit score: 750. Good payment history. Employment verification pending.", color: "bg-slate-700" },
-    ];
-
-    const history = [
-        { status: "Under Review", actor: "Rajesh Kumar", time: "15 Jan 2024, 04:30 pm", desc: "Assigned for review" },
-        { status: "Document Verification", actor: "System", time: "15 Jan 2024, 04:15 pm", desc: "Identity documents verified automatically" },
-        { status: "Submitted", actor: "System", time: "15 Jan 2024, 04:00 pm", desc: "Application received successfully" }
     ];
 
     const contentVariants = {
@@ -333,43 +340,44 @@ export const AdminApplicationDetailSection = () => {
                                     </motion.button>
                                 </div>
                                 <div className="space-y-3">
-                                    {docs.map((doc, idx) => (
-                                        <motion.div
-                                            key={idx}
-                                            whileHover={{ scale: 1.01, borderColor: "#FB923C" }}
-                                            className="flex flex-col lg:flex-row lg:items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-xl transition-all gap-4 group cursor-pointer"
-                                        >
-                                            <div className="flex items-center space-x-4">
-                                                <div className="h-10 w-10 bg-slate-900 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-orange-400 transition-colors">
-                                                    <i className="ri-file-text-line text-white text-xl"></i>
+                                    {(application?.documents && application.documents.length > 0) ? (
+                                        application.documents.map((doc: any, idx: number) => (
+                                            <motion.div
+                                                key={idx}
+                                                whileHover={{ scale: 1.01, borderColor: "#FB923C" }}
+                                                className="flex flex-col lg:flex-row lg:items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-xl transition-all gap-4 group cursor-pointer"
+                                            >
+                                                <div className="flex items-center space-x-4">
+                                                    <div className="h-10 w-10 bg-slate-900 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-orange-400 transition-colors">
+                                                        <i className="ri-file-text-line text-white text-xl"></i>
+                                                    </div>
+                                                    <div className="min-w-0">
+                                                        <h4 className="text-slate-900 font-semibold text-sm truncate font-inter">{doc.name}</h4>
+                                                        <p className="text-gray-500 text-xs mt-1 truncate font-inter">
+                                                            {doc.category} • Uploaded {formatDate(doc.date)}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                                <div className="min-w-0">
-                                                    <h4 className="text-slate-900 font-semibold text-sm truncate font-inter">{doc.name}</h4>
-                                                    <p className="text-gray-500 text-xs mt-1 truncate font-inter">
-                                                        {doc.category} • Uploaded {doc.date}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center justify-between lg:justify-end lg:space-x-6 gap-3">
-                                                <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shrink-0 font-inter ${doc.statusClass}`}>
-                                                    {doc.status}
-                                                </span>
-                                                <div className="flex items-center space-x-2">
-                                                    <button title="View" className="p-2 text-gray-500 hover:text-slate-900 hover:bg-white rounded-md transition-all shadow-sm border border-transparent hover:border-gray-200">
-                                                        <i className="ri-eye-line text-lg"></i>
-                                                    </button>
-                                                    <button title="Download" className="p-2 text-gray-500 hover:text-slate-900 hover:bg-white rounded-md transition-all shadow-sm border border-transparent hover:border-gray-200">
-                                                        <i className="ri-download-line text-lg"></i>
-                                                    </button>
-                                                    {doc.status !== "Verified" && (
-                                                        <button title="Verify" className="p-2 text-gray-400 hover:text-green-600 hover:bg-white rounded-md transition-all shadow-sm border border-transparent hover:border-gray-200">
-                                                            <i className="ri-checkbox-circle-line text-lg"></i>
+                                                <div className="flex items-center justify-between lg:justify-end lg:space-x-6 gap-3">
+                                                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shrink-0 font-inter ${doc.status === 'Verified' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
+                                                        {doc.status}
+                                                    </span>
+                                                    <div className="flex items-center space-x-2">
+                                                        <button title="View" className="p-2 text-gray-500 hover:text-slate-900 hover:bg-white rounded-md transition-all shadow-sm border border-transparent hover:border-gray-200">
+                                                            <i className="ri-eye-line text-lg"></i>
                                                         </button>
-                                                    )}
+                                                        <button title="Download" className="p-2 text-gray-500 hover:text-slate-900 hover:bg-white rounded-md transition-all shadow-sm border border-transparent hover:border-gray-200">
+                                                            <i className="ri-download-line text-lg"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </motion.div>
-                                    ))}
+                                            </motion.div>
+                                        ))
+                                    ) : (
+                                        <div className="text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-300 text-gray-500 font-inter">
+                                            No documents uploaded yet.
+                                        </div>
+                                    )}
                                 </div>
                             </motion.div>
                         )}
@@ -386,53 +394,67 @@ export const AdminApplicationDetailSection = () => {
                                     <h3 className="text-slate-900 text-lg font-semibold font-inter">Add Internal Note</h3>
                                     <div className="space-y-3">
                                         <div className="w-full md:w-48">
-                                            <select className="w-full text-sm bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-orange-400 transition-all font-inter cursor-pointer">
-                                                <option>General</option>
-                                                <option>Document Review</option>
-                                                <option>Risk Assessment</option>
-                                                <option>Financial Check</option>
+                                            <select
+                                                value={noteCategory}
+                                                onChange={(e) => setNoteCategory(e.target.value)}
+                                                className="w-full text-sm bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-orange-400 transition-all font-inter cursor-pointer"
+                                            >
+                                                <option value="General">General</option>
+                                                <option value="Document Review">Document Review</option>
+                                                <option value="Risk Assessment">Risk Assessment</option>
+                                                <option value="Financial Check">Financial Check</option>
                                             </select>
                                         </div>
                                         <textarea
+                                            value={noteText}
+                                            onChange={(e) => setNoteText(e.target.value)}
                                             className="w-full h-32 text-sm bg-gray-50 border border-gray-300 p-4 rounded-xl outline-none focus:ring-2 focus:ring-orange-400 transition-all resize-none font-inter"
                                             placeholder="Add your note here..."
                                         ></textarea>
                                         <motion.button
                                             whileHover={{ y: -2 }}
                                             whileTap={{ y: 0 }}
-                                            className="text-white text-sm font-semibold bg-orange-400 px-6 py-2.5 rounded-lg hover:bg-orange-500 transition-colors shadow-sm shadow-orange-100 font-inter"
+                                            onClick={handleAddNote}
+                                            disabled={isSubmittingNote || !noteText.trim()}
+                                            className="text-white text-sm font-semibold bg-orange-400 px-6 py-2.5 rounded-lg hover:bg-orange-500 transition-colors shadow-sm shadow-orange-100 font-inter disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
-                                            Add Note
+                                            {isSubmittingNote ? "Adding..." : "Add Note"}
                                         </motion.button>
                                     </div>
                                 </div>
 
                                 <div className="space-y-6 pt-6 border-t border-gray-100">
-                                    {notes.map((note, idx) => (
-                                        <motion.div
-                                            key={idx}
-                                            whileHover={{ scale: 1.01 }}
-                                            className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-all"
-                                        >
-                                            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
-                                                <div className="flex items-center space-x-3">
-                                                    <div className={`h-8 w-8 ${note.color} rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0`}>
-                                                        {note.user.split(' ').map(n => n[0]).join('')}
+                                    {(application?.notes && application.notes.length > 0) ? (
+                                        application.notes.slice().reverse().map((note: any, idx: number) => (
+                                            <motion.div
+                                                key={idx}
+                                                whileHover={{ scale: 1.01 }}
+                                                className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-all"
+                                            >
+                                                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className={`h-8 w-8 ${note.color} rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0`}>
+                                                            {note.user.split(' ').map((n: string) => n[0]).join('')}
+                                                        </div>
+                                                        <div className="min-w-0">
+                                                            <div className="text-sm font-semibold text-slate-900 truncate font-inter">{note.user}</div>
+                                                            <div className="text-gray-500 text-[11px] mt-0.5 font-inter">{formatDate(note.date)}</div>
+                                                        </div>
                                                     </div>
-                                                    <div className="min-w-0">
-                                                        <div className="text-sm font-semibold text-slate-900 truncate font-inter">{note.user}</div>
-                                                        <div className="text-gray-500 text-[11px] mt-0.5 font-inter">{note.time}</div>
-                                                    </div>
+                                                    <span className="text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 px-2 py-1 rounded-md self-start sm:self-center font-inter">
+                                                        {note.role}
+                                                    </span>
                                                 </div>
-                                                <span className="text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 px-2 py-1 rounded-md self-start sm:self-center font-inter">
-                                                    {note.role}
-                                                </span>
-                                            </div>
-                                            <p className="text-slate-700 text-sm leading-relaxed font-inter">
-                                                {note.text}
-                                            </p>
-                                        </motion.div>
-                                    ))}
+                                                <p className="text-slate-700 text-sm leading-relaxed font-inter">
+                                                    {note.text}
+                                                </p>
+                                            </motion.div>
+                                        ))
+                                    ) : (
+                                        <div className="text-center py-10 text-gray-500 font-inter">
+                                            No notes added yet.
+                                        </div>
+                                    )}
                                 </div>
                             </motion.div>
                         )}
@@ -448,31 +470,37 @@ export const AdminApplicationDetailSection = () => {
                                 <h3 className="text-slate-900 text-lg font-semibold font-inter">Status Timeline</h3>
                                 <div className="relative pl-6 space-y-10">
                                     <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-gray-200"></div>
-                                    {history.map((item, idx) => (
-                                        <motion.div
-                                            key={idx}
-                                            initial={{ opacity: 0, x: -10 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            transition={{ delay: idx * 0.1 }}
-                                            className="relative"
-                                        >
-                                            <div className="absolute -left-[22px] top-1.5 h-6 w-6 rounded-full bg-white border-4 border-orange-400 flex items-center justify-center z-10 shadow-sm">
-                                                <i className="ri-history-line text-[10px] text-orange-400"></i>
-                                            </div>
-                                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                                <div>
-                                                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-orange-100 text-orange-700 font-inter">
-                                                        {item.status}
-                                                    </span>
-                                                    <span className="ml-2 text-sm font-medium text-gray-500 font-inter">by {item.actor}</span>
-                                                    <p className="text-gray-500 text-xs mt-2 font-inter">{item.desc}</p>
+                                    {(application?.statusHistory && application.statusHistory.length > 0) ? (
+                                        application.statusHistory.slice().reverse().map((item: any, idx: number) => (
+                                            <motion.div
+                                                key={idx}
+                                                initial={{ opacity: 0, x: -10 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: idx * 0.1 }}
+                                                className="relative"
+                                            >
+                                                <div className="absolute -left-[22px] top-1.5 h-6 w-6 rounded-full bg-white border-4 border-orange-400 flex items-center justify-center z-10 shadow-sm">
+                                                    <i className="ri-history-line text-[10px] text-orange-400"></i>
                                                 </div>
-                                                <div className="text-gray-400 text-xs font-medium shrink-0 font-inter">
-                                                    {item.time}
+                                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                                    <div>
+                                                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-orange-100 text-orange-700 font-inter">
+                                                            {item.status}
+                                                        </span>
+                                                        <span className="ml-2 text-sm font-medium text-gray-500 font-inter">by {item.actor}</span>
+                                                        <p className="text-gray-500 text-xs mt-2 font-inter">{item.description}</p>
+                                                    </div>
+                                                    <div className="text-gray-400 text-xs font-medium shrink-0 font-inter">
+                                                        {formatDate(item.date)}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </motion.div>
-                                    ))}
+                                            </motion.div>
+                                        ))
+                                    ) : (
+                                        <div className="text-gray-500 text-sm font-inter">
+                                            No status history available.
+                                        </div>
+                                    )}
                                 </div>
                             </motion.div>
                         )}

@@ -7,7 +7,8 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
 
     // State to track which submenus are open
     const [openSubmenus, setOpenSubmenus] = useState<string[]>(
-        location.pathname.startsWith("/admin/applications") ? ["Loan Applications"] : []
+        location.pathname.startsWith("/admin/applications") ? ["Loan Applications"] :
+            location.pathname.startsWith("/admin/reports") ? ["Reports & Analytics"] : []
     );
 
     const toggleSubmenu = (label: string) => {
@@ -98,7 +99,8 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                         {openSubmenus.includes("Loan Applications") && (!isCollapsed || isMobileOpen) && (
                             <div className="bg-slate-800/50 box-border caret-transparent">
                                 {[
-                                    { label: "Pending Review", icon: "ri-time-line", active: isApplications && location.search === "", path: "/admin/applications" },
+                                    { label: "All Applications", icon: "ri-list-check", active: isApplications && location.search === "", path: "/admin/applications" },
+                                    { label: "Under Review", icon: "ri-time-line", active: location.search.includes("status=Under Review"), path: "/admin/applications?status=Under Review" },
                                     { label: "Approved", icon: "ri-check-line", active: location.search.includes("status=Approved"), path: "/admin/applications?status=Approved" },
                                     { label: "Rejected", icon: "ri-close-line", active: location.search.includes("status=Rejected"), path: "/admin/applications?status=Rejected" },
                                     { label: "Disbursed", icon: "ri-money-dollar-circle-line", active: location.search.includes("status=Disbursed"), path: "/admin/applications?status=Disbursed" }

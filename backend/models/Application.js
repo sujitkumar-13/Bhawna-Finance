@@ -25,12 +25,32 @@ const applicationSchema = new mongoose.Schema({
     bankName: { type: String, required: true },
     accountNumber: { type: String, required: true },
     ifsc: { type: String, required: true },
-    status: { 
-        type: String, 
+    status: {
+        type: String,
         enum: ['Pending', 'Under Review', 'Document Pending', 'Approved', 'Rejected', 'Disbursed'],
-        default: 'Under Review' 
+        default: 'Under Review'
     },
     assignedTo: { type: String, default: 'Unassigned' },
+    documents: [{
+        name: String,
+        category: String,
+        url: String,
+        status: { type: String, default: 'Uploaded' },
+        date: { type: Date, default: Date.now }
+    }],
+    notes: [{
+        user: String,
+        role: String,
+        text: String,
+        color: String,
+        date: { type: Date, default: Date.now }
+    }],
+    statusHistory: [{
+        status: String,
+        actor: String,
+        description: String,
+        date: { type: Date, default: Date.now }
+    }],
     createdAt: { type: Date, default: Date.now }
 });
 

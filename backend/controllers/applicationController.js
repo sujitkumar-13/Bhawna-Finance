@@ -79,20 +79,26 @@ exports.getApplicationStats = async (req, res) => {
 exports.updateApplicationStatus = async (req, res) => {
     try {
         const { id } = req.params;
-        const { status } = req.body;
+        const { status, remarks } = req.body;
 
-        const updatedApplication = await Application.findByIdAndUpdate(
-            id,
-            { status },
-            { new: true }
-        );
-
-        if (!updatedApplication) {
+        const application = await Application.findById(id);
+        if (!application) {
             return res.status(404).json({
                 success: false,
                 message: 'Application not found'
             });
         }
+
+        // Add to history
+        application.statusHistory.push({
+            status,
+            actor: 'Admin', // In a real app, this would be the logged-in user
+            description: remarks || `Status changed to ${status}`,
+            date: new Date()
+        });
+
+        application.status = status;
+        const updatedApplication = await application.save();
 
         res.status(200).json({
             success: true,
@@ -103,6 +109,44 @@ exports.updateApplicationStatus = async (req, res) => {
         res.status(400).json({
             success: false,
             message: 'Error updating status',
+            error: error.message
+        });
+    }
+};
+
+// Add internal note
+exports.addNote = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { text, role, user, color } = req.body;
+
+        const application = await Application.findById(id);
+        if (!application) {
+            return res.status(404).json({
+                success: false,
+                message: 'Application not found'
+            });
+        }
+
+        application.notes.push({
+            user: user || 'Admin User',
+            role: role || 'General',
+            text,
+            color: color || 'bg-slate-600',
+            date: new Date()
+        });
+
+        const updatedApplication = await application.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Note added successfully',
+            data: updatedApplication
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Error adding note',
             error: error.message
         });
     }
