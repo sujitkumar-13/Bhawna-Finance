@@ -1,22 +1,65 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export const AdminDashboardSection = () => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchDashboardData = async () => {
+            try {
+                const response = await axios.get("http://localhost:5000/api/applications/stats");
+                setData(response.data.data);
+            } catch (error) {
+                console.error("Error fetching dashboard data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDashboardData();
+    }, []);
+
+    const formatCurrency = (amt: number) => {
+        if (amt >= 10000000) return `₹${(amt / 10000000).toFixed(2)}Cr`;
+        if (amt >= 100000) return `₹${(amt / 100000).toFixed(2)}L`;
+        return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amt);
+    };
 
     const stats = [
-        { title: "Total Applications", value: "2,847", change: "+12.5% from last month", color: "text-green-600", icon: "ri-article-line" },
-        { title: "Pending Review", value: "156", change: "+8 from yesterday", color: "text-gray-600", icon: "ri-time-line" },
-        { title: "Approved Today", value: "23", change: "+15.2% from yesterday", color: "text-green-600", icon: "ri-checkbox-line" },
-        { title: "Total Disbursed", value: "₹45.2Cr", change: "+18.7% from last month", color: "text-green-600", icon: "ri-refund-2-line" }
+        { title: "Total Applications", value: data?.summary?.totalApplications || 0, change: "Since last month", color: "text-green-600", icon: "ri-article-line" },
+        { title: "Pending Review", value: data?.summary?.pendingCount || 0, change: "Requires action", color: "text-gray-600", icon: "ri-time-line" },
+        { title: "Total Approved", value: data?.summary?.approvedCount || 0, change: "Successful loans", color: "text-green-600", icon: "ri-checkbox-line" },
+        { title: "Total Amount", value: formatCurrency(data?.summary?.totalAmount || 0), change: "Cumulative value", color: "text-green-600", icon: "ri-refund-2-line" }
     ];
 
-    const applications = [
-        { id: "BF2024156", name: "Priya Sharma", initials: "PS", type: "Personal Loan", amount: "₹5,00,000", status: "Under Review", time: "2 hours ago", statusClass: "text-yellow-800 bg-yellow-100" },
-        { id: "BF2024155", name: "Amit Patel", initials: "AP", type: "Business Loan", amount: "₹15,00,000", status: "Document Pending", time: "4 hours ago", statusClass: "text-orange-800 bg-orange-100" },
-        { id: "BF2024154", name: "Sunita Devi", initials: "SD", type: "Gold Loan", amount: "₹2,50,000", status: "Approved", time: "6 hours ago", statusClass: "text-green-800 bg-green-100" },
-        { id: "BF2024153", name: "Rahul Singh", initials: "RS", type: "Property Loan", amount: "₹25,00,000", status: "Under Review", time: "8 hours ago", statusClass: "text-yellow-800 bg-yellow-100" }
-    ];
+    const getStatusClass = (status: string) => {
+        switch (status) {
+            case 'Approved': return 'text-green-800 bg-green-100';
+            case 'Rejected': return 'text-red-800 bg-red-100';
+            case 'Under Review': return 'text-yellow-800 bg-yellow-100';
+            case 'Document Pending': return 'text-orange-800 bg-orange-100';
+            default: return 'text-gray-800 bg-gray-100';
+        }
+    };
+
+    const getTimeAgo = (date: string) => {
+        const seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+        let interval = seconds / 31536000;
+        if (interval > 1) return Math.floor(interval) + " years ago";
+        interval = seconds / 2592000;
+        if (interval > 1) return Math.floor(interval) + " months ago";
+        interval = seconds / 86400;
+        if (interval > 1) return Math.floor(interval) + " days ago";
+        interval = seconds / 3600;
+        if (interval > 1) return Math.floor(interval) + " hours ago";
+        interval = seconds / 60;
+        if (interval > 1) return Math.floor(interval) + " minutes ago";
+        return Math.floor(seconds) + " seconds ago";
+    };
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -130,42 +173,53 @@ export const AdminDashboardSection = () => {
                         </div>
                         <div className="box-border caret-transparent p-6">
                             <div className="box-border caret-transparent space-y-4">
-                                {applications.map((app, idx) => (
-                                    <motion.div
-                                        key={idx}
-                                        whileHover={{ x: 5, backgroundColor: "#F9FAFB" }}
-                                        className="items-center box-border caret-transparent flex justify-between border border-gray-100 p-4 rounded-lg border-solid transition-colors cursor-pointer group"
-                                    >
-                                        <div className="items-center box-border caret-transparent flex min-w-0">
-                                            <div className="items-center bg-slate-900 box-border caret-transparent flex h-10 w-10 shrink-0 justify-center rounded-full group-hover:scale-110 transition-transform">
-                                                <span className="text-white text-sm font-medium box-border caret-transparent block leading-5">
-                                                    {app.initials}
-                                                </span>
-                                            </div>
-                                            <div className="box-border caret-transparent ml-4 truncate">
-                                                <div className="text-slate-900 font-medium box-border caret-transparent truncate font-inter">
-                                                    {app.name}
+                                {loading ? (
+                                    <div className="flex justify-center items-center py-20">
+                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-400"></div>
+                                    </div>
+                                ) : data?.recentApplications?.length > 0 ? (
+                                    data.recentApplications.map((app: any, idx: number) => (
+                                        <motion.div
+                                            key={idx}
+                                            whileHover={{ x: 5, backgroundColor: "#F9FAFB" }}
+                                            onClick={() => navigate(`/admin/applications/${app._id}`)}
+                                            className="items-center box-border caret-transparent flex justify-between border border-gray-100 p-4 rounded-lg border-solid transition-colors cursor-pointer group"
+                                        >
+                                            <div className="items-center box-border caret-transparent flex min-w-0">
+                                                <div className="items-center bg-slate-900 box-border caret-transparent flex h-10 w-10 shrink-0 justify-center rounded-full group-hover:scale-110 transition-transform">
+                                                    <span className="text-white text-sm font-medium box-border caret-transparent block leading-5 uppercase">
+                                                        {app.firstName[0]}{app.lastName[0]}
+                                                    </span>
                                                 </div>
-                                                <div className="text-gray-600 text-xs md:text-sm box-border caret-transparent leading-5 truncate font-inter">
-                                                    {app.id} • {app.type}
+                                                <div className="box-border caret-transparent ml-4 truncate">
+                                                    <div className="text-slate-900 font-medium box-border caret-transparent truncate font-inter">
+                                                        {app.firstName} {app.lastName}
+                                                    </div>
+                                                    <div className="text-gray-600 text-xs md:text-sm box-border caret-transparent leading-5 truncate font-inter">
+                                                        ID: {app._id.slice(-8).toUpperCase()} • {app.loanType}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="box-border caret-transparent text-right shrink-0 ml-4">
-                                            <div className="text-slate-900 font-semibold box-border caret-transparent text-sm md:text-base font-inter">
-                                                {app.amount}
+                                            <div className="box-border caret-transparent text-right shrink-0 ml-4">
+                                                <div className="text-slate-900 font-semibold box-border caret-transparent text-sm md:text-base font-inter">
+                                                    ₹{new Intl.NumberFormat('en-IN').format(app.loanAmount)}
+                                                </div>
+                                                <div className="items-center box-border caret-transparent flex flex-col md:flex-row md:justify-end mt-1 gap-1 md:gap-2">
+                                                    <span className={`${getStatusClass(app.status)} text-[10px] font-medium box-border caret-transparent block leading-4 px-2 py-0.5 rounded-full whitespace-nowrap font-inter`}>
+                                                        {app.status}
+                                                    </span>
+                                                    <span className="text-gray-500 text-[10px] box-border caret-transparent block leading-4 whitespace-nowrap font-inter">
+                                                        {getTimeAgo(app.createdAt)}
+                                                    </span>
+                                                </div>
                                             </div>
-                                            <div className="items-center box-border caret-transparent flex flex-col md:flex-row md:justify-end mt-1 gap-1 md:gap-2">
-                                                <span className={`${app.statusClass} text-[10px] font-medium box-border caret-transparent block leading-4 px-2 py-0.5 rounded-full whitespace-nowrap font-inter`}>
-                                                    {app.status}
-                                                </span>
-                                                <span className="text-gray-500 text-[10px] box-border caret-transparent block leading-4 whitespace-nowrap font-inter">
-                                                    {app.time}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
+                                        </motion.div>
+                                    ))
+                                ) : (
+                                    <div className="text-center py-10 text-gray-500 font-inter">
+                                        No recent applications found.
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </motion.div>

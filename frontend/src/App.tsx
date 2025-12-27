@@ -11,6 +11,7 @@ import { ApplyNow } from "./pages/ApplyNow";
 import { AdminDashboard } from "./pages/AdminDashboard";
 import { AdminApplications } from "./pages/AdminApplications";
 import { AdminApplicationDetail } from "./pages/AdminApplicationDetail";
+import { AdminComingSoon } from "./pages/AdminComingSoon";
 import ScrollToTop from "./components/ScrollToTop";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -37,6 +38,14 @@ function App() {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/applications" element={<AdminApplications />} />
             <Route path="/admin/applications/:id" element={<AdminApplicationDetail />} />
+
+            {/* Admin Coming Soon Routes */}
+            <Route path="/admin/user-management" element={<AdminComingSoon title="User Management" icon="ri-user-line" />} />
+            <Route path="/admin/staff-permissions" element={<AdminComingSoon title="Staff & Permissions" icon="ri-group-line" />} />
+            <Route path="/admin/reports/daily" element={<AdminComingSoon title="Daily Reports" icon="ri-calendar-line" />} />
+            <Route path="/admin/reports/financial" element={<AdminComingSoon title="Financial Overview" icon="ri-pie-chart-line" />} />
+            <Route path="/admin/reports/staff-performance" element={<AdminComingSoon title="Staff Performance" icon="ri-line-chart-line" />} />
+            <Route path="/admin/settings" element={<AdminComingSoon title="System Settings" icon="ri-settings-4-line" />} />
           </Routes>
           {!isAdminPage && <Footer />}
         </div>

@@ -1,24 +1,73 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export const AdminApplicationsSection = () => {
     const navigate = useNavigate();
-    const [selectedRows, setSelectedRows] = useState<string[]>([]);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const statusFilter = searchParams.get("status") || "All Status";
 
-    const applications = [
-        { id: 'BF2024156', date: 'Jan 15, 2024, 10:30 am', priority: 'Medium', priorityClass: 'bg-yellow-100 text-yellow-800', name: 'Priya Sharma', phone: '+91 98765 43210', type: 'Personal Loan', amount: '₹5,00,000', status: 'Under Review', statusClass: 'bg-yellow-100 text-yellow-800', assignee: 'Rajesh Kumar', updated: 'Jan 15, 2024, 02:20 pm' },
-        { id: 'BF2024155', date: 'Jan 15, 2024, 08:15 am', priority: 'High', priorityClass: 'bg-red-100 text-red-800', name: 'Amit Patel', phone: '+91 87654 32109', type: 'Business Loan', amount: '₹15,00,000', status: 'Document Pending', statusClass: 'bg-orange-100 text-orange-800', assignee: 'Sunita Devi', updated: 'Jan 15, 2024, 12:45 pm' },
-        { id: 'BF2024154', date: 'Jan 14, 2024, 04:45 pm', priority: 'Low', priorityClass: 'bg-green-100 text-green-800', name: 'Sunita Devi', phone: '+91 76543 21098', type: 'Gold Loan', amount: '₹2,50,000', status: 'Approved', statusClass: 'bg-green-100 text-green-800', assignee: 'Amit Singh', updated: 'Jan 15, 2024, 09:30 am' },
-        { id: 'BF2024153', date: 'Jan 14, 2024, 02:20 pm', priority: 'High', priorityClass: 'bg-red-100 text-red-800', name: 'Rahul Singh', phone: '+91 65432 10987', type: 'Property Loan', amount: '₹25,00,000', status: 'Under Review', statusClass: 'bg-yellow-100 text-yellow-800', assignee: 'Priya Sharma', updated: 'Jan 15, 2024, 11:15 am' },
-        { id: 'BF2024152', date: 'Jan 14, 2024, 11:30 am', priority: 'Low', priorityClass: 'bg-green-100 text-green-800', name: 'Meera Gupta', phone: '+91 54321 09876', type: 'Personal Loan', amount: '₹3,00,000', status: 'Rejected', statusClass: 'bg-red-100 text-red-800', assignee: 'Rajesh Kumar', updated: 'Jan 14, 2024, 05:45 pm' },
-    ];
+    const [selectedRows, setSelectedRows] = useState<string[]>([]);
+    const [applications, setApplications] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchApplications = async () => {
+        try {
+            const response = await axios.get("http://localhost:5000/api/applications");
+            setApplications(response.data.data);
+        } catch (error) {
+            console.error("Error fetching applications:", error);
+            toast.error("Failed to load applications");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchApplications();
+    }, []);
+
+    const handleStatusUpdate = async (id: string, newStatus: string) => {
+        try {
+            const response = await axios.put(`http://localhost:5000/api/applications/${id}/status`, { status: newStatus });
+            if (response.data.success) {
+                toast.success("Status updated successfully");
+                setApplications(prev => prev.map(app => app._id === id ? { ...app, status: newStatus } : app));
+            }
+        } catch (error) {
+            console.error("Error updating status:", error);
+            toast.error("Failed to update status");
+        }
+    };
+
+    const getStatusClass = (status: string) => {
+        switch (status) {
+            case 'Approved': return 'bg-green-100 text-green-800';
+            case 'Rejected': return 'bg-red-100 text-red-800';
+            case 'Under Review': return 'bg-yellow-100 text-yellow-800';
+            case 'Document Pending': return 'bg-orange-100 text-orange-800';
+            default: return 'bg-gray-100 text-gray-800';
+        }
+    };
+
+    const formatDate = (date: string) => {
+        return new Date(date).toLocaleString('en-IN', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+    };
 
     const toggleAll = () => {
         if (selectedRows.length === applications.length) {
             setSelectedRows([]);
         } else {
-            setSelectedRows(applications.map(app => app.id));
+            setSelectedRows(applications.map(app => app._id));
         }
     };
 
@@ -104,7 +153,19 @@ export const AdminApplicationsSection = () => {
                     <div>
                         <label className="text-slate-700 text-sm font-semibold block mb-2 font-inter">Status</label>
                         <div className="relative">
-                            <select className="w-full bg-slate-50 border border-gray-300 px-4 py-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none appearance-none cursor-pointer font-inter">
+                            <select
+                                value={statusFilter}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    if (val === "All Status") {
+                                        searchParams.delete("status");
+                                    } else {
+                                        searchParams.set("status", val);
+                                    }
+                                    setSearchParams(searchParams);
+                                }}
+                                className="w-full bg-slate-50 border border-gray-300 px-4 py-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none appearance-none cursor-pointer font-inter"
+                            >
                                 <option>All Status</option>
                                 <option>Under Review</option>
                                 <option>Document Pending</option>
@@ -153,7 +214,7 @@ export const AdminApplicationsSection = () => {
                 <div className="box-border caret-transparent border-gray-200 p-6 border-b border-solid bg-white">
                     <div className="items-center box-border caret-transparent flex justify-between">
                         <h3 className="text-slate-900 text-lg font-semibold box-border caret-transparent leading-7 font-inter">
-                            Applications ({applications.length})
+                            Applications ({applications.filter(app => statusFilter === "All Status" || app.status === statusFilter).length})
                         </h3>
                     </div>
                 </div>
@@ -197,88 +258,115 @@ export const AdminApplicationsSection = () => {
                             animate="visible"
                             className="bg-white divide-y divide-gray-200"
                         >
-                            {applications.map((app, idx) => (
-                                <motion.tr
-                                    key={idx}
-                                    variants={rowVariants}
-                                    className={`hover:bg-gray-50 transition-colors ${selectedRows.includes(app.id) ? 'bg-orange-50/20' : ''}`}
-                                >
-                                    <td className="px-6 py-4 align-middle text-center">
-                                        <input
-                                            type="checkbox"
-                                            className="accent-orange-400 h-4 w-4 cursor-pointer"
-                                            checked={selectedRows.includes(app.id)}
-                                            onChange={() => toggleRow(app.id)}
-                                        />
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="text-slate-900 text-sm font-semibold font-inter">{app.id}</div>
-                                        <div className="text-gray-500 text-xs mt-1 font-inter">{app.date}</div>
-                                        <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider mt-2 font-inter ${app.priorityClass}`}>
-                                            {app.priority}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="text-slate-900 text-sm font-medium font-inter">{app.name}</div>
-                                        <div className="text-gray-500 text-xs mt-1 font-inter">{app.phone}</div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="text-slate-900 text-sm font-medium font-inter">{app.type}</div>
-                                        <div className="text-slate-900 text-sm font-bold mt-1 font-inter">{app.amount}</div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="inline-block">
-                                            <select className={`text-xs font-semibold px-3 py-1.5 rounded-full border-none focus:ring-2 focus:ring-orange-400 font-inter cursor-pointer transition-all ${app.statusClass}`}>
-                                                <option>Under Review</option>
-                                                <option>Document Pending</option>
-                                                <option>Approved</option>
-                                                <option>Rejected</option>
-                                                <option>Disbursed</option>
-                                            </select>
-                                        </div>
-                                        <div className="text-gray-400 text-[10px] mt-2 block font-inter">
-                                            Last update: {app.updated}
+                            {loading ? (
+                                <tr>
+                                    <td colSpan={7} className="px-6 py-20 text-center">
+                                        <div className="flex flex-col items-center">
+                                            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-orange-400"></div>
+                                            <p className="text-gray-500 mt-4 font-inter">Loading applications...</p>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center">
-                                            <div className="h-7 w-7 rounded-full bg-slate-100 flex items-center justify-center mr-2">
-                                                <i className="ri-user-line text-slate-500 text-xs"></i>
-                                            </div>
-                                            <span className="text-slate-700 text-sm font-medium font-inter">{app.assignee}</span>
-                                        </div>
+                                </tr>
+                            ) : applications.filter(app => statusFilter === "All Status" || app.status === statusFilter).length > 0 ? (
+                                applications
+                                    .filter(app => statusFilter === "All Status" || app.status === statusFilter)
+                                    .map((app) => (
+                                        <motion.tr
+                                            key={app._id}
+                                            variants={rowVariants}
+                                            className={`hover:bg-gray-50 transition-colors ${selectedRows.includes(app._id) ? 'bg-orange-50/20' : ''}`}
+                                        >
+                                            <td className="px-6 py-4 align-middle text-center">
+                                                <input
+                                                    type="checkbox"
+                                                    className="accent-orange-400 h-4 w-4 cursor-pointer"
+                                                    checked={selectedRows.includes(app._id)}
+                                                    onChange={() => toggleRow(app._id)}
+                                                />
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="text-slate-900 text-sm font-semibold font-inter uppercase">
+                                                    {app._id.slice(-8)}
+                                                </div>
+                                                <div className="text-gray-500 text-xs mt-1 font-inter">{formatDate(app.createdAt)}</div>
+                                                <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider mt-2 font-inter bg-blue-100 text-blue-800`}>
+                                                    Medium
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="text-slate-900 text-sm font-medium font-inter">{app.firstName} {app.lastName}</div>
+                                                <div className="text-gray-500 text-xs mt-1 font-inter">{app.phone}</div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="text-slate-900 text-sm font-medium font-inter capitalize">{app.loanType}</div>
+                                                <div className="text-slate-900 text-sm font-bold mt-1 font-inter">
+                                                    ₹{new Intl.NumberFormat('en-IN').format(app.loanAmount)}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="inline-block">
+                                                    <select
+                                                        value={app.status}
+                                                        onChange={(e) => handleStatusUpdate(app._id, e.target.value)}
+                                                        className={`text-xs font-semibold px-3 py-1.5 rounded-full border-none focus:ring-2 focus:ring-orange-400 font-inter cursor-pointer transition-all ${getStatusClass(app.status)}`}
+                                                    >
+                                                        <option value="Under Review">Under Review</option>
+                                                        <option value="Document Pending">Document Pending</option>
+                                                        <option value="Approved">Approved</option>
+                                                        <option value="Rejected">Rejected</option>
+                                                        <option value="Disbursed">Disbursed</option>
+                                                    </select>
+                                                </div>
+                                                <div className="text-gray-400 text-[10px] mt-2 block font-inter">
+                                                    Last update: {formatDate(app.createdAt)}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center">
+                                                    <div className="h-7 w-7 rounded-full bg-slate-100 flex items-center justify-center mr-2">
+                                                        <i className="ri-user-line text-slate-500 text-xs"></i>
+                                                    </div>
+                                                    <span className="text-slate-700 text-sm font-medium font-inter">{app.assignedTo}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 text-right">
+                                                <div className="flex items-center justify-end space-x-2">
+                                                    <motion.button
+                                                        whileHover={{ scale: 1.1 }}
+                                                        whileTap={{ scale: 0.9 }}
+                                                        onClick={() => navigate(`/admin/applications/${app._id}`)}
+                                                        title="View Details"
+                                                        className="p-2 text-slate-600 hover:text-white hover:bg-slate-900 rounded-lg transition-all cursor-pointer shadow-sm"
+                                                    >
+                                                        <i className="ri-eye-line text-lg"></i>
+                                                    </motion.button>
+                                                    <motion.button
+                                                        whileHover={{ scale: 1.1 }}
+                                                        whileTap={{ scale: 0.9 }}
+                                                        title="Edit"
+                                                        className="p-2 text-orange-500 hover:text-white hover:bg-orange-500 rounded-lg transition-all shadow-sm"
+                                                    >
+                                                        <i className="ri-edit-line text-lg"></i>
+                                                    </motion.button>
+                                                    <motion.button
+                                                        whileHover={{ scale: 1.1 }}
+                                                        whileTap={{ scale: 0.9 }}
+                                                        title="Download Documents"
+                                                        className="p-2 text-blue-600 hover:text-white hover:bg-blue-600 rounded-lg transition-all shadow-sm"
+                                                    >
+                                                        <i className="ri-download-line text-lg"></i>
+                                                    </motion.button>
+                                                </div>
+                                            </td>
+                                        </motion.tr>
+                                    ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={7} className="px-6 py-20 text-center text-gray-500 font-inter">
+                                        No applications found.
                                     </td>
-                                    <td className="px-6 py-4 text-right">
-                                        <div className="flex items-center justify-end space-x-2">
-                                            <motion.button
-                                                whileHover={{ scale: 1.1 }}
-                                                whileTap={{ scale: 0.9 }}
-                                                onClick={() => navigate(`/admin/applications/${app.id}`)}
-                                                title="View Details"
-                                                className="p-2 text-slate-600 hover:text-white hover:bg-slate-900 rounded-lg transition-all cursor-pointer shadow-sm"
-                                            >
-                                                <i className="ri-eye-line text-lg"></i>
-                                            </motion.button>
-                                            <motion.button
-                                                whileHover={{ scale: 1.1 }}
-                                                whileTap={{ scale: 0.9 }}
-                                                title="Edit"
-                                                className="p-2 text-orange-500 hover:text-white hover:bg-orange-500 rounded-lg transition-all shadow-sm"
-                                            >
-                                                <i className="ri-edit-line text-lg"></i>
-                                            </motion.button>
-                                            <motion.button
-                                                whileHover={{ scale: 1.1 }}
-                                                whileTap={{ scale: 0.9 }}
-                                                title="Download Documents"
-                                                className="p-2 text-blue-600 hover:text-white hover:bg-blue-600 rounded-lg transition-all shadow-sm"
-                                            >
-                                                <i className="ri-download-line text-lg"></i>
-                                            </motion.button>
-                                        </div>
-                                    </td>
-                                </motion.tr>
-                            ))}
+                                </tr>
+                            )}
                         </motion.tbody>
                     </table>
                 </div>
@@ -287,7 +375,7 @@ export const AdminApplicationsSection = () => {
                 <div className="box-border caret-transparent border-gray-200 px-6 py-4 border-t border-solid bg-white">
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                         <div className="text-gray-700 text-sm box-border caret-transparent leading-5 font-inter">
-                            Showing 1 to 5 of 5 results
+                            Showing 1 to {applications.length} of {applications.length} results
                         </div>
                         <div className="items-center box-border caret-transparent flex space-x-2">
                             <button className="text-sm bg-transparent border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors font-inter">

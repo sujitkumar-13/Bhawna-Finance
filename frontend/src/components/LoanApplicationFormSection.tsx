@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Search, ChevronRight, ChevronLeft, Check, Send } from "lucide-react";
+import { Search, ChevronRight, ChevronLeft, Check, Send, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const LOAN_TYPES = [
     {
@@ -32,6 +33,7 @@ const LOAN_TYPES = [
 
 export const LoanApplicationFormSection = () => {
     const [currentStep, setCurrentStep] = useState(1);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         loanType: "personal",
         loanAmount: "",
@@ -65,6 +67,48 @@ export const LoanApplicationFormSection = () => {
 
     const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 5));
     const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
+
+    const handleSubmit = async () => {
+        setIsSubmitting(true);
+        try {
+            const response = await axios.post("http://localhost:5000/api/applications", formData);
+            if (response.data.success) {
+                toast.success("Application Submitted Successfully!");
+                setCurrentStep(1);
+                setFormData({
+                    loanType: "personal",
+                    loanAmount: "",
+                    tenure: "",
+                    purpose: "",
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                    phone: "",
+                    dob: "",
+                    pan: "",
+                    aadhar: "",
+                    address: "",
+                    city: "",
+                    state: "",
+                    pinCode: "",
+                    employmentType: "",
+                    companyName: "",
+                    designation: "",
+                    experience: "",
+                    income: "",
+                    existingEmi: "",
+                    bankName: "",
+                    accountNumber: "",
+                    ifsc: "",
+                });
+            }
+        } catch (error: any) {
+            console.error("Submission error:", error);
+            toast.error(error.response?.data?.message || "Error submitting application. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     const steps = [
         { id: 1, label: "Loan Details", sub: "Choose loan type and amount" },
@@ -615,12 +659,22 @@ export const LoanApplicationFormSection = () => {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 initial={{ backgroundColor: "#FB923C" }}
-                                animate={{ backgroundColor: "#111F3B" }}
-                                onClick={() => toast.success("Application Submitted Successfully!")}
-                                className="flex items-center justify-center text-white px-10 py-4 rounded-xl font-bold shadow-xl shadow-slate-300 transition-all w-full sm:w-auto"
+                                animate={{ backgroundColor: isSubmitting ? "#94A3B8" : "#111F3B" }}
+                                onClick={handleSubmit}
+                                disabled={isSubmitting}
+                                className="flex items-center justify-center text-white px-10 py-4 rounded-xl font-bold shadow-xl shadow-slate-300 transition-all w-full sm:w-auto disabled:cursor-not-allowed"
                             >
-                                Submit Application
-                                <Send size={20} className="ml-2" strokeWidth={2} />
+                                {isSubmitting ? (
+                                    <>
+                                        Submitting...
+                                        <Loader2 size={20} className="ml-2 animate-spin" strokeWidth={2} />
+                                    </>
+                                ) : (
+                                    <>
+                                        Submit Application
+                                        <Send size={20} className="ml-2" strokeWidth={2} />
+                                    </>
+                                )}
                             </motion.button>
                         )}
                     </div>

@@ -1,11 +1,65 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export const AdminApplicationDetailSection = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("Overview");
+    const [application, setApplication] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    const fetchApplication = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/applications/${id}`);
+            setApplication(response.data.data);
+        } catch (error) {
+            console.error("Error fetching application details:", error);
+            toast.error("Failed to load application details");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (id) fetchApplication();
+    }, [id]);
+
+    const handleStatusUpdate = async (newStatus: string) => {
+        try {
+            const response = await axios.put(`http://localhost:5000/api/applications/${id}/status`, { status: newStatus });
+            if (response.data.success) {
+                toast.success("Status updated successfully");
+                setApplication({ ...application, status: newStatus });
+            }
+        } catch (error) {
+            console.error("Error updating status:", error);
+            toast.error("Failed to update status");
+        }
+    };
+
+    const getStatusClass = (status: string) => {
+        switch (status) {
+            case 'Approved': return 'bg-green-100 text-green-800';
+            case 'Rejected': return 'bg-red-100 text-red-800';
+            case 'Under Review': return 'bg-yellow-100 text-yellow-800';
+            case 'Document Pending': return 'bg-orange-100 text-orange-800';
+            default: return 'bg-gray-100 text-gray-800';
+        }
+    };
+
+    const formatDate = (date: string) => {
+        return new Date(date).toLocaleString('en-IN', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+    };
 
     const tabs = [
         { name: "Overview", icon: "ri-information-line" },
@@ -66,79 +120,84 @@ export const AdminApplicationDetailSection = () => {
                         <h2 className="text-slate-900 text-2xl font-bold box-border caret-transparent leading-8 font-inter">
                             Application Details
                         </h2>
-                        <p className="text-gray-600 box-border caret-transparent mt-1 font-inter">
-                            {id || "BF2024156"} • Priya Sharma
+                        <p className="text-gray-600 box-border caret-transparent mt-1 font-inter uppercase">
+                            ID: {id?.slice(-8) || "N/A"} • {application?.firstName} {application?.lastName}
                         </p>
                     </div>
                 </div>
                 {/* StatusDropdown */}
                 <div className="items-center box-border caret-transparent flex gap-3">
-                    <select className="text-sm bg-white caret-transparent block leading-[normal] border border-gray-300 px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-orange-400 font-inter transition-all cursor-pointer">
+                    <select
+                        value={application?.status || "Under Review"}
+                        onChange={(e) => handleStatusUpdate(e.target.value)}
+                        className="text-sm bg-white caret-transparent block leading-[normal] border border-gray-300 px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-orange-400 font-inter transition-all cursor-pointer"
+                    >
                         <option value="Under Review">Under Review</option>
                         <option value="Document Pending">Document Pending</option>
                         <option value="Approved">Approved</option>
                         <option value="Rejected">Rejected</option>
                         <option value="Disbursed">Disbursed</option>
                     </select>
-                    <motion.button
-                        whileHover={{ y: -2 }}
-                        whileTap={{ y: 0 }}
-                        className="text-white text-sm font-semibold bg-orange-400 caret-transparent block leading-5 text-center px-4 py-2 rounded-lg hover:bg-orange-500 transition-colors cursor-pointer font-inter shadow-md shadow-orange-100"
-                    >
-                        Update Status
-                    </motion.button>
                 </div>
             </motion.div>
 
-            {/* ApplicationStats */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="bg-white box-border caret-transparent border border-gray-200 p-6 rounded-xl border-solid shadow-sm"
-            >
-                <div className="box-border caret-transparent gap-x-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-6">
-                    <div className="box-border caret-transparent">
-                        <div className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1 font-inter">
-                            Loan Amount
-                        </div>
-                        <div className="text-slate-900 text-2xl font-bold box-border caret-transparent font-inter">
-                            ₹5,00,000
-                        </div>
-                    </div>
-                    <div className="box-border caret-transparent">
-                        <div className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1 font-inter">
-                            Loan Type
-                        </div>
-                        <div className="text-slate-900 text-lg font-semibold box-border caret-transparent font-inter">
-                            Personal Loan
-                        </div>
-                    </div>
-                    <div className="box-border caret-transparent">
-                        <div className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1 font-inter">
-                            Current Status
-                        </div>
-                        <div>
-                            <span className="text-yellow-800 text-xs font-bold bg-yellow-100 box-border caret-transparent inline-flex leading-none px-3 py-1.5 rounded-full uppercase tracking-wider font-inter">
-                                Under Review
-                            </span>
-                        </div>
-                    </div>
-                    <div className="box-border caret-transparent">
-                        <div className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1 font-inter">
-                            Assigned To
-                        </div>
-                        <div className="flex items-center">
-                            <div className="h-7 w-7 rounded-full bg-slate-100 flex items-center justify-center mr-2">
-                                <i className="ri-user-line text-slate-500 text-sm"></i>
-                            </div>
-                            <span className="text-slate-900 text-base font-semibold box-border caret-transparent font-inter">
-                                Rajesh Kumar
-                            </span>
-                        </div>
-                    </div>
+            {loading ? (
+                <div className="flex justify-center items-center py-40 bg-white rounded-xl border border-gray-200">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-400"></div>
                 </div>
-            </motion.div>
+            ) : (
+                <>
+                    {/* ApplicationStats */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                        className="bg-white box-border caret-transparent border border-gray-200 p-6 rounded-xl border-solid shadow-sm"
+                    >
+                        <div className="box-border caret-transparent gap-x-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-6">
+                            <div className="box-border caret-transparent">
+                                <div className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1 font-inter">
+                                    Loan Amount
+                                </div>
+                                <div className="text-slate-900 text-2xl font-bold box-border caret-transparent font-inter">
+                                    ₹{new Intl.NumberFormat('en-IN').format(application?.loanAmount || 0)}
+                                </div>
+                            </div>
+                            <div className="box-border caret-transparent">
+                                <div className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1 font-inter">
+                                    Loan Type
+                                </div>
+                                <div className="text-slate-900 text-lg font-semibold box-border caret-transparent font-inter capitalize">
+                                    {application?.loanType || "N/A"}
+                                </div>
+                            </div>
+                            <div className="box-border caret-transparent">
+                                <div className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1 font-inter">
+                                    Current Status
+                                </div>
+                                <div>
+                                    <span className={`${getStatusClass(application?.status)} text-xs font-bold box-border caret-transparent inline-flex leading-none px-3 py-1.5 rounded-full uppercase tracking-wider font-inter`}>
+                                        {application?.status || "N/A"}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="box-border caret-transparent">
+                                <div className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1 font-inter">
+                                    Assigned To
+                                </div>
+                                <div className="flex items-center">
+                                    <div className="h-7 w-7 rounded-full bg-slate-100 flex items-center justify-center mr-2">
+                                        <i className="ri-user-line text-slate-500 text-sm"></i>
+                                    </div>
+                                    <span className="text-slate-900 text-base font-semibold box-border caret-transparent font-inter">
+                                        {application?.assignedTo || "Unassigned"}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                </>
+            )}
 
             <motion.div
                 initial={{ opacity: 0 }}
@@ -182,12 +241,12 @@ export const AdminApplicationDetailSection = () => {
                                         </h3>
                                         <div className="box-border caret-transparent space-y-4">
                                             {[
-                                                { label: "Full Name:", value: "Priya Sharma" },
-                                                { label: "Phone:", value: "+91 98765 43210" },
-                                                { label: "Email:", value: "priya.sharma@email.com" },
-                                                { label: "Date of Birth:", value: "15/06/1985" },
-                                                { label: "PAN Number:", value: "ABCDE1234F", className: "uppercase tracking-wider" },
-                                                { label: "Marital Status:", value: "Married" }
+                                                { label: "Full Name:", value: `${application?.firstName} ${application?.lastName}` },
+                                                { label: "Phone:", value: application?.phone },
+                                                { label: "Email:", value: application?.email },
+                                                { label: "Date of Birth:", value: new Date(application?.dob).toLocaleDateString() },
+                                                { label: "PAN Number:", value: application?.pan, className: "uppercase tracking-wider" },
+                                                { label: "Aadhar Number:", value: application?.aadhar }
                                             ].map((item, i) => (
                                                 <div key={i} className="box-border caret-transparent flex justify-between items-center group">
                                                     <span className="text-gray-500 text-sm font-medium font-inter">{item.label}</span>
@@ -202,12 +261,12 @@ export const AdminApplicationDetailSection = () => {
                                         </h3>
                                         <div className="box-border caret-transparent space-y-4">
                                             {[
-                                                { label: "Employment Type:", value: "Salaried" },
-                                                { label: "Company:", value: "Tech Solutions Pvt Ltd" },
-                                                { label: "Designation:", value: "Senior Software Engineer", className: "text-right" },
-                                                { label: "Experience:", value: "8 years" },
-                                                { label: "Monthly Income:", value: "₹85,000" },
-                                                { label: "Other Income:", value: "₹15,000" }
+                                                { label: "Employment Type:", value: application?.employmentType, className: "capitalize" },
+                                                { label: "Company:", value: application?.companyName || "N/A" },
+                                                { label: "Designation:", value: application?.designation || "N/A", className: "text-right" },
+                                                { label: "Experience:", value: application?.experience ? `${application.experience} years` : "N/A" },
+                                                { label: "Monthly Income:", value: `₹${new Intl.NumberFormat('en-IN').format(application?.income || 0)}` },
+                                                { label: "Existing EMI:", value: `₹${new Intl.NumberFormat('en-IN').format(application?.existingEmi || 0)}` }
                                             ].map((item, i) => (
                                                 <div key={i} className="box-border caret-transparent flex justify-between items-center">
                                                     <span className="text-gray-500 text-sm font-medium font-inter">{item.label}</span>
@@ -223,16 +282,33 @@ export const AdminApplicationDetailSection = () => {
                                             Address
                                         </h3>
                                         <p className="text-slate-700 font-medium font-inter">
-                                            123, MG Road, Bangalore, Karnataka - 560001
+                                            {application?.address}, {application?.city}, {application?.state} - {application?.pinCode}
                                         </p>
                                     </div>
                                     <div className="box-border caret-transparent">
                                         <h3 className="text-slate-900 text-lg font-semibold box-border caret-transparent leading-7 mb-3 font-inter border-b border-gray-100 pb-3">
                                             Loan Purpose
                                         </h3>
-                                        <p className="text-slate-700 font-medium font-inter">
-                                            Home Renovation
+                                        <p className="text-slate-700 font-medium font-inter capitalize">
+                                            {application?.purpose?.replace(/-/g, ' ')}
                                         </p>
+                                    </div>
+                                </div>
+                                <div className="box-border caret-transparent pt-8">
+                                    <h3 className="text-slate-900 text-lg font-semibold box-border caret-transparent leading-7 mb-5 font-inter border-b border-gray-100 pb-3">
+                                        Banking Information
+                                    </h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                        {[
+                                            { label: "Bank Name", value: application?.bankName },
+                                            { label: "Account Number", value: application?.accountNumber },
+                                            { label: "IFSC Code", value: application?.ifsc, className: "uppercase" }
+                                        ].map((item, i) => (
+                                            <div key={i} className="box-border caret-transparent">
+                                                <span className="text-gray-500 text-xs font-semibold uppercase tracking-wider block mb-1 font-inter">{item.label}</span>
+                                                <span className={`text-slate-900 font-bold font-inter ${item.className || ""}`}>{item.value}</span>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </motion.div>

@@ -98,14 +98,14 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                         {openSubmenus.includes("Loan Applications") && (!isCollapsed || isMobileOpen) && (
                             <div className="bg-slate-800/50 box-border caret-transparent">
                                 {[
-                                    { label: "Pending Review", icon: "ri-time-line", active: isApplications },
-                                    { label: "Approved", icon: "ri-check-line", active: false },
-                                    { label: "Rejected", icon: "ri-close-line", active: false },
-                                    { label: "Disbursed", icon: "ri-money-dollar-circle-line", active: false }
+                                    { label: "Pending Review", icon: "ri-time-line", active: isApplications && location.search === "", path: "/admin/applications" },
+                                    { label: "Approved", icon: "ri-check-line", active: location.search.includes("status=Approved"), path: "/admin/applications?status=Approved" },
+                                    { label: "Rejected", icon: "ri-close-line", active: location.search.includes("status=Rejected"), path: "/admin/applications?status=Rejected" },
+                                    { label: "Disbursed", icon: "ri-money-dollar-circle-line", active: location.search.includes("status=Disbursed"), path: "/admin/applications?status=Disbursed" }
                                 ].map((sub) => (
                                     <div
                                         key={sub.label}
-                                        onClick={() => handleNav("/admin/applications")}
+                                        onClick={() => handleNav(sub.path)}
                                         className={`text-gray-300 items-center box-border caret-transparent flex ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : 'pl-12 pr-4'} py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer ${sub.active ? 'text-white bg-blue-900/40' : ''}`}
                                     >
                                         <i className={`text-lg block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ${sub.icon}`}></i>
@@ -122,11 +122,14 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
 
                     {/* Static NavItems Inlined */}
                     {[
-                        { label: "User Management", icon: "ri-user-line" },
-                        { label: "Staff & Permissions", icon: "ri-group-line" }
+                        { label: "User Management", icon: "ri-user-line", path: "/admin/user-management" },
+                        { label: "Staff & Permissions", icon: "ri-group-line", path: "/admin/staff-permissions" }
                     ].map((item) => (
                         <div key={item.label} className="box-border caret-transparent">
-                            <div className={`text-gray-300 items-center box-border caret-transparent flex px-4 py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer border-l-4 border-transparent ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : ''}`}>
+                            <div
+                                onClick={() => handleNav(item.path)}
+                                className={`text-gray-300 items-center box-border caret-transparent flex px-4 py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer border-l-4 border-transparent ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : ''}`}
+                            >
                                 <i className={`text-lg transition-colors duration-200 block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ${item.icon}`}></i>
                                 {(!isCollapsed || isMobileOpen) && (
                                     <span className="text-sm font-medium box-border caret-transparent block basis-[0%] grow leading-5">
@@ -156,12 +159,13 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                         {openSubmenus.includes("Reports & Analytics") && (!isCollapsed || isMobileOpen) && (
                             <div className="bg-slate-800/50 box-border caret-transparent">
                                 {[
-                                    { label: "Daily Reports", icon: "ri-calendar-line" },
-                                    { label: "Financial Overview", icon: "ri-pie-chart-line" },
-                                    { label: "Staff Performance", icon: "ri-line-chart-line" }
+                                    { label: "Daily Reports", icon: "ri-calendar-line", path: "/admin/reports/daily" },
+                                    { label: "Financial Overview", icon: "ri-pie-chart-line", path: "/admin/reports/financial" },
+                                    { label: "Staff Performance", icon: "ri-line-chart-line", path: "/admin/reports/staff-performance" }
                                 ].map((sub) => (
                                     <div
                                         key={sub.label}
+                                        onClick={() => handleNav(sub.path)}
                                         className={`text-gray-300 items-center box-border caret-transparent flex ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : 'pl-12 pr-4'} py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer`}
                                     >
                                         <i className={`text-lg block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ${sub.icon}`}></i>
@@ -177,7 +181,10 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                     </div>
 
                     <div className="box-border caret-transparent">
-                        <div className={`text-gray-300 items-center box-border caret-transparent flex px-4 py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer border-l-4 border-transparent ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : ''}`}>
+                        <div
+                            onClick={() => handleNav("/admin/settings")}
+                            className={`text-gray-300 items-center box-border caret-transparent flex px-4 py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer border-l-4 border-transparent ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : ''}`}
+                        >
                             <i className={`text-lg transition-colors duration-200 block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ri-settings-4-line`}></i>
                             {(!isCollapsed || isMobileOpen) && (
                                 <span className="text-sm font-medium box-border caret-transparent block basis-[0%] grow leading-5">
