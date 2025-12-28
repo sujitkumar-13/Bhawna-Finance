@@ -72,10 +72,10 @@ export const TimelineSection = () => {
                                 className={`w-full pl-12 sm:pl-16 md:pl-0 md:w-[41.6667%] ${item.variant === "justify-start" ? "md:text-right md:pr-8" : "md:text-left md:pl-8 md:ml-auto"}`}
                             >
                                 {/* Mobile indicator dot */}
-                                <div className="absolute md:hidden bg-orange-400 h-4 w-4 rounded-full border-4 border-solid border-white left-4 sm:left-6 -translate-x-1/2 top-6"></div>
+                                <div className="absolute md:hidden bg-[#C59D4F]  h-4 w-4 rounded-full border-4 border-solid border-white left-4 sm:left-6 -translate-x-1/2 top-6"></div>
 
                                 <div className="bg-white shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.05)_0px_1px_2px_0px] border border-gray-200 p-6 rounded-lg border-solid">
-                                    <div className="text-orange-400 text-lg font-bold leading-7 mb-2">
+                                    <div className="text-[#C59D4F] text-lg font-bold leading-7 mb-2">
                                         <Counter value={item.year} />
                                     </div>
                                     <h4 className="text-slate-900 text-xl font-semibold leading-7 mb-2 font-inter">
@@ -87,7 +87,7 @@ export const TimelineSection = () => {
                                 </div>
                             </div>
                             {/* Desktop indicator dot */}
-                            <div className="absolute hidden md:block bg-orange-400 h-4 w-4 rounded-full border-4 border-solid border-white left-1/2 -translate-x-1/2"></div>
+                            <div className="absolute hidden md:block bg-[#C59D4F]  h-4 w-4 rounded-full border-4 border-solid border-white left-1/2 -translate-x-1/2"></div>
                         </motion.div>
                     ))}
                 </div>

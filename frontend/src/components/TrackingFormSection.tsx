@@ -26,7 +26,7 @@ export const TrackingFormSection = () => {
                             <input
                                 placeholder="Enter your application ID (e.g., BF2024001)"
                                 type="text"
-                                className="text-sm box-border caret-transparent leading-5 w-full border border-gray-300 px-4 py-3 rounded-xl border-solid focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none transition-all"
+                                className="text-sm box-border caret-transparent leading-5 w-full border border-gray-300 px-4 py-3 rounded-xl border-solid focus:ring-2 focus:ring-[#C59D4F] focus:border-transparent outline-none transition-all"
                             />
                             <p className="text-gray-400 text-xs box-border caret-transparent leading-4 mt-2">
                                 You can find your application ID in the confirmation email or SMS
@@ -45,7 +45,7 @@ export const TrackingFormSection = () => {
                             <input
                                 placeholder="Enter your registered phone number"
                                 type="tel"
-                                className="text-sm box-border caret-transparent leading-5 w-full border border-gray-300 px-4 py-3 rounded-xl border-solid focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none transition-all"
+                                className="text-sm box-border caret-transparent leading-5 w-full border border-gray-300 px-4 py-3 rounded-xl border-solid focus:ring-2 focus:ring-[#C59D4F] focus:border-transparent outline-none transition-all"
                             />
                         </motion.div>
                         <motion.button
@@ -55,7 +55,7 @@ export const TrackingFormSection = () => {
                             viewport={{ once: true }}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="text-white text-lg font-bold items-center bg-orange-400 shadow-lg caret-transparent border-none flex cursor-pointer h-14 justify-center leading-7 text-center text-nowrap w-full mt-8 px-8 py-4 rounded-xl hover:bg-orange-500 transition-all"
+                            className="text-white text-lg font-bold items-center bg-[#C59D4F] hover:bg-[#B38C3D] shadow-lg caret-transparent border-none flex cursor-pointer h-14 justify-center leading-7 text-center text-nowrap w-full mt-8 px-8 py-4 rounded-xl transition-all"
                         >
                             <Search className="mr-2 w-5 h-5" />
                             Track Application

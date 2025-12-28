@@ -125,7 +125,7 @@ export const EligibilityCalculator = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
-                    className="bg-orange-50/50 box-border caret-transparent border border-orange-100 mt-12 md:mt-16 p-6 md:p-8 rounded-2xl border-solid"
+                    className="bg-[#C59D4F]/10 box-border caret-transparent border border-[#C59D4F] mt-12 md:mt-16 p-6 md:p-8 rounded-2xl border-solid"
                 >
                     <div className="items-start box-border caret-transparent flex">
                         <div className="items-center bg-[#C59D4F] box-border caret-transparent flex shrink-0 h-8 w-8 md:h-10 md:w-10 mt-0.5 rounded-full shadow-sm justify-center">

@@ -140,18 +140,18 @@ export const LoanApplicationFormSection = () => {
                                         key={loan.id}
                                         onClick={() => updateFormData("loanType", loan.id)}
                                         className={`p-5 rounded-xl border-2 cursor-pointer transition-all ${formData.loanType === loan.id
-                                            ? "bg-orange-400/10 border-orange-400 shadow-md"
-                                            : "bg-white border-gray-100 hover:border-orange-200"
+                                            ? "bg-[#C59D4F]/10 border-[#C59D4F] shadow-md"
+                                            : "bg-white border-gray-100 hover:border-[#C59D4F]"
                                             }`}
                                     >
                                         <div className="flex justify-between items-start">
                                             <div>
                                                 <h4 className="font-bold text-slate-900">{loan.title}</h4>
-                                                <p className="text-orange-500 font-semibold text-sm mt-1">{loan.rate}</p>
+                                                <p className="text-[#C59D4F] font-semibold text-sm mt-1">{loan.rate}</p>
                                                 <p className="text-gray-400 text-xs mt-1">{loan.max}</p>
                                             </div>
                                             {formData.loanType === loan.id && (
-                                                <div className="bg-orange-400 rounded-full p-1">
+                                                <div className="bg-[#C59D4F] rounded-full p-1">
                                                     <Check size={12} className="text-white" />
                                                 </div>
                                             )}
@@ -168,7 +168,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.loanAmount}
                                     onChange={(e) => updateFormData("loanAmount", e.target.value)}
                                     placeholder="Enter loan amount"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                             <div>
@@ -176,7 +176,7 @@ export const LoanApplicationFormSection = () => {
                                 <select
                                     value={formData.tenure}
                                     onChange={(e) => updateFormData("tenure", e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm bg-white transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm bg-white transition-all"
                                 >
                                     <option value="">Select tenure</option>
                                     {[12, 24, 36, 48, 60, 72, 84].map((m) => (
@@ -190,7 +190,7 @@ export const LoanApplicationFormSection = () => {
                             <select
                                 value={formData.purpose}
                                 onChange={(e) => updateFormData("purpose", e.target.value)}
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm bg-white transition-all"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm bg-white transition-all"
                             >
                                 <option value="">Select purpose</option>
                                 <option value="debt-consolidation">Debt Consolidation</option>
@@ -221,7 +221,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.firstName}
                                     onChange={(e) => updateFormData("firstName", e.target.value)}
                                     placeholder="Enter first name"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                             <div>
@@ -231,7 +231,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.lastName}
                                     onChange={(e) => updateFormData("lastName", e.target.value)}
                                     placeholder="Enter last name"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                         </div>
@@ -243,7 +243,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.email}
                                     onChange={(e) => updateFormData("email", e.target.value)}
                                     placeholder="Enter email address"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                             <div>
@@ -253,7 +253,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.phone}
                                     onChange={(e) => updateFormData("phone", e.target.value)}
                                     placeholder="Enter phone number"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                         </div>
@@ -264,7 +264,7 @@ export const LoanApplicationFormSection = () => {
                                     type="date"
                                     value={formData.dob}
                                     onChange={(e) => updateFormData("dob", e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                             <div>
@@ -274,7 +274,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.pan}
                                     onChange={(e) => updateFormData("pan", e.target.value.toUpperCase())}
                                     placeholder="ABCDE1234F"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                             <div>
@@ -284,7 +284,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.aadhar}
                                     onChange={(e) => updateFormData("aadhar", e.target.value)}
                                     placeholder="1234 5678 9012"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                         </div>
@@ -295,7 +295,7 @@ export const LoanApplicationFormSection = () => {
                                 onChange={(e) => updateFormData("address", e.target.value)}
                                 placeholder="Enter complete address"
                                 rows={3}
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm resize-none transition-all"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm resize-none transition-all"
                             />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -306,7 +306,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.city}
                                     onChange={(e) => updateFormData("city", e.target.value)}
                                     placeholder="Enter city"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                             <div>
@@ -316,7 +316,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.state}
                                     onChange={(e) => updateFormData("state", e.target.value)}
                                     placeholder="Enter state"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                             <div>
@@ -326,7 +326,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.pinCode}
                                     onChange={(e) => updateFormData("pinCode", e.target.value)}
                                     placeholder="Enter PIN code"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                         </div>
@@ -348,7 +348,7 @@ export const LoanApplicationFormSection = () => {
                                 <select
                                     value={formData.employmentType}
                                     onChange={(e) => updateFormData("employmentType", e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm bg-white transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm bg-white transition-all"
                                 >
                                     <option value="">Select type</option>
                                     <option value="salaried">Salaried</option>
@@ -363,7 +363,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.companyName}
                                     onChange={(e) => updateFormData("companyName", e.target.value)}
                                     placeholder="Enter company name"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                         </div>
@@ -375,7 +375,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.designation}
                                     onChange={(e) => updateFormData("designation", e.target.value)}
                                     placeholder="Enter designation"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                             <div>
@@ -383,7 +383,7 @@ export const LoanApplicationFormSection = () => {
                                 <select
                                     value={formData.experience}
                                     onChange={(e) => updateFormData("experience", e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm bg-white transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm bg-white transition-all"
                                 >
                                     <option value="">Select experience</option>
                                     {["0-1", "1-3", "3-5", "5-10", "10+"].map((exp) => (
@@ -400,7 +400,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.income}
                                     onChange={(e) => updateFormData("income", e.target.value)}
                                     placeholder="Enter monthly income"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                             <div>
@@ -410,7 +410,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.existingEmi}
                                     onChange={(e) => updateFormData("existingEmi", e.target.value)}
                                     placeholder="Enter existing EMI (0 if none)"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                         </div>
@@ -433,7 +433,7 @@ export const LoanApplicationFormSection = () => {
                                 value={formData.bankName}
                                 onChange={(e) => updateFormData("bankName", e.target.value)}
                                 placeholder="Enter bank name"
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                             />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -444,7 +444,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.accountNumber}
                                     onChange={(e) => updateFormData("accountNumber", e.target.value)}
                                     placeholder="Enter account number"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                             <div>
@@ -454,7 +454,7 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.ifsc}
                                     onChange={(e) => updateFormData("ifsc", e.target.value.toUpperCase())}
                                     placeholder="Enter IFSC code"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-1 focus:ring-orange-400 focus:outline-none text-sm transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
                                 />
                             </div>
                         </div>
@@ -472,14 +472,14 @@ export const LoanApplicationFormSection = () => {
                     >
                         <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100 shadow-inner">
                             <h3 className="text-xl font-bold text-slate-900 mb-8 flex items-center">
-                                <div className="bg-orange-400 rounded-full p-1 mr-3">
+                                <div className="bg-[#C59D4F] rounded-full p-1 mr-3">
                                     <Check className="text-white" size={18} />
                                 </div>
                                 Application Summary
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-10 gap-x-12">
                                 <div>
-                                    <h4 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-4">Loan Details</h4>
+                                    <h4 className="text-xs font-bold text-[#C59D4F] uppercase tracking-widest mb-4">Loan Details</h4>
                                     <div className="space-y-3">
                                         <p className="text-sm flex justify-between border-b border-slate-200 pb-2">
                                             <span className="text-gray-500">Type</span>
@@ -500,7 +500,7 @@ export const LoanApplicationFormSection = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <h4 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-4">Personal Details</h4>
+                                    <h4 className="text-xs font-bold text-[#C59D4F] uppercase tracking-widest mb-4">Personal Details</h4>
                                     <div className="space-y-3">
                                         <p className="text-sm flex justify-between border-b border-slate-200 pb-2">
                                             <span className="text-gray-500">Name</span>
@@ -521,7 +521,7 @@ export const LoanApplicationFormSection = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <h4 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-4">Employment</h4>
+                                    <h4 className="text-xs font-bold text-[#C59D4F] uppercase tracking-widest mb-4">Employment</h4>
                                     <div className="space-y-3">
                                         <p className="text-sm flex justify-between border-b border-slate-200 pb-2">
                                             <span className="text-gray-500">Type</span>
@@ -538,7 +538,7 @@ export const LoanApplicationFormSection = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <h4 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-4">Bank Details</h4>
+                                    <h4 className="text-xs font-bold text-[#C59D4F] uppercase tracking-widest mb-4">Bank Details</h4>
                                     <div className="space-y-3">
                                         <p className="text-sm flex justify-between border-b border-slate-200 pb-2">
                                             <span className="text-gray-500">Bank</span>
@@ -553,13 +553,13 @@ export const LoanApplicationFormSection = () => {
                             </div>
                         </div>
 
-                        <div className="bg-orange-50 border border-orange-100 p-5 rounded-2xl flex items-start">
-                            <div className="bg-orange-100 rounded-full p-2 mr-4 mt-0.5">
-                                <Search size={18} className="text-orange-600" />
+                        <div className="bg-[#F9F5EE] border border-[#C59D4F] p-5 rounded-2xl flex items-start">
+                            <div className="bg-[#C59D4F]/20 rounded-full p-2 mr-4 mt-0.5">
+                                <Search size={18} className="text-[#B38C3D]" />
                             </div>
                             <div>
-                                <h4 className="text-sm font-bold text-orange-800">Important Information:</h4>
-                                <ul className="text-xs text-orange-700/80 mt-2 space-y-1.5 list-disc ml-4">
+                                <h4 className="text-sm font-bold text-[#C59D4F]">Important Information:</h4>
+                                <ul className="text-xs text-[#B38C3D]/80 mt-2 space-y-1.5 list-disc ml-4">
                                     <li>Your application will be processed within 24-48 business hours</li>
                                     <li>Track status using Application ID sent to your email</li>
                                     <li>Keep original documents ready for physical verification</li>
@@ -588,12 +588,12 @@ export const LoanApplicationFormSection = () => {
                                             borderColor: currentStep >= step.id ? "#FB923C" : "#E2E8F0",
                                             color: currentStep >= step.id ? "#FFFFFF" : "#94A3B8"
                                         }}
-                                        className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center border-2 transition-shadow duration-300 ${currentStep === step.id ? "shadow-lg ring-4 ring-orange-100" : ""}`}
+                                        className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center border-2 transition-shadow duration-300 ${currentStep === step.id ? "shadow-lg ring-4 ring-[#C59D4F]" : ""}`}
                                     >
                                         {currentStep > step.id ? <Check size={20} strokeWidth={3} /> : <span className="text-sm md:text-lg font-bold">{step.id}</span>}
                                     </motion.div>
                                     <div className="absolute top-14 text-center hidden md:block w-32">
-                                        <p className={`text-[10px] font-bold uppercase tracking-wider ${currentStep >= step.id ? "text-orange-500" : "text-gray-300"}`}>
+                                        <p className={`text-[10px] font-bold uppercase tracking-wider ${currentStep >= step.id ? "text-[#C59D4F]" : "text-gray-300"}`}>
                                             Step {step.id}
                                         </p>
                                     </div>
@@ -603,7 +603,7 @@ export const LoanApplicationFormSection = () => {
                                         <motion.div
                                             initial={{ width: "0%" }}
                                             animate={{ width: currentStep > step.id ? "100%" : "0%" }}
-                                            className="h-full bg-orange-400"
+                                            className="h-full bg-[#C59D4F]"
                                         />
                                     </div>
                                 )}
@@ -649,7 +649,7 @@ export const LoanApplicationFormSection = () => {
                                 whileHover={{ scale: 1.02, x: 5 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={nextStep}
-                                className="flex items-center justify-center bg-orange-400 hover:bg-orange-500 text-white px-10 py-4 rounded-xl font-bold shadow-lg shadow-orange-200 transition-all w-full sm:w-auto"
+                                className="flex items-center justify-center bg-[#C59D4F] hover:bg-[#B38C3D] text-white px-10 py-4 rounded-xl font-bold shadow-lg shadow-[#C59D4F]/20 transition-all w-full sm:w-auto"
                             >
                                 Next Step
                                 <ChevronRight size={20} className="ml-2" strokeWidth={3} />
@@ -658,11 +658,11 @@ export const LoanApplicationFormSection = () => {
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                initial={{ backgroundColor: "#FB923C" }}
+                                initial={{ backgroundColor: "#C59D4F" }}
                                 animate={{ backgroundColor: isSubmitting ? "#94A3B8" : "#111F3B" }}
                                 onClick={handleSubmit}
                                 disabled={isSubmitting}
-                                className="flex items-center justify-center text-white px-10 py-4 rounded-xl font-bold shadow-xl shadow-slate-300 transition-all w-full sm:w-auto disabled:cursor-not-allowed"
+                                className="flex items-center justify-center text-white px-10 py-4 rounded-xl font-bold shadow-xl shadow-[#C59D4F]/20 transition-all w-full sm:w-auto disabled:cursor-not-allowed"
                             >
                                 {isSubmitting ? (
                                     <>

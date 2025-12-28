@@ -39,7 +39,7 @@ export const ComplianceSection = () => {
                                     viewport={{ once: true }}
                                     className="items-center box-border caret-transparent flex"
                                 >
-                                    <item.Icon className="text-orange-400 w-5 h-5" />
+                                    <item.Icon className="text-[#C59D4F] w-5 h-5" />
                                     <span className="text-white box-border caret-transparent block ml-3">
                                         {item.text}
                                     </span>

@@ -30,7 +30,7 @@ export const HeroSection = () => {
                         <div className="box-border caret-transparent gap-x-4 flex flex-col gap-y-4 mt-6 pt-6 md:flex-row">
                             <Link
                                 to="/apply-now"
-                                className="text-white text-lg font-medium items-center bg-orange-400 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.05)_0px_1px_2px_0px] caret-transparent flex h-14 justify-center leading-7 text-center text-nowrap w-full px-8 py-4 rounded-bl rounded-br rounded-tl rounded-tr md:w-auto hover:bg-orange-500 hover:shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]"
+                                className="text-white text-lg font-medium items-center  shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.05)_0px_1px_2px_0px] caret-transparent flex h-14 justify-center leading-7 text-center text-nowrap w-full px-8 py-4 rounded-bl rounded-br rounded-tl rounded-tr md:w-auto bg-[#C59D4F] hover:bg-[#B38C3D] hover:shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]"
                             >
                                 Apply for Loan
                             </Link>

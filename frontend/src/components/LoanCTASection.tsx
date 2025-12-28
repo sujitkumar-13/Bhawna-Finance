@@ -30,7 +30,7 @@ export const LoanCTASection = () => {
                     viewport={{ once: true }}
                     className="box-border caret-transparent gap-x-4 flex flex-col justify-center gap-y-4 md:flex-row"
                 >
-                    <button className="text-white text-lg font-medium items-center bg-orange-400 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.05)_0px_1px_2px_0px] caret-transparent flex h-14 justify-center leading-7 text-nowrap px-8 py-4 rounded-xl hover:bg-orange-500 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                    <button className="text-white text-lg font-medium items-center bg-[#C59D4F] shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.05)_0px_1px_2px_0px] caret-transparent flex h-14 justify-center leading-7 text-nowrap px-8 py-4 rounded-xl hover:bg-[#B38C3D] hover:shadow-lg transition-all duration-300 transform hover:scale-105">
                         Schedule Consultation
                     </button>
                     <button className="text-white text-lg font-medium items-center bg-transparent caret-transparent flex h-14 justify-center leading-7 text-nowrap border px-8 py-4 rounded-xl border-solid border-white hover:bg-white/10 hover:text-white transition-all duration-300 transform hover:scale-105">

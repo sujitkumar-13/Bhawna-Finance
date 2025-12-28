@@ -23,9 +23,9 @@ export const ComingSoonSection = ({ title, description, icon = "ri-tools-line" }
                     damping: 20,
                     delay: 0.2
                 }}
-                className="w-24 h-24 bg-orange-100 rounded-3xl flex items-center justify-center mb-8"
+                className="w-24 h-24 bg-[#C59D4F]/20 rounded-3xl flex items-center justify-center mb-8"
             >
-                <i className={`${icon} text-5xl text-orange-500`}></i>
+                <i className={`${icon} text-5xl text-[#C59D4F]`}></i>
             </motion.div>
 
             <motion.h2
@@ -52,9 +52,9 @@ export const ComingSoonSection = ({ title, description, icon = "ri-tools-line" }
                 transition={{ delay: 0.5 }}
                 className="flex gap-4"
             >
-                <div className="h-1.5 w-12 bg-orange-400 rounded-full"></div>
-                <div className="h-1.5 w-1.5 bg-orange-200 rounded-full"></div>
-                <div className="h-1.5 w-1.5 bg-orange-200 rounded-full"></div>
+                <div className="h-1.5 w-12 bg-[#C59D4F] rounded-full"></div>
+                <div className="h-1.5 w-1.5 bg-[#C59D4F] rounded-full"></div>
+                <div className="h-1.5 w-1.5 bg-[#C59D4F] rounded-full"></div>
             </motion.div>
         </motion.div>
     );

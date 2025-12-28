@@ -11,7 +11,7 @@ export const AdminHeader = ({ onToggle, onToggleMobile }: { onToggle: () => void
                 </button>
 
                 {/* Mobile BF Logo and Admin Text */}
-                <div className="flex md:hidden items-center bg-orange-400 h-8 w-8 justify-center rounded-lg mr-3 shrink-0">
+                <div className="flex md:hidden items-center bg-[#C59D4F] h-8 w-8 justify-center rounded-lg mr-3 shrink-0">
                     <span className="text-white text-sm font-bold">BF</span>
                 </div>
                 <span className="text-slate-900 text-lg font-semibold md:hidden">Admin</span>
@@ -64,7 +64,7 @@ export const AdminHeader = ({ onToggle, onToggleMobile }: { onToggle: () => void
 
                 {/* Desktop Action Buttons */}
                 <div className="hidden lg:flex items-center box-border caret-transparent ml-2 md:ml-4">
-                    <button className="text-white text-xs md:text-sm bg-orange-400 caret-transparent block leading-5 text-center px-3 py-1.5 rounded-lg hover:bg-orange-500 transition-colors duration-200 cursor-pointer">
+                    <button className="text-white text-xs md:text-sm bg-[#C59D4F] caret-transparent block leading-5 text-center px-3 py-1.5 rounded-lg hover:bg-[#B38C3D] transition-colors duration-200 cursor-pointer">
                         Export Data
                     </button>
                     <button className="text-slate-900 text-xs md:text-sm bg-transparent caret-transparent block leading-5 text-center border border-slate-900 ml-2 px-3 py-1.5 rounded-lg hover:text-white hover:bg-slate-900 transition-all duration-200 cursor-pointer">

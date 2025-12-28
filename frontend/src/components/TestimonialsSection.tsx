@@ -137,7 +137,7 @@ export const TestimonialsSection = () => {
                             <p className="text-sm box-border caret-transparent leading-4 opacity-90 mb-3">
                                 Retail Chain Owner
                             </p>
-                            <p className="text-sm box-border caret-transparent leading-relaxed italic border-l-2 border-orange-400 pl-4">
+                            <p className="text-sm box-border caret-transparent leading-relaxed italic border-l-2 border-[#C59D4F] pl-4">
                                 &quot;Their loan against property service helped me secure funds for expansion at the best rates in the market.&quot;
                             </p>
                         </div>

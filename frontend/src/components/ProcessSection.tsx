@@ -88,7 +88,7 @@ export const ProcessSection = () => {
                                     variants={itemVariants}
                                     className={`items-center box-border caret-transparent flex${index > 0 ? " mt-4" : ""}`}
                                 >
-                                    <div className="items-center bg-orange-400 box-border caret-transparent flex shrink-0 h-5 justify-center w-5 rounded-full">
+                                    <div className="items-center bg-[#C59D4F] box-border caret-transparent flex shrink-0 h-5 justify-center w-5 rounded-full">
                                         <Check className="text-white w-3 h-3" strokeWidth={3} />
                                     </div>
                                     <span className="text-white text-lg box-border caret-transparent block leading-7 ml-4">
@@ -124,7 +124,7 @@ export const ProcessSection = () => {
                                     className={`items-start box-border caret-transparent flex${index > 0 ? " mt-8" : ""}`}
                                 >
                                     <div className="relative box-border caret-transparent">
-                                        <div className="text-white font-bold items-center bg-orange-400 box-border caret-transparent flex h-10 justify-center w-10 rounded-full">
+                                        <div className="text-white font-bold items-center bg-[#C59D4F] box-border caret-transparent flex h-10 justify-center w-10 rounded-full">
                                             {index + 1}
                                         </div>
                                         {index < applicationSteps.length - 1 && (
@@ -155,7 +155,7 @@ export const ProcessSection = () => {
                 >
                     <Link
                         to="/eligibility"
-                        className="text-white text-lg font-medium items-center bg-orange-400 shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.05)_0px_1px_2px_0px] caret-transparent inline-flex h-14 justify-center leading-7 text-nowrap px-8 py-4 rounded-bl rounded-br rounded-tl rounded-tr hover:bg-orange-500 hover:shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]"
+                        className="text-white text-lg font-medium items-center bg-[#C59D4F] shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.05)_0px_1px_2px_0px] caret-transparent inline-flex h-14 justify-center leading-7 text-nowrap px-8 py-4 rounded-bl rounded-br rounded-tl rounded-tr hover:bg-[#B38C3D] hover:shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]"
                     >
                         Check Your Eligibility
                     </Link>

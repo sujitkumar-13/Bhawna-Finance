@@ -61,7 +61,7 @@ export const LoanRatesSection = () => {
                             <h4 className="text-slate-900 font-semibold box-border caret-transparent mb-2 font-inter">
                                 {rate.title}
                             </h4>
-                            <div className="text-orange-400 text-2xl font-bold box-border caret-transparent leading-8 mb-1">
+                            <div className="text-[#C59D4F] text-2xl font-bold box-border caret-transparent leading-8 mb-1">
                                 <Counter value={rate.rate} />
                             </div>
                             <p className="text-gray-400 text-xs box-border caret-transparent leading-4">

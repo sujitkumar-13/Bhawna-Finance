@@ -46,7 +46,7 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                         onClick={() => handleNav("/admin")}
                         className="items-center box-border caret-transparent flex cursor-pointer"
                     >
-                        <div className="items-center bg-orange-400 box-border caret-transparent flex h-8 justify-center w-8 rounded-lg shrink-0">
+                        <div className="items-center bg-[#C59D4F] box-border caret-transparent flex h-8 justify-center w-8 rounded-lg shrink-0">
                             <span className="text-white text-sm font-bold box-border caret-transparent block leading-5">
                                 BF
                             </span>
@@ -69,7 +69,7 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                     <div className="box-border caret-transparent">
                         <div
                             onClick={() => handleNav("/admin")}
-                            className={`${isDashboard ? "text-white items-center bg-blue-950/50 box-border caret-transparent flex px-4 py-3 border-l-4 border-orange-400" : "text-gray-300 items-center box-border caret-transparent flex px-4 py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer border-l-4 border-transparent"} ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : ''}`}
+                            className={`${isDashboard ? "text-white items-center bg-blue-950/50 box-border caret-transparent flex px-4 py-3 border-l-4 border-[#C59D4F]" : "text-gray-300 items-center box-border caret-transparent flex px-4 py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer border-l-4 border-transparent"} ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : ''}`}
                         >
                             <i className={`text-lg transition-colors duration-200 block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ri-layout-grid-line`}></i>
                             {(!isCollapsed || isMobileOpen) && (
@@ -198,7 +198,7 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
 
                     {/* Mobile Only Action Buttons */}
                     <div className="md:hidden px-4 mt-6 space-y-3">
-                        <button className="w-full text-white text-sm bg-orange-400 py-3 rounded-lg hover:bg-orange-500 transition-colors">
+                        <button className="w-full text-white text-sm bg-[#C59D4F] py-3 rounded-lg hover:bg-[#B38C3D]/80 transition-colors">
                             Export Data
                         </button>
                         <button className="w-full text-white text-sm bg-transparent border border-white/20 py-3 rounded-lg hover:bg-white/10 transition-colors">

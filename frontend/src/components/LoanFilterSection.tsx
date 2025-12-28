@@ -196,7 +196,7 @@ export const LoanFilterSection = () => {
                             <div className="box-border caret-transparent p-10">
                                 <div className="box-border caret-transparent">
                                     <div className="box-border caret-transparent">
-                                        <h3 className="text-slate-900 text-xl font-bold box-border caret-transparent leading-7 mb-6 font-inter underline decoration-orange-400 decoration-4 underline-offset-8">
+                                        <h3 className="text-slate-900 text-xl font-bold box-border caret-transparent leading-7 mb-6 font-inter underline decoration-[#C59D4F] decoration-4 underline-offset-8">
                                             Key Features
                                         </h3>
                                         <ul className="box-border caret-transparent list-none pl-0 space-y-3">
@@ -208,7 +208,7 @@ export const LoanFilterSection = () => {
                                                     transition={{ delay: idx * 0.1 }}
                                                     className="items-start box-border caret-transparent flex"
                                                 >
-                                                    <Check className="text-orange-400 w-5 h-5 shrink-0 mt-0.5" strokeWidth={3} />
+                                                    <Check className="text-[#C59D4F] w-5 h-5 shrink-0 mt-0.5" strokeWidth={3} />
                                                     <span className="text-gray-500 text-sm box-border caret-transparent block leading-5 ml-3 font-medium">
                                                         {feature.match(/[0-9]+/) ? (
                                                             <>

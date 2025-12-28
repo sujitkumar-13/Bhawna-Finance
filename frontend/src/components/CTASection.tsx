@@ -13,7 +13,7 @@ export const CTASection = () => {
             <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
                 <div className="bg-slate-900 rounded-3xl p-8 md:p-20 text-center shadow-2xl overflow-hidden relative group">
                     {/* Inner glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-orange-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#C59D4F]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -22,7 +22,7 @@ export const CTASection = () => {
                         viewport={{ once: true }}
                         className="flex justify-center mb-6"
                     >
-                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-orange-400 text-sm font-medium border border-white/10 backdrop-blur-sm">
+                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-[#C59D4F] text-sm font-medium border border-white/10 backdrop-blur-sm">
                             <Sparkles className="w-4 h-4" />
                             Fast-Track Your Dreams
                         </span>
@@ -35,7 +35,7 @@ export const CTASection = () => {
                         viewport={{ once: true }}
                         className="text-white text-3xl md:text-6xl font-bold mb-6 md:mb-8 leading-[1.2] md:leading-[1.1] font-inter tracking-tight"
                     >
-                        Ready to Apply for a <span className="text-orange-400">Loan?</span>
+                        Ready to Apply for a <span className="text-[#C59D4F] ">Loan?</span>
                     </motion.h2>
 
                     <motion.p
@@ -58,7 +58,7 @@ export const CTASection = () => {
                     >
                         <Link
                             to="/apply-now"
-                            className="group relative inline-flex items-center justify-center gap-3 bg-orange-400 text-white text-base md:text-lg font-semibold px-8 py-4 md:px-10 md:py-5 rounded-2xl hover:bg-orange-500 transition-all duration-300 shadow-xl shadow-orange-400/20 hover:shadow-orange-400/40 hover:-translate-y-1 active:scale-95"
+                            className="group relative inline-flex items-center justify-center gap-3  text-white text-base md:text-lg font-semibold px-8 py-4 md:px-10 md:py-5 rounded-2xl bg-[#C59D4F] hover:bg-[#B38C3D] transition-all duration-300 shadow-xl shadow-[#C59D4F]/20 hover:shadow-[#B38C3D]/40 hover:-translate-y-1 active:scale-95"
                         >
                             Start Your Application
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

@@ -57,7 +57,7 @@ export const Header = () => {
                                 <Link
                                     key={link.path}
                                     to={link.path}
-                                    className={`text-slate-700 font-medium box-border block ml-8 hover:text-orange-500 transition-colors ${location.pathname === link.path ? "text-orange-500" : ""
+                                    className={`text-slate-700 font-medium box-border block ml-8 hover:text-[#B38C3D] transition-colors ${location.pathname === link.path ? "text-[#C59D4F]" : ""
                                         }`}
                                 >
                                     {link.title}
@@ -76,7 +76,7 @@ export const Header = () => {
                                 </Link>
                                 <Link
                                     to="/apply-now"
-                                    className="text-white text-sm font-medium items-center bg-orange-400 shadow-sm flex h-10 justify-center leading-5 text-center text-nowrap ml-3 px-4 py-2 rounded-lg hover:bg-orange-500 hover:shadow-md transition-all active:scale-95"
+                                    className="text-white text-sm font-medium items-center shadow-sm flex h-10 justify-center leading-5 text-center text-nowrap ml-3 px-4 py-2 rounded-lg bg-[#C59D4F] hover:bg-[#B38C3D] hover:shadow-md transition-all active:scale-95"
                                 >
                                     Apply Now
                                 </Link>
@@ -117,7 +117,7 @@ export const Header = () => {
                                 <Link
                                     key={link.path}
                                     to={link.path}
-                                    className={`text-xl font-semibold text-slate-900 hover:text-orange-500 transition-colors ${location.pathname === link.path ? "text-orange-500" : ""
+                                    className={`text-xl font-semibold text-slate-900 hover:text-[#B38C3D] transition-colors ${location.pathname === link.path ? "text-[#B38C3D]" : ""
                                         }`}
                                 >
                                     {link.title}
@@ -134,7 +134,7 @@ export const Header = () => {
                             </Link>
                             <Link
                                 to="/apply-now"
-                                className="w-full text-white text-lg font-medium flex h-14 items-center justify-center bg-orange-400 rounded-xl shadow-lg hover:bg-orange-500 active:scale-[0.98] transition-all"
+                                className="w-full text-white text-lg font-medium flex h-14 items-center justify-center bg-[#C59D4F] hover:bg-[#B38C3D] rounded-xl shadow-lg  active:scale-[0.98] transition-all"
                             >
                                 Apply Now
                             </Link>
