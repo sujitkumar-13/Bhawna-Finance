@@ -56,7 +56,7 @@ const applicationSchema = new mongoose.Schema({
 });
 
 // Pre-save hook to generate tracking ID
-applicationSchema.pre('save', async function (next) {
+applicationSchema.pre('save', async function () {
     if (!this.applicationId) {
         const date = new Date();
         const year = date.getFullYear().toString().slice(-2);
@@ -74,7 +74,6 @@ applicationSchema.pre('save', async function (next) {
             });
         }
     }
-    next();
 });
 
 module.exports = mongoose.model('Application', applicationSchema);

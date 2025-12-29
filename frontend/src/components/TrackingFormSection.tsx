@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { API_BASE_URL } from "../apiConfig";
 
 export const TrackingFormSection = () => {
     const [applicationId, setApplicationId] = useState("");
@@ -19,7 +20,7 @@ export const TrackingFormSection = () => {
 
         setIsLoading(true);
         try {
-            const response = await axios.post("https://bhawna-finance-dimq.vercel.app/api/applications/track", {
+            const response = await axios.post(`${API_BASE_URL}/track`, {
                 applicationId,
                 phone
             });
@@ -48,8 +49,8 @@ export const TrackingFormSection = () => {
 
     return (
         <section className="bg-slate-100 py-16 min-h-[600px]">
-            <div className="max-w-4xl mx-auto px-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <div className="max-w-3xl mx-auto px-6">
+                <div className="flex flex-col gap-8">
                     {/* Form Section */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}

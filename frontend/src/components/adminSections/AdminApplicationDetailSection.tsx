@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { API_BASE_URL } from "../../apiConfig";
 
 export const AdminApplicationDetailSection = () => {
     const { id } = useParams();
@@ -16,7 +17,7 @@ export const AdminApplicationDetailSection = () => {
 
     const fetchApplication = async () => {
         try {
-            const response = await axios.get(`https://bhawna-finance-dimq.vercel.app/api/applications/${id}`);
+            const response = await axios.get(`${API_BASE_URL}/${id}`);
             setApplication(response.data.data);
         } catch (error) {
             console.error("Error fetching application details:", error);
@@ -32,7 +33,7 @@ export const AdminApplicationDetailSection = () => {
 
     const handleStatusUpdate = async (newStatus: string) => {
         try {
-            const response = await axios.put(`https://bhawna-finance-dimq.vercel.app/api/applications/${id}/status`, { status: newStatus });
+            const response = await axios.put(`${API_BASE_URL}/${id}/status`, { status: newStatus });
             if (response.data.success) {
                 toast.success("Status updated successfully");
                 setApplication(response.data.data);
@@ -47,7 +48,7 @@ export const AdminApplicationDetailSection = () => {
         if (!noteText.trim()) return;
         setIsSubmittingNote(true);
         try {
-            const response = await axios.post(`https://bhawna-finance-dimq.vercel.app/api/applications/${id}/notes`, {
+            const response = await axios.post(`${API_BASE_URL}/${id}/notes`, {
                 text: noteText,
                 role: noteCategory,
                 user: "Rajesh Kumar", // Hardcoded for demo, usually from Auth

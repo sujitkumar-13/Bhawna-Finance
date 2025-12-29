@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { API_BASE_URL } from "../../apiConfig";
 
 export const AdminApplicationsSection = () => {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ export const AdminApplicationsSection = () => {
 
     const fetchApplications = async () => {
         try {
-            const response = await axios.get("https://bhawna-finance-dimq.vercel.app/api/applications");
+            const response = await axios.get(API_BASE_URL);
             setApplications(response.data.data);
         } catch (error) {
             console.error("Error fetching applications:", error);
@@ -36,7 +37,7 @@ export const AdminApplicationsSection = () => {
 
     const handleStatusUpdate = async (id: string, newStatus: string) => {
         try {
-            const response = await axios.put(`https://bhawna-finance-dimq.vercel.app/api/applications/${id}/status`, { status: newStatus });
+            const response = await axios.put(`${API_BASE_URL}/${id}/status`, { status: newStatus });
             if (response.data.success) {
                 toast.success("Status updated successfully");
                 setApplications(prev => prev.map(app => app._id === id ? { ...app, status: newStatus } : app));

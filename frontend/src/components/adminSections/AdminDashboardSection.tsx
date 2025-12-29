@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../../apiConfig";
 
 export const AdminDashboardSection = () => {
     const navigate = useNavigate();
@@ -11,7 +12,7 @@ export const AdminDashboardSection = () => {
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
-                const response = await axios.get("https://bhawna-finance-dimq.vercel.app/api/applications/stats");
+                const response = await axios.get(`${API_BASE_URL}/stats`);
                 setData(response.data.data);
             } catch (error) {
                 console.error("Error fetching dashboard data:", error);

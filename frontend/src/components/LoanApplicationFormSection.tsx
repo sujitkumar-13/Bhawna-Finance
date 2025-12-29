@@ -3,6 +3,7 @@ import { Search, ChevronRight, ChevronLeft, Check, Send, Loader2 } from "lucide-
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { API_BASE_URL } from "../apiConfig";
 
 const LOAN_TYPES = [
     {
@@ -96,20 +97,12 @@ const getFlagEmoji = (countryCode: string) => {
 };
 
 export const LoanApplicationFormSection = () => {
-    // Session persistence for Step
-    const [currentStep, setCurrentStep] = useState(() => {
-        const savedStep = sessionStorage.getItem("loan_app_step");
-        return savedStep ? parseInt(savedStep) : 1;
-    });
+    const [currentStep, setCurrentStep] = useState(1);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [countries, setCountries] = useState<{ name: string, dial_code: string, code: string, flag: string }[]>([]);
 
-    // Session persistence for Form Data
-    const [formData, setFormData] = useState(() => {
-        const savedData = sessionStorage.getItem("loan_app_data");
-        return savedData ? JSON.parse(savedData) : DEFAULT_FORM_DATA;
-    });
+    const [formData, setFormData] = useState(DEFAULT_FORM_DATA);
 
     const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
@@ -142,14 +135,6 @@ export const LoanApplicationFormSection = () => {
         fetchCountries();
     }, []);
 
-    // Save to sessionStorage whenever data changes
-    useEffect(() => {
-        sessionStorage.setItem("loan_app_data", JSON.stringify(formData));
-    }, [formData]);
-
-    useEffect(() => {
-        sessionStorage.setItem("loan_app_step", currentStep.toString());
-    }, [currentStep]);
 
     const updateFormData = (field: string, value: string) => {
         setFormData((prev: any) => ({ ...prev, [field]: value }));
@@ -254,18 +239,9 @@ export const LoanApplicationFormSection = () => {
 
         setIsSubmitting(true);
         try {
-            const response = await axios.post("https://bhawna-finance-dimq.vercel.app/api/applications", formData);
+            const response = await axios.post(API_BASE_URL, formData);
             if (response.data.success) {
-                const appId = response.data.data.applicationId;
-                toast.success(
-                    <div>
-                        <p className="font-bold">Application Submitted!</p>
-                        <p className="text-sm">Your ID: <span className="text-[#C59D4F]">{appId}</span></p>
-                    </div>,
-                    { autoClose: 10000 }
-                );
-                sessionStorage.removeItem("loan_app_data");
-                sessionStorage.removeItem("loan_app_step");
+                toast.success("Application submitted successfully!");
                 setCurrentStep(1);
                 setFormData(DEFAULT_FORM_DATA);
             }

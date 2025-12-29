@@ -74,7 +74,7 @@ exports.submitApplication = async (req, res) => {
         // Send confirmation email
         try {
             await transporter.sendMail({
-                from: '"Bhawan Finance" <no-reply@bhawanfinance.com>',
+                from: `"Bhawan Finance" <${process.env.EMAIL_USER}>`,
                 to: savedApplication.email,
                 subject: `Application Received - ${savedApplication.applicationId}`,
                 html: getConfirmationEmailTemplate(savedApplication)
@@ -94,9 +94,10 @@ exports.submitApplication = async (req, res) => {
             }
         });
     } catch (error) {
+        console.error('Submission failed:', error);
         res.status(400).json({
             success: false,
-            message: 'Error submitting application',
+            message: `Submission failed: ${error.message}`,
             error: error.message
         });
     }
