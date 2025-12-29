@@ -12,7 +12,10 @@ app.use(express.json());
 
 // Routes
 const applicationRoutes = require('./routes/applicationRoutes');
+const authRoutes = require('./routes/authRoutes');
+
 app.use('/api/applications', applicationRoutes);
+app.use('/api/auth', authRoutes);
 
 // Basic Route
 app.get('/', (req, res) => {

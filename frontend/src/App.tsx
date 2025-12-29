@@ -15,6 +15,8 @@ import { AdminComingSoon } from "./pages/AdminComingSoon";
 import { AdminDailyReports } from "./pages/AdminDailyReports";
 import { AdminFinancialOverview } from "./pages/AdminFinancialOverview";
 import { AdminStaffPerformance } from "./pages/AdminStaffPerformance";
+import { AdminLogin } from "./pages/AdminLogin";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -38,17 +40,19 @@ function App() {
             <Route path="/contact" element={<ContactSupport />} />
             <Route path="/track-application" element={<TrackApplication />} />
             <Route path="/apply-now" element={<ApplyNow />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/applications" element={<AdminApplications />} />
-            <Route path="/admin/applications/:id" element={<AdminApplicationDetail />} />
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/applications" element={<ProtectedRoute><AdminApplications /></ProtectedRoute>} />
+            <Route path="/admin/applications/:id" element={<ProtectedRoute><AdminApplicationDetail /></ProtectedRoute>} />
 
             {/* Admin Coming Soon Routes */}
-            <Route path="/admin/user-management" element={<AdminComingSoon title="User Management" icon="ri-user-line" />} />
-            <Route path="/admin/staff-permissions" element={<AdminComingSoon title="Staff & Permissions" icon="ri-group-line" />} />
-            <Route path="/admin/reports/daily" element={<AdminDailyReports />} />
-            <Route path="/admin/reports/financial" element={<AdminFinancialOverview />} />
-            <Route path="/admin/reports/staff-performance" element={<AdminStaffPerformance />} />
-            <Route path="/admin/settings" element={<AdminComingSoon title="System Settings" icon="ri-settings-4-line" />} />
+            <Route path="/admin/user-management" element={<ProtectedRoute><AdminComingSoon title="User Management" icon="ri-user-line" /></ProtectedRoute>} />
+            <Route path="/admin/staff-permissions" element={<ProtectedRoute><AdminComingSoon title="Staff & Permissions" icon="ri-group-line" /></ProtectedRoute>} />
+            <Route path="/admin/reports/daily" element={<ProtectedRoute><AdminDailyReports /></ProtectedRoute>} />
+            <Route path="/admin/reports/financial" element={<ProtectedRoute><AdminFinancialOverview /></ProtectedRoute>} />
+            <Route path="/admin/reports/staff-performance" element={<ProtectedRoute><AdminStaffPerformance /></ProtectedRoute>} />
+            <Route path="/admin/settings" element={<ProtectedRoute><AdminComingSoon title="System Settings" icon="ri-settings-4-line" /></ProtectedRoute>} />
           </Routes>
           {!isAdminPage && <Footer />}
         </div>
