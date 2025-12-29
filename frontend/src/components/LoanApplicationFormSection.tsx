@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, ChevronRight, ChevronLeft, Check, Send, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
@@ -31,80 +31,247 @@ const LOAN_TYPES = [
     },
 ];
 
+const FIELD_LABELS: Record<string, string> = {
+    loanAmount: "Loan Amount",
+    tenure: "Tenure",
+    purpose: "Purpose",
+    firstName: "First Name",
+    lastName: "Last Name",
+    email: "Email Address",
+    phoneCode: "Country Code",
+    phone: "Phone Number",
+    dob: "Date of Birth",
+    pan: "PAN Number",
+    aadhar: "Aadhar Number",
+    address: "Address",
+    city: "City",
+    state: "State",
+    pinCode: "PIN Code",
+    employmentType: "Employment Type",
+    companyName: "Company Name",
+    designation: "Designation",
+    experience: "Experience",
+    income: "Monthly Income",
+    existingEmi: "Existing EMI",
+    bankName: "Bank Name",
+    accountNumber: "Account Number",
+    ifsc: "IFSC Code",
+};
+
+const DEFAULT_FORM_DATA = {
+    loanType: "personal",
+    loanAmount: "",
+    tenure: "",
+    purpose: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneCode: "+91",
+    phone: "",
+    dob: "",
+    pan: "",
+    aadhar: "",
+    address: "",
+    city: "",
+    state: "",
+    pinCode: "",
+    employmentType: "",
+    companyName: "",
+    designation: "",
+    experience: "",
+    income: "",
+    existingEmi: "",
+    bankName: "",
+    accountNumber: "",
+    ifsc: "",
+};
+
+const getFlagEmoji = (countryCode: string) => {
+    if (!countryCode) return "🌐";
+    const codePoints = countryCode
+        .toUpperCase()
+        .split('')
+        .map(char => 127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
+};
+
 export const LoanApplicationFormSection = () => {
-    const [currentStep, setCurrentStep] = useState(1);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [formData, setFormData] = useState({
-        loanType: "personal",
-        loanAmount: "",
-        tenure: "",
-        purpose: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        dob: "",
-        pan: "",
-        aadhar: "",
-        address: "",
-        city: "",
-        state: "",
-        pinCode: "",
-        employmentType: "",
-        companyName: "",
-        designation: "",
-        experience: "",
-        income: "",
-        existingEmi: "",
-        bankName: "",
-        accountNumber: "",
-        ifsc: "",
+    // Session persistence for Step
+    const [currentStep, setCurrentStep] = useState(() => {
+        const savedStep = sessionStorage.getItem("loan_app_step");
+        return savedStep ? parseInt(savedStep) : 1;
     });
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [countries, setCountries] = useState<{ name: string, dial_code: string, code: string, flag: string }[]>([]);
+
+    // Session persistence for Form Data
+    const [formData, setFormData] = useState(() => {
+        const savedData = sessionStorage.getItem("loan_app_data");
+        return savedData ? JSON.parse(savedData) : DEFAULT_FORM_DATA;
+    });
+
+    const [validationErrors, setValidationErrors] = useState<string[]>([]);
+
+    // Fetch countries
+    useEffect(() => {
+        const fetchCountries = async () => {
+            try {
+                const res = await axios.get("https://countriesnow.space/api/v0.1/countries/codes");
+                if (!res.data.error) {
+                    const formatted = res.data.data.map((c: any) => ({
+                        ...c,
+                        flag: getFlagEmoji(c.code)
+                    })).sort((a: any, b: any) => a.name.localeCompare(b.name));
+
+                    // Put India at top of list but keep alphabetical for others
+                    const india = formatted.find((c: any) => c.code === "IN");
+                    const others = formatted.filter((c: any) => c.code !== "IN");
+                    setCountries(india ? [india, ...others] : formatted);
+                }
+            } catch (err) {
+                console.error("Failed to fetch countries", err);
+                // Fallback basic list
+                setCountries([
+                    { name: "India", code: "IN", dial_code: "+91", flag: "🇮🇳" },
+                    { name: "United States", code: "US", dial_code: "+1", flag: "🇺🇸" },
+                    { name: "United Kingdom", code: "GB", dial_code: "+44", flag: "🇬🇧" }
+                ]);
+            }
+        };
+        fetchCountries();
+    }, []);
+
+    // Save to sessionStorage whenever data changes
+    useEffect(() => {
+        sessionStorage.setItem("loan_app_data", JSON.stringify(formData));
+    }, [formData]);
+
+    useEffect(() => {
+        sessionStorage.setItem("loan_app_step", currentStep.toString());
+    }, [currentStep]);
+
     const updateFormData = (field: string, value: string) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
+        setFormData((prev: any) => ({ ...prev, [field]: value }));
+        // Clear error for this field when updated
+        if (validationErrors.includes(field)) {
+            setValidationErrors((prev) => prev.filter((f) => f !== field));
+        }
     };
 
-    const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 5));
-    const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
+    const clearError = (field: string) => {
+        if (validationErrors.includes(field)) {
+            setValidationErrors((prev) => prev.filter((f) => f !== field));
+        }
+    };
+
+    const fieldError = (field: keyof typeof formData) => {
+        return validationErrors.includes(field as string);
+    };
+
+    const validateStep = (step: number) => {
+        const requiredFields: Record<number, string[]> = {
+            1: ["loanAmount", "tenure", "purpose"],
+            2: ["firstName", "lastName", "email", "phone", "dob", "pan", "aadhar", "address", "city", "state", "pinCode"],
+            3: ["employmentType", "companyName", "designation", "experience", "income", "existingEmi"],
+            4: ["bankName", "accountNumber", "ifsc"]
+        };
+
+        const fieldsForStep = requiredFields[step];
+        if (!fieldsForStep) return true;
+
+        // 1. Basic empty check
+        const missing = fieldsForStep.filter(field => {
+            const value = formData[field as keyof typeof formData];
+            return value === undefined || value === null || value === "";
+        });
+
+        if (missing.length > 0) {
+            const firstMissingField = missing[0];
+            setValidationErrors([firstMissingField]);
+            const label = FIELD_LABELS[firstMissingField] || firstMissingField;
+            toast.error(`Please fill in your ${label}`);
+            return false;
+        }
+
+        // 2. Advanced format checks for Step 2
+        if (step === 2) {
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                setValidationErrors(["email"]);
+                toast.error("Please enter a valid email address.");
+                return false;
+            }
+
+            // Phone number validation (10 digits)
+            if (!/^\d{10}$/.test(formData.phone)) {
+                setValidationErrors(["phone"]);
+                toast.error("Phone number must be exactly 10 digits.");
+                return false;
+            }
+
+            // Age validation (18+ years)
+            const birthDate = new Date(formData.dob);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            if (age < 18) {
+                setValidationErrors(["dob"]);
+                toast.error("You must be at least 18 years old to apply.");
+                return false;
+            }
+
+            // Aadhar validation (12 digits)
+            if (!/^\d{12}$/.test(formData.aadhar)) {
+                setValidationErrors(["aadhar"]);
+                toast.error("Aadhar number must be exactly 12 digits.");
+                return false;
+            }
+        }
+
+        setValidationErrors([]);
+        return true;
+    };
+
+    const nextStep = () => {
+        if (validateStep(currentStep)) {
+            setCurrentStep((prev) => Math.min(prev + 1, 5));
+            setValidationErrors([]);
+        }
+    };
+
+    const prevStep = () => {
+        setCurrentStep((prev) => Math.max(prev - 1, 1));
+        setValidationErrors([]);
+    };
 
     const handleSubmit = async () => {
+        if (!validateStep(4)) return;
+
         setIsSubmitting(true);
         try {
             const response = await axios.post("https://bhawna-finance-dimq.vercel.app/api/applications", formData);
             if (response.data.success) {
-                toast.success("Application Submitted Successfully!");
+                const appId = response.data.data.applicationId;
+                toast.success(
+                    <div>
+                        <p className="font-bold">Application Submitted!</p>
+                        <p className="text-sm">Your ID: <span className="text-[#C59D4F]">{appId}</span></p>
+                    </div>,
+                    { autoClose: 10000 }
+                );
+                sessionStorage.removeItem("loan_app_data");
+                sessionStorage.removeItem("loan_app_step");
                 setCurrentStep(1);
-                setFormData({
-                    loanType: "personal",
-                    loanAmount: "",
-                    tenure: "",
-                    purpose: "",
-                    firstName: "",
-                    lastName: "",
-                    email: "",
-                    phone: "",
-                    dob: "",
-                    pan: "",
-                    aadhar: "",
-                    address: "",
-                    city: "",
-                    state: "",
-                    pinCode: "",
-                    employmentType: "",
-                    companyName: "",
-                    designation: "",
-                    experience: "",
-                    income: "",
-                    existingEmi: "",
-                    bankName: "",
-                    accountNumber: "",
-                    ifsc: "",
-                });
+                setFormData(DEFAULT_FORM_DATA);
             }
         } catch (error: any) {
             console.error("Submission error:", error);
-            toast.error(error.response?.data?.message || "Error submitting application. Please try again.");
+            toast.error(error.response?.data?.message || "Failed to submit application");
         } finally {
             setIsSubmitting(false);
         }
@@ -168,7 +335,8 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.loanAmount}
                                     onChange={(e) => updateFormData("loanAmount", e.target.value)}
                                     placeholder="Enter loan amount"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("loanAmount")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("loanAmount") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                             <div>
@@ -176,7 +344,8 @@ export const LoanApplicationFormSection = () => {
                                 <select
                                     value={formData.tenure}
                                     onChange={(e) => updateFormData("tenure", e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm bg-white transition-all"
+                                    onFocus={() => clearError("tenure")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm bg-white transition-all ${fieldError("tenure") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 >
                                     <option value="">Select tenure</option>
                                     {[12, 24, 36, 48, 60, 72, 84].map((m) => (
@@ -190,7 +359,8 @@ export const LoanApplicationFormSection = () => {
                             <select
                                 value={formData.purpose}
                                 onChange={(e) => updateFormData("purpose", e.target.value)}
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm bg-white transition-all"
+                                onFocus={() => clearError("purpose")}
+                                className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm bg-white transition-all ${fieldError("purpose") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                             >
                                 <option value="">Select purpose</option>
                                 <option value="debt-consolidation">Debt Consolidation</option>
@@ -221,7 +391,8 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.firstName}
                                     onChange={(e) => updateFormData("firstName", e.target.value)}
                                     placeholder="Enter first name"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("firstName")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("firstName") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                             <div>
@@ -231,7 +402,8 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.lastName}
                                     onChange={(e) => updateFormData("lastName", e.target.value)}
                                     placeholder="Enter last name"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("lastName")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("lastName") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                         </div>
@@ -243,18 +415,37 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.email}
                                     onChange={(e) => updateFormData("email", e.target.value)}
                                     placeholder="Enter email address"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("email")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("email") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                             <div>
                                 <label className="text-slate-900 text-sm font-semibold block mb-2">Phone Number</label>
-                                <input
-                                    type="tel"
-                                    value={formData.phone}
-                                    onChange={(e) => updateFormData("phone", e.target.value)}
-                                    placeholder="Enter phone number"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
-                                />
+                                <div className="flex gap-2">
+                                    <select
+                                        value={formData.phoneCode}
+                                        onChange={(e) => updateFormData("phoneCode", e.target.value)}
+                                        className="w-24 px-2 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm bg-white appearance-none"
+                                    >
+                                        {countries.length > 0 ? (
+                                            countries.map((c, idx) => (
+                                                <option key={`${c.code}-${idx}`} value={c.dial_code}>
+                                                    {c.flag} {c.dial_code}
+                                                </option>
+                                            ))
+                                        ) : (
+                                            <option value="+91">�� +91</option>
+                                        )}
+                                    </select>
+                                    <input
+                                        type="tel"
+                                        value={formData.phone}
+                                        onChange={(e) => updateFormData("phone", e.target.value)}
+                                        placeholder="Enter phone number"
+                                        onFocus={() => clearError("phone")}
+                                        className={`flex-1 px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("phone") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
+                                    />
+                                </div>
                             </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -264,7 +455,8 @@ export const LoanApplicationFormSection = () => {
                                     type="date"
                                     value={formData.dob}
                                     onChange={(e) => updateFormData("dob", e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("dob")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("dob") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                             <div>
@@ -274,7 +466,8 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.pan}
                                     onChange={(e) => updateFormData("pan", e.target.value.toUpperCase())}
                                     placeholder="ABCDE1234F"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("pan")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("pan") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                             <div>
@@ -284,7 +477,8 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.aadhar}
                                     onChange={(e) => updateFormData("aadhar", e.target.value)}
                                     placeholder="1234 5678 9012"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("aadhar")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("aadhar") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                         </div>
@@ -295,7 +489,8 @@ export const LoanApplicationFormSection = () => {
                                 onChange={(e) => updateFormData("address", e.target.value)}
                                 placeholder="Enter complete address"
                                 rows={3}
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm resize-none transition-all"
+                                onFocus={() => clearError("address")}
+                                className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm resize-none transition-all ${fieldError("address") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                             />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -306,7 +501,8 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.city}
                                     onChange={(e) => updateFormData("city", e.target.value)}
                                     placeholder="Enter city"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("city")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("city") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                             <div>
@@ -316,7 +512,8 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.state}
                                     onChange={(e) => updateFormData("state", e.target.value)}
                                     placeholder="Enter state"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("state")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("state") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                             <div>
@@ -326,7 +523,8 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.pinCode}
                                     onChange={(e) => updateFormData("pinCode", e.target.value)}
                                     placeholder="Enter PIN code"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("pinCode")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("pinCode") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                         </div>
@@ -348,7 +546,8 @@ export const LoanApplicationFormSection = () => {
                                 <select
                                     value={formData.employmentType}
                                     onChange={(e) => updateFormData("employmentType", e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm bg-white transition-all"
+                                    onFocus={() => clearError("employmentType")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm bg-white transition-all ${fieldError("employmentType") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 >
                                     <option value="">Select type</option>
                                     <option value="salaried">Salaried</option>
@@ -363,7 +562,8 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.companyName}
                                     onChange={(e) => updateFormData("companyName", e.target.value)}
                                     placeholder="Enter company name"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("companyName")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("companyName") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                         </div>
@@ -375,7 +575,8 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.designation}
                                     onChange={(e) => updateFormData("designation", e.target.value)}
                                     placeholder="Enter designation"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("designation")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("designation") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                             <div>
@@ -383,7 +584,8 @@ export const LoanApplicationFormSection = () => {
                                 <select
                                     value={formData.experience}
                                     onChange={(e) => updateFormData("experience", e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm bg-white transition-all"
+                                    onFocus={() => clearError("experience")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm bg-white transition-all ${fieldError("experience") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 >
                                     <option value="">Select experience</option>
                                     {["0-1", "1-3", "3-5", "5-10", "10+"].map((exp) => (
@@ -400,7 +602,8 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.income}
                                     onChange={(e) => updateFormData("income", e.target.value)}
                                     placeholder="Enter monthly income"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("income")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("income") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                             <div>
@@ -410,7 +613,8 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.existingEmi}
                                     onChange={(e) => updateFormData("existingEmi", e.target.value)}
                                     placeholder="Enter existing EMI (0 if none)"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("existingEmi")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("existingEmi") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                         </div>
@@ -433,7 +637,8 @@ export const LoanApplicationFormSection = () => {
                                 value={formData.bankName}
                                 onChange={(e) => updateFormData("bankName", e.target.value)}
                                 placeholder="Enter bank name"
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                onFocus={() => clearError("bankName")}
+                                className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("bankName") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                             />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -444,7 +649,8 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.accountNumber}
                                     onChange={(e) => updateFormData("accountNumber", e.target.value)}
                                     placeholder="Enter account number"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("accountNumber")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("accountNumber") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                             <div>
@@ -454,7 +660,8 @@ export const LoanApplicationFormSection = () => {
                                     value={formData.ifsc}
                                     onChange={(e) => updateFormData("ifsc", e.target.value.toUpperCase())}
                                     placeholder="Enter IFSC code"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all"
+                                    onFocus={() => clearError("ifsc")}
+                                    className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm transition-all ${fieldError("ifsc") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
                                 />
                             </div>
                         </div>

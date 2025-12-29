@@ -3,6 +3,7 @@ const router = express.Router();
 const applicationController = require('../controllers/applicationController');
 
 router.post('/', applicationController.submitApplication);
+router.post('/track', applicationController.trackApplication);
 router.get('/', applicationController.getAllApplications);
 router.get('/stats', applicationController.getApplicationStats);
 router.get('/:id', applicationController.getApplicationById);

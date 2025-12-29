@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const applicationSchema = new mongoose.Schema({
+    applicationId: { type: String, unique: true },
     loanType: { type: String, required: true },
     loanAmount: { type: Number, required: true },
     tenure: { type: Number, required: true },
@@ -52,6 +53,28 @@ const applicationSchema = new mongoose.Schema({
         date: { type: Date, default: Date.now }
     }],
     createdAt: { type: Date, default: Date.now }
+});
+
+// Pre-save hook to generate tracking ID
+applicationSchema.pre('save', async function (next) {
+    if (!this.applicationId) {
+        const date = new Date();
+        const year = date.getFullYear().toString().slice(-2);
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const random = Math.floor(1000 + Math.random() * 9000); // 4 digit random
+        this.applicationId = `BF${year}${month}${random}`;
+
+        // Initialize status history if empty
+        if (this.statusHistory.length === 0) {
+            this.statusHistory.push({
+                status: 'Under Review',
+                actor: 'System',
+                description: 'Application submitted and received successfully.',
+                date: new Date()
+            });
+        }
+    }
+    next();
 });
 
 module.exports = mongoose.model('Application', applicationSchema);
