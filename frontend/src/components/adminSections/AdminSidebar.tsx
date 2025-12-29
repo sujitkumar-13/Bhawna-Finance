@@ -160,14 +160,14 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                         {openSubmenus.includes("Reports & Analytics") && (!isCollapsed || isMobileOpen) && (
                             <div className="bg-slate-800/50 box-border caret-transparent">
                                 {[
-                                    { label: "Daily Reports", icon: "ri-calendar-line", path: "/admin/reports/daily" },
-                                    { label: "Financial Overview", icon: "ri-pie-chart-line", path: "/admin/reports/financial" },
-                                    { label: "Staff Performance", icon: "ri-line-chart-line", path: "/admin/reports/staff-performance" }
+                                    { label: "Daily Reports", icon: "ri-calendar-line", path: "/admin/reports/daily", active: location.pathname === "/admin/reports/daily" },
+                                    { label: "Financial Overview", icon: "ri-pie-chart-line", path: "/admin/reports/financial", active: location.pathname === "/admin/reports/financial" },
+                                    { label: "Staff Performance", icon: "ri-line-chart-line", path: "/admin/reports/staff-performance", active: location.pathname === "/admin/reports/staff-performance" }
                                 ].map((sub) => (
                                     <div
                                         key={sub.label}
                                         onClick={() => handleNav(sub.path)}
-                                        className={`text-gray-300 items-center box-border caret-transparent flex ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : 'pl-12 pr-4'} py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer`}
+                                        className={`text-gray-300 items-center box-border caret-transparent flex ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : 'pl-12 pr-4'} py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer ${sub.active ? 'text-white bg-blue-900/40' : ''}`}
                                     >
                                         <i className={`text-lg block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ${sub.icon}`}></i>
                                         {(!isCollapsed || isMobileOpen) && (
