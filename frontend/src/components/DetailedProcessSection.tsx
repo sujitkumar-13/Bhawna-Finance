@@ -80,8 +80,8 @@ export const DetailedProcessSection = () => {
     };
 
     return (
-        <section className="bg-white box-border caret-transparent py-16 md:py-24">
-            <div className="box-border caret-transparent max-w-screen-xl mx-auto px-6 md:px-8">
+        <section className="bg-white box-border  py-16 md:py-24">
+            <div className="box-border  max-w-screen-xl mx-auto px-6 md:px-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -98,40 +98,40 @@ export const DetailedProcessSection = () => {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
-                    className="box-border caret-transparent mt-10 md:mt-16"
+                    className="box-border  mt-10 md:mt-16"
                 >
                     {steps.map((step, index) => (
                         <motion.div
                             key={index}
                             variants={itemVariants}
-                            className="relative box-border caret-transparent mt-8 first:mt-0 md:mt-12"
+                            className="relative box-border  mt-8 first:mt-0 md:mt-12"
                         >
-                            <div className="items-start box-border caret-transparent gap-x-8 flex flex-col gap-y-6 md:gap-y-8 md:items-center md:flex-row">
-                                <div className="box-border caret-transparent shrink-0">
-                                    <div className="relative box-border caret-transparent">
-                                        <div className="items-center bg-[#111F3B] box-border caret-transparent flex h-16 w-16 md:h-20 md:w-20 justify-center rounded-full shadow-lg">
+                            <div className="items-start box-border  gap-x-8 flex flex-col gap-y-6 md:gap-y-8 md:items-center md:flex-row">
+                                <div className="box-border  shrink-0">
+                                    <div className="relative box-border ">
+                                        <div className="items-center bg-[#111F3B] box-border  flex h-16 w-16 md:h-20 md:w-20 justify-center rounded-full shadow-lg">
                                             <step.icon className="text-white w-7 h-7 md:w-8 md:h-8" />
                                         </div>
-                                        <div className="absolute items-center bg-[#C59D4F] box-border caret-transparent flex h-7 w-7 md:h-8 md:w-8 justify-center rounded-full -right-1 -top-1 md:-right-2 md:-top-2 border-2 border-white shadow-sm">
-                                            <span className="text-white text-xs md:text-sm font-bold box-border caret-transparent block leading-5">
+                                        <div className="absolute items-center bg-[#C59D4F] box-border  flex h-7 w-7 md:h-8 md:w-8 justify-center rounded-full -right-1 -top-1 md:-right-2 md:-top-2 border-2 border-white shadow-sm">
+                                            <span className="text-white text-xs md:text-sm font-bold box-border  block leading-5">
                                                 {step.stepNumber}
                                             </span>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="box-border caret-transparent basis-[0%] grow w-full">
-                                    <div className="bg-[#F8FAFC] box-border caret-transparent p-6 md:p-8 rounded-2xl border border-slate-100 shadow-sm transition-all duration-300 hover:shadow-md">
-                                        <div className="[align-items:normal] box-border caret-transparent flex flex-col justify-normal mb-4 md:mb-6 md:items-start md:flex-row md:justify-between">
-                                            <div className="box-border caret-transparent">
-                                                <h3 className="text-[#111F3B] text-xl md:text-2xl font-bold box-border caret-transparent leading-8 mb-2 font-inter">
+                                <div className="box-border  basis-[0%] grow w-full">
+                                    <div className="bg-[#F8FAFC] box-border  p-6 md:p-8 rounded-2xl border border-slate-100 shadow-sm transition-all duration-300 hover:shadow-md">
+                                        <div className="[align-items:normal] box-border  flex flex-col justify-normal mb-4 md:mb-6 md:items-start md:flex-row md:justify-between">
+                                            <div className="box-border ">
+                                                <h3 className="text-[#111F3B] text-xl md:text-2xl font-bold box-border  leading-8 mb-2 font-inter">
                                                     {step.title}
                                                 </h3>
-                                                <p className="text-slate-600 text-base md:text-lg box-border caret-transparent leading-relaxed md:leading-[29.25px] max-w-2xl">
+                                                <p className="text-slate-600 text-base md:text-lg box-border  leading-relaxed md:leading-[29.25px] max-w-2xl">
                                                     {step.description}
                                                 </p>
                                             </div>
-                                            <div className="box-border caret-transparent mt-4 md:mt-0">
-                                                <div className="text-white text-[10px] md:text-xs font-bold bg-[#C59D4F] box-border caret-transparent leading-5 text-nowrap px-3 md:px-4 py-1.5 rounded-full uppercase tracking-wider">
+                                            <div className="box-border  mt-4 md:mt-0">
+                                                <div className="text-white text-[10px] md:text-xs font-bold bg-[#C59D4F] box-border  leading-5 text-nowrap px-3 md:px-4 py-1.5 rounded-full uppercase tracking-wider">
                                                     {step.duration.match(/[0-9]/) ? (
                                                         <Counter value={step.duration} />
                                                     ) : (
@@ -140,11 +140,11 @@ export const DetailedProcessSection = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="box-border caret-transparent gap-x-8 grid grid-cols-1 md:grid-cols-2 gap-y-3 md:gap-y-4">
+                                        <div className="box-border  gap-x-8 grid grid-cols-1 md:grid-cols-2 gap-y-3 md:gap-y-4">
                                             {step.items.map((item, i) => (
-                                                <div key={i} className="items-center box-border caret-transparent flex">
-                                                    <div className="bg-[#C59D4F] box-border caret-transparent shrink-0 h-1.5 w-1.5 md:h-2 md:w-2 rounded-full"></div>
-                                                    <span className="text-slate-700 text-xs md:text-sm font-medium box-border caret-transparent block leading-5 ml-3">
+                                                <div key={i} className="items-center box-border  flex">
+                                                    <div className="bg-[#C59D4F] box-border  shrink-0 h-1.5 w-1.5 md:h-2 md:w-2 rounded-full"></div>
+                                                    <span className="text-slate-700 text-xs md:text-sm font-medium box-border  block leading-5 ml-3">
                                                         {item}
                                                     </span>
                                                 </div>
@@ -154,7 +154,7 @@ export const DetailedProcessSection = () => {
                                 </div>
                             </div>
                             {index < steps.length - 1 && (
-                                <div className="box-border caret-transparent absolute bg-slate-200 hidden h-12 w-[2px] left-10 top-20 md:block"></div>
+                                <div className="box-border  absolute bg-slate-200 hidden h-12 w-[2px] left-10 top-20 md:block"></div>
                             )}
                         </motion.div>
                     ))}
@@ -165,22 +165,22 @@ export const DetailedProcessSection = () => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.8 }}
                     viewport={{ once: true }}
-                    className="box-border caret-transparent text-center mt-16 md:mt-24"
+                    className="box-border  text-center mt-16 md:mt-24"
                 >
-                    <div className="text-white bg-[#111F3B] box-border caret-transparent p-6 md:p-12 rounded-3xl shadow-xl relative overflow-hidden">
+                    <div className="text-white bg-[#111F3B] box-border  p-6 md:p-12 rounded-3xl shadow-xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32"></div>
                         <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24"></div>
 
                         <div className="relative z-10">
-                            <h3 className="text-2xl md:text-3xl font-bold box-border caret-transparent leading-tight mb-4 font-inter">
+                            <h3 className="text-2xl md:text-3xl font-bold box-border  leading-tight mb-4 font-inter">
                                 Ready to Start Your Application?
                             </h3>
-                            <p className="text-white/80 text-base md:text-lg box-border caret-transparent max-w-2xl mb-8 md:mb-10 mx-auto">
+                            <p className="text-white/80 text-base md:text-lg box-border  max-w-2xl mb-8 md:mb-10 mx-auto">
                                 Join thousands of satisfied customers who have successfully obtained
                                 loans through our platform. Start your application today and get
                                 approved quickly.
                             </p>
-                            <Link to="/apply-now" className="font-bold bg-[#C59D4F] hover:bg-[#B38C3D] transition-all duration-300 transform hover:scale-105 caret-transparent text-nowrap px-8 md:px-10 py-3 md:py-4 rounded-xl shadow-lg cursor-pointer text-base md:text-lg">
+                            <Link to="/apply-now" className="font-bold bg-[#C59D4F] hover:bg-[#B38C3D] transition-all duration-300 transform hover:scale-105  text-nowrap px-8 md:px-10 py-3 md:py-4 rounded-xl shadow-lg cursor-pointer text-base md:text-lg">
                                 Start Application Now
                             </Link>
                         </div>

@@ -7,7 +7,7 @@ import { ComplianceSection } from "../components/ComplianceSection";
 
 export const About = () => {
     return (
-        <main className="box-border caret-transparent pt-20">
+        <main className="box-border  pt-20">
             <AboutHero />
             <VisionMissionSection />
             <TimelineSection />

@@ -36,24 +36,24 @@ export const TimelineSection = () => {
     ];
 
     return (
-        <section className="bg-white box-border caret-transparent py-20">
-            <div className="box-border caret-transparent max-w-screen-xl mx-auto px-4 sm:px-8">
+        <section className="bg-white box-border  py-20">
+            <div className="box-border  max-w-screen-xl mx-auto px-4 sm:px-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
-                    className="box-border caret-transparent text-center mb-16"
+                    className="box-border  text-center mb-16"
                 >
-                    <h2 className="text-slate-900 text-3xl sm:text-4xl font-bold box-border caret-transparent leading-10 mb-4 font-inter">
+                    <h2 className="text-slate-900 text-3xl sm:text-4xl font-bold box-border  leading-10 mb-4 font-inter">
                         Our Journey
                     </h2>
-                    <p className="text-gray-400 text-base sm:text-lg box-border caret-transparent leading-7 max-w-2xl mx-auto">
+                    <p className="text-gray-400 text-base sm:text-lg box-border  leading-7 max-w-2xl mx-auto">
                         Key milestones that have shaped our growth and commitment to
                         excellence
                     </p>
                 </motion.div>
-                <div className="relative box-border caret-transparent">
+                <div className="relative box-border ">
                     {/* Vertical line - hidden on mobile, center on desktop */}
                     <div className="absolute hidden md:block bg-slate-700 h-full left-1/2 -translate-x-1/2 w-px"></div>
                     {/* Vertical line - mobile only, left side */}

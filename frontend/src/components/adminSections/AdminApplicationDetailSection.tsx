@@ -127,26 +127,26 @@ export const AdminApplicationDetailSection = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="flex flex-col md:flex-row md:items-center justify-between gap-4"
             >
-                <div className="items-center box-border caret-transparent flex">
+                <div className="items-center box-border  flex">
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => navigate("/admin/applications")}
-                        className="bg-white border border-gray-300 caret-transparent block text-center p-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer shadow-sm"
+                        className="bg-white border border-gray-300  block text-center p-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer shadow-sm"
                     >
                         <i className="ri-arrow-left-line text-gray-600 text-xl font-remixicon"></i>
                     </motion.button>
-                    <div className="box-border caret-transparent ml-4">
-                        <h2 className="text-slate-900 text-2xl font-bold box-border caret-transparent leading-8 font-inter">
+                    <div className="box-border  ml-4">
+                        <h2 className="text-slate-900 text-2xl font-bold box-border  leading-8 font-inter">
                             Application Details
                         </h2>
-                        <p className="text-gray-600 box-border caret-transparent mt-1 font-inter uppercase">
+                        <p className="text-gray-600 box-border  mt-1 font-inter uppercase">
                             ID: {id?.slice(-8) || "N/A"} • {application?.firstName} {application?.lastName}
                         </p>
                     </div>
                 </div>
                 {/* StatusAndActions */}
-                <div className="items-center box-border caret-transparent flex gap-3">
+                <div className="items-center box-border  flex gap-3">
                     <button
                         onClick={handleDownloadReport}
                         className="text-white text-sm font-semibold bg-[#C59D4F] px-4 py-2 rounded-lg hover:bg-[#B38C3D] transition-colors cursor-pointer font-inter shadow-sm flex items-center"
@@ -157,7 +157,7 @@ export const AdminApplicationDetailSection = () => {
                     <select
                         value={application?.status || "Under Review"}
                         onChange={(e) => handleStatusUpdate(e.target.value)}
-                        className="text-sm bg-white caret-transparent block leading-[normal] border border-gray-300 px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-[#C59D4F] font-inter transition-all cursor-pointer"
+                        className="text-sm bg-white  block leading-[normal] border border-gray-300 px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-[#C59D4F] font-inter transition-all cursor-pointer"
                     >
                         <option value="Under Review">Under Review</option>
                         <option value="Document Pending">Document Pending</option>
@@ -179,36 +179,36 @@ export const AdminApplicationDetailSection = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.3 }}
-                        className="bg-white box-border caret-transparent border border-gray-200 p-6 rounded-xl border-solid shadow-sm"
+                        className="bg-white box-border  border border-gray-200 p-6 rounded-xl border-solid shadow-sm"
                     >
-                        <div className="box-border caret-transparent gap-x-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-6">
-                            <div className="box-border caret-transparent">
+                        <div className="box-border  gap-x-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-6">
+                            <div className="box-border ">
                                 <div className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1 font-inter">
                                     Loan Amount
                                 </div>
-                                <div className="text-slate-900 text-2xl font-bold box-border caret-transparent font-inter">
+                                <div className="text-slate-900 text-2xl font-bold box-border  font-inter">
                                     ₹{new Intl.NumberFormat('en-IN').format(application?.loanAmount || 0)}
                                 </div>
                             </div>
-                            <div className="box-border caret-transparent">
+                            <div className="box-border ">
                                 <div className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1 font-inter">
                                     Loan Type
                                 </div>
-                                <div className="text-slate-900 text-lg font-semibold box-border caret-transparent font-inter capitalize">
+                                <div className="text-slate-900 text-lg font-semibold box-border  font-inter capitalize">
                                     {application?.loanType || "N/A"}
                                 </div>
                             </div>
-                            <div className="box-border caret-transparent">
+                            <div className="box-border ">
                                 <div className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1 font-inter">
                                     Current Status
                                 </div>
                                 <div>
-                                    <span className={`${getStatusClass(application?.status)} text-xs font-bold box-border caret-transparent inline-flex leading-none px-3 py-1.5 rounded-full uppercase tracking-wider font-inter`}>
+                                    <span className={`${getStatusClass(application?.status)} text-xs font-bold box-border  inline-flex leading-none px-3 py-1.5 rounded-full uppercase tracking-wider font-inter`}>
                                         {application?.status || "N/A"}
                                     </span>
                                 </div>
                             </div>
-                            <div className="box-border caret-transparent">
+                            <div className="box-border ">
                                 <div className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1 font-inter">
                                     Assigned To
                                 </div>
@@ -216,7 +216,7 @@ export const AdminApplicationDetailSection = () => {
                                     <div className="h-7 w-7 rounded-full bg-slate-100 flex items-center justify-center mr-2">
                                         <i className="ri-user-line text-slate-500 text-sm"></i>
                                     </div>
-                                    <span className="text-slate-900 text-base font-semibold box-border caret-transparent font-inter">
+                                    <span className="text-slate-900 text-base font-semibold box-border  font-inter">
                                         {application?.assignedTo || "Unassigned"}
                                     </span>
                                 </div>
@@ -261,12 +261,12 @@ export const AdminApplicationDetailSection = () => {
                                 exit="exit"
                                 className="space-y-8"
                             >
-                                <div className="box-border caret-transparent gap-x-12 lg:gap-x-24 grid grid-cols-1 md:grid-cols-2 gap-y-10">
-                                    <div className="box-border caret-transparent">
-                                        <h3 className="text-slate-900 text-lg font-semibold box-border caret-transparent leading-7 font-inter border-b border-gray-100 pb-3 mb-5">
+                                <div className="box-border  gap-x-12 lg:gap-x-24 grid grid-cols-1 md:grid-cols-2 gap-y-10">
+                                    <div className="box-border ">
+                                        <h3 className="text-slate-900 text-lg font-semibold box-border  leading-7 font-inter border-b border-gray-100 pb-3 mb-5">
                                             Personal Details
                                         </h3>
-                                        <div className="box-border caret-transparent space-y-4">
+                                        <div className="box-border  space-y-4">
                                             {[
                                                 { label: "Full Name:", value: `${application?.firstName} ${application?.lastName}` },
                                                 { label: "Phone:", value: application?.phone },
@@ -275,18 +275,18 @@ export const AdminApplicationDetailSection = () => {
                                                 { label: "PAN Number:", value: application?.pan, className: "uppercase tracking-wider" },
                                                 { label: "Aadhar Number:", value: application?.aadhar }
                                             ].map((item, i) => (
-                                                <div key={i} className="box-border caret-transparent flex justify-between items-center group">
+                                                <div key={i} className="box-border  flex justify-between items-center group">
                                                     <span className="text-gray-500 text-sm font-medium font-inter">{item.label}</span>
                                                     <span className={`text-slate-900 font-semibold md:text-base font-inter ${item.className || ""}`}>{item.value}</span>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="box-border caret-transparent">
-                                        <h3 className="text-slate-900 text-lg font-semibold box-border caret-transparent leading-7 font-inter border-b border-gray-100 pb-3 mb-5">
+                                    <div className="box-border ">
+                                        <h3 className="text-slate-900 text-lg font-semibold box-border  leading-7 font-inter border-b border-gray-100 pb-3 mb-5">
                                             Employment Details
                                         </h3>
-                                        <div className="box-border caret-transparent space-y-4">
+                                        <div className="box-border  space-y-4">
                                             {[
                                                 { label: "Employment Type:", value: application?.employmentType, className: "capitalize" },
                                                 { label: "Company:", value: application?.companyName || "N/A" },
@@ -295,7 +295,7 @@ export const AdminApplicationDetailSection = () => {
                                                 { label: "Monthly Income:", value: `₹${new Intl.NumberFormat('en-IN').format(application?.income || 0)}` },
                                                 { label: "Existing EMI:", value: `₹${new Intl.NumberFormat('en-IN').format(application?.existingEmi || 0)}` }
                                             ].map((item, i) => (
-                                                <div key={i} className="box-border caret-transparent flex justify-between items-center">
+                                                <div key={i} className="box-border  flex justify-between items-center">
                                                     <span className="text-gray-500 text-sm font-medium font-inter">{item.label}</span>
                                                     <span className={`text-slate-900 font-semibold md:text-base font-inter ${item.className || ""}`}>{item.value}</span>
                                                 </div>
@@ -304,16 +304,16 @@ export const AdminApplicationDetailSection = () => {
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div className="box-border caret-transparent">
-                                        <h3 className="text-slate-900 text-lg font-semibold box-border caret-transparent leading-7 mb-3 font-inter border-b border-gray-100 pb-3">
+                                    <div className="box-border ">
+                                        <h3 className="text-slate-900 text-lg font-semibold box-border  leading-7 mb-3 font-inter border-b border-gray-100 pb-3">
                                             Address
                                         </h3>
                                         <p className="text-slate-700 font-medium font-inter">
                                             {application?.address}, {application?.city}, {application?.state} - {application?.pinCode}
                                         </p>
                                     </div>
-                                    <div className="box-border caret-transparent">
-                                        <h3 className="text-slate-900 text-lg font-semibold box-border caret-transparent leading-7 mb-3 font-inter border-b border-gray-100 pb-3">
+                                    <div className="box-border ">
+                                        <h3 className="text-slate-900 text-lg font-semibold box-border  leading-7 mb-3 font-inter border-b border-gray-100 pb-3">
                                             Loan Purpose
                                         </h3>
                                         <p className="text-slate-700 font-medium font-inter capitalize">
@@ -321,8 +321,8 @@ export const AdminApplicationDetailSection = () => {
                                         </p>
                                     </div>
                                 </div>
-                                <div className="box-border caret-transparent pt-8">
-                                    <h3 className="text-slate-900 text-lg font-semibold box-border caret-transparent leading-7 mb-5 font-inter border-b border-gray-100 pb-3">
+                                <div className="box-border  pt-8">
+                                    <h3 className="text-slate-900 text-lg font-semibold box-border  leading-7 mb-5 font-inter border-b border-gray-100 pb-3">
                                         Banking Information
                                     </h3>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -331,7 +331,7 @@ export const AdminApplicationDetailSection = () => {
                                             { label: "Account Number", value: application?.accountNumber },
                                             { label: "IFSC Code", value: application?.ifsc, className: "uppercase" }
                                         ].map((item, i) => (
-                                            <div key={i} className="box-border caret-transparent">
+                                            <div key={i} className="box-border ">
                                                 <span className="text-gray-500 text-xs font-semibold uppercase tracking-wider block mb-1 font-inter">{item.label}</span>
                                                 <span className={`text-slate-900 font-bold font-inter ${item.className || ""}`}>{item.value}</span>
                                             </div>

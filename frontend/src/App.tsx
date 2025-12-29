@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
@@ -25,12 +26,20 @@ function App() {
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith("/admin");
 
+  useEffect(() => {
+    // If we're not on an admin page, clear the admin session to force re-login upon return
+    if (!isAdminPage) {
+      sessionStorage.removeItem("adminToken");
+      localStorage.removeItem("adminToken"); // Clean up legacy storage if any
+    }
+  }, [isAdminPage]);
+
   return (
-    <div className="text-slate-950 text-base not-italic normal-nums font-normal accent-auto bg-white box-border caret-transparent block tracking-[normal] leading-6 list-outside list-disc pointer-events-auto text-start indent-[0px] normal-case visible border-separate font-inter">
-      <div className="box-border caret-transparent">
+    <div className="text-slate-950 text-base not-italic normal-nums font-normal accent-auto bg-white box-border block tracking-[normal] leading-6 list-outside list-disc pointer-events-auto text-start indent-[0px] normal-case visible border-separate font-inter">
+      <div className="box-border">
         <ScrollToTop />
         <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} />
-        <div className="box-border caret-transparent min-h-screen">
+        <div className="box-border min-h-screen">
           {!isAdminPage && <Header />}
           <Routes>
             <Route path="/" element={<Home />} />

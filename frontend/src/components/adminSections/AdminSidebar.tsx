@@ -36,23 +36,23 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
             ></div>
 
             {/* Sidebar Container */}
-            <div className={`fixed bg-slate-900 box-border caret-transparent h-full transition-all duration-300 ease-in-out z-50 left-0 top-0 
+            <div className={`fixed bg-slate-900 box-border  h-full transition-all duration-300 ease-in-out z-50 left-0 top-0 
                 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} 
                 ${isCollapsed ? 'md:w-20' : 'w-64'}`}
             >
                 {/* Sidebar Header */}
-                <div className={`items-center box-border caret-transparent flex h-16 justify-between md:justify-center border-slate-700 border-b border-solid px-4 md:px-0 ${isCollapsed ? 'md:px-2' : ''}`}>
+                <div className={`items-center box-border  flex h-16 justify-between md:justify-center border-slate-700 border-b border-solid px-4 md:px-0 ${isCollapsed ? 'md:px-2' : ''}`}>
                     <div
                         onClick={() => handleNav("/admin")}
-                        className="items-center box-border caret-transparent flex cursor-pointer"
+                        className="items-center box-border  flex cursor-pointer"
                     >
-                        <div className="items-center bg-[#C59D4F] box-border caret-transparent flex h-8 justify-center w-8 rounded-lg shrink-0">
-                            <span className="text-white text-sm font-bold box-border caret-transparent block leading-5">
+                        <div className="items-center bg-[#C59D4F] box-border  flex h-8 justify-center w-8 rounded-lg shrink-0">
+                            <span className="text-white text-sm font-bold box-border  block leading-5">
                                 BF
                             </span>
                         </div>
                         {(!isCollapsed || isMobileOpen) && (
-                            <span className="text-white text-lg font-semibold box-border caret-transparent block leading-7 font-inter ml-3 whitespace-nowrap">
+                            <span className="text-white text-lg font-semibold box-border  block leading-7 font-inter ml-3 whitespace-nowrap">
                                 Admin Center
                             </span>
                         )}
@@ -64,16 +64,16 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                 </div>
 
                 {/* Sidebar Nav */}
-                <nav className="box-border caret-transparent mt-6 overflow-y-auto max-h-[calc(100vh-160px)]">
+                <nav className="box-border  mt-6 overflow-y-auto max-h-[calc(100vh-160px)]">
                     {/* Dashboard Overview NavItem Inlined */}
-                    <div className="box-border caret-transparent">
+                    <div className="box-border ">
                         <div
                             onClick={() => handleNav("/admin")}
-                            className={`${isDashboard ? "text-white items-center bg-blue-950/50 box-border caret-transparent flex px-4 py-3 border-l-4 border-[#C59D4F]" : "text-gray-300 items-center box-border caret-transparent flex px-4 py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer border-l-4 border-transparent"} ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : ''}`}
+                            className={`${isDashboard ? "text-white items-center bg-blue-950/50 box-border  flex px-4 py-3 border-l-4 border-[#C59D4F]" : "text-gray-300 items-center box-border  flex px-4 py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer border-l-4 border-transparent"} ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : ''}`}
                         >
                             <i className={`text-lg transition-colors duration-200 block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ri-layout-grid-line`}></i>
                             {(!isCollapsed || isMobileOpen) && (
-                                <span className="text-sm font-medium box-border caret-transparent block basis-[0%] grow leading-5">
+                                <span className="text-sm font-medium box-border  block basis-[0%] grow leading-5">
                                     Dashboard Overview
                                 </span>
                             )}
@@ -81,23 +81,23 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                     </div>
 
                     {/* Loan Applications NavItemWithSubmenu Inlined */}
-                    <div className="box-border caret-transparent">
+                    <div className="box-border ">
                         <div
                             onClick={() => !isCollapsed && toggleSubmenu("Loan Applications")}
-                            className={`text-gray-300 items-center box-border caret-transparent flex ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : 'px-4'} py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer`}
+                            className={`text-gray-300 items-center box-border  flex ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : 'px-4'} py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer`}
                         >
-                            <i className={`text-lg box-border caret-transparent block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ri-article-line`}></i>
+                            <i className={`text-lg box-border  block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ri-article-line`}></i>
                             {(!isCollapsed || isMobileOpen) && (
                                 <>
-                                    <span className="text-sm font-medium box-border caret-transparent block basis-[0%] grow leading-5">
+                                    <span className="text-sm font-medium box-border  block basis-[0%] grow leading-5">
                                         Loan Applications
                                     </span>
-                                    <i className={`text-sm box-border caret-transparent block leading-5 font-remixicon transition-transform duration-200 ${openSubmenus.includes("Loan Applications") ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'}`}></i>
+                                    <i className={`text-sm box-border  block leading-5 font-remixicon transition-transform duration-200 ${openSubmenus.includes("Loan Applications") ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'}`}></i>
                                 </>
                             )}
                         </div>
                         {openSubmenus.includes("Loan Applications") && (!isCollapsed || isMobileOpen) && (
-                            <div className="bg-slate-800/50 box-border caret-transparent">
+                            <div className="bg-slate-800/50 box-border ">
                                 {[
                                     { label: "All Applications", icon: "ri-list-check", active: isApplications && location.search === "", path: "/admin/applications" },
                                     { label: "Under Review", icon: "ri-time-line", active: location.search.includes("status=Under Review"), path: "/admin/applications?status=Under Review" },
@@ -108,11 +108,11 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                                     <div
                                         key={sub.label}
                                         onClick={() => handleNav(sub.path)}
-                                        className={`text-gray-300 items-center box-border caret-transparent flex ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : 'pl-12 pr-4'} py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer ${sub.active ? 'text-white bg-blue-900/40' : ''}`}
+                                        className={`text-gray-300 items-center box-border  flex ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : 'pl-12 pr-4'} py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer ${sub.active ? 'text-white bg-blue-900/40' : ''}`}
                                     >
                                         <i className={`text-lg block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ${sub.icon}`}></i>
                                         {(!isCollapsed || isMobileOpen) && (
-                                            <span className="text-sm font-medium box-border caret-transparent block basis-[0%] grow leading-5">
+                                            <span className="text-sm font-medium box-border  block basis-[0%] grow leading-5">
                                                 {sub.label}
                                             </span>
                                         )}
@@ -126,14 +126,14 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                     {[
                         { label: "Staff & Permissions", icon: "ri-group-line", path: "/admin/staff-permissions" }
                     ].map((item) => (
-                        <div key={item.label} className="box-border caret-transparent">
+                        <div key={item.label} className="box-border ">
                             <div
                                 onClick={() => handleNav(item.path)}
-                                className={`text-gray-300 items-center box-border caret-transparent flex px-4 py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer border-l-4 border-transparent ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : ''}`}
+                                className={`text-gray-300 items-center box-border  flex px-4 py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer border-l-4 border-transparent ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : ''}`}
                             >
                                 <i className={`text-lg transition-colors duration-200 block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ${item.icon}`}></i>
                                 {(!isCollapsed || isMobileOpen) && (
-                                    <span className="text-sm font-medium box-border caret-transparent block basis-[0%] grow leading-5">
+                                    <span className="text-sm font-medium box-border  block basis-[0%] grow leading-5">
                                         {item.label}
                                     </span>
                                 )}
@@ -142,23 +142,23 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                     ))}
 
                     {/* Reports NavItemWithSubmenu Inlined */}
-                    <div className="box-border caret-transparent">
+                    <div className="box-border ">
                         <div
                             onClick={() => !isCollapsed && toggleSubmenu("Reports & Analytics")}
-                            className={`text-gray-300 items-center box-border caret-transparent flex ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : 'px-4'} py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer`}
+                            className={`text-gray-300 items-center box-border  flex ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : 'px-4'} py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer`}
                         >
-                            <i className={`text-lg box-border caret-transparent block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ri-bar-chart-2-line`}></i>
+                            <i className={`text-lg box-border  block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ri-bar-chart-2-line`}></i>
                             {(!isCollapsed || isMobileOpen) && (
                                 <>
-                                    <span className="text-sm font-medium box-border caret-transparent block basis-[0%] grow leading-5">
+                                    <span className="text-sm font-medium box-border  block basis-[0%] grow leading-5">
                                         Reports & Analytics
                                     </span>
-                                    <i className={`text-sm box-border caret-transparent block leading-5 font-remixicon transition-transform duration-200 ${openSubmenus.includes("Reports & Analytics") ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'}`}></i>
+                                    <i className={`text-sm box-border  block leading-5 font-remixicon transition-transform duration-200 ${openSubmenus.includes("Reports & Analytics") ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'}`}></i>
                                 </>
                             )}
                         </div>
                         {openSubmenus.includes("Reports & Analytics") && (!isCollapsed || isMobileOpen) && (
-                            <div className="bg-slate-800/50 box-border caret-transparent">
+                            <div className="bg-slate-800/50 box-border ">
                                 {[
                                     { label: "Daily Reports", icon: "ri-calendar-line", path: "/admin/reports/daily", active: location.pathname === "/admin/reports/daily" },
                                     { label: "Financial Overview", icon: "ri-pie-chart-line", path: "/admin/reports/financial", active: location.pathname === "/admin/reports/financial" },
@@ -167,11 +167,11 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                                     <div
                                         key={sub.label}
                                         onClick={() => handleNav(sub.path)}
-                                        className={`text-gray-300 items-center box-border caret-transparent flex ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : 'pl-12 pr-4'} py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer ${sub.active ? 'text-white bg-blue-900/40' : ''}`}
+                                        className={`text-gray-300 items-center box-border  flex ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : 'pl-12 pr-4'} py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer ${sub.active ? 'text-white bg-blue-900/40' : ''}`}
                                     >
                                         <i className={`text-lg block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ${sub.icon}`}></i>
                                         {(!isCollapsed || isMobileOpen) && (
-                                            <span className="text-sm font-medium box-border caret-transparent block basis-[0%] grow leading-5">
+                                            <span className="text-sm font-medium box-border  block basis-[0%] grow leading-5">
                                                 {sub.label}
                                             </span>
                                         )}
@@ -181,14 +181,14 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                         )}
                     </div>
 
-                    <div className="box-border caret-transparent">
+                    <div className="box-border ">
                         <div
                             onClick={() => handleNav("/admin/settings")}
-                            className={`text-gray-300 items-center box-border caret-transparent flex px-4 py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer border-l-4 border-transparent ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : ''}`}
+                            className={`text-gray-300 items-center box-border  flex px-4 py-3 hover:text-white hover:bg-blue-950 transition-colors duration-200 cursor-pointer border-l-4 border-transparent ${isCollapsed && !isMobileOpen ? 'justify-center px-0' : ''}`}
                         >
                             <i className={`text-lg transition-colors duration-200 block leading-none ${isCollapsed && !isMobileOpen ? 'mr-0' : 'mr-3'} ri-settings-4-line`}></i>
                             {(!isCollapsed || isMobileOpen) && (
-                                <span className="text-sm font-medium box-border caret-transparent block basis-[0%] grow leading-5">
+                                <span className="text-sm font-medium box-border  block basis-[0%] grow leading-5">
                                     System Settings
                                 </span>
                             )}
@@ -207,17 +207,17 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                 </nav>
 
                 {/* Sidebar Footer */}
-                <div className="absolute box-border caret-transparent border-slate-700 p-4 border-t border-solid bottom-0 inset-x-0 bg-slate-900">
-                    <div className={`items-center box-border caret-transparent flex ${(isCollapsed && !isMobileOpen) ? 'justify-center' : ''}`}>
-                        <div className="items-center bg-slate-700 box-border caret-transparent flex h-8 justify-center w-8 rounded-full shrink-0">
+                <div className="absolute box-border  border-slate-700 p-4 border-t border-solid bottom-0 inset-x-0 bg-slate-900">
+                    <div className={`items-center box-border  flex ${(isCollapsed && !isMobileOpen) ? 'justify-center' : ''}`}>
+                        <div className="items-center bg-slate-700 box-border  flex h-8 justify-center w-8 rounded-full shrink-0">
                             <i className="ri-user-line text-white text-sm"></i>
                         </div>
                         {(!isCollapsed || isMobileOpen) && (
-                            <div className="box-border caret-transparent ml-3 overflow-hidden">
-                                <div className="text-white text-sm font-medium box-border caret-transparent leading-5 font-inter truncate">
+                            <div className="box-border  ml-3 overflow-hidden">
+                                <div className="text-white text-sm font-medium box-border  leading-5 font-inter truncate">
                                     Admin User
                                 </div>
-                                <div className="text-gray-400 text-xs box-border caret-transparent leading-4 font-inter truncate">
+                                <div className="text-gray-400 text-xs box-border  leading-4 font-inter truncate">
                                     System Administrator
                                 </div>
                             </div>

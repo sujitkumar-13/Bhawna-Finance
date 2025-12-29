@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../apiConfig";
+import { Eye, EyeOff } from "lucide-react";
 
 // Extracting base URL for auth
 const AUTH_URL = API_BASE_URL.replace("/applications", "/auth");
@@ -11,6 +12,7 @@ const AUTH_URL = API_BASE_URL.replace("/applications", "/auth");
 export const AdminLogin = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -22,7 +24,7 @@ export const AdminLogin = () => {
             const response = await axios.post(`${AUTH_URL}/login`, { email, password });
 
             if (response.data.success) {
-                localStorage.setItem("adminToken", response.data.token);
+                sessionStorage.setItem("adminToken", response.data.token);
                 toast.success("Welcome back, Administrator!");
                 navigate("/admin");
             }
@@ -81,13 +83,20 @@ export const AdminLogin = () => {
                             <div className="relative group">
                                 <i className="ri-lock-2-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[#C59D4F] transition-colors"></i>
                                 <input
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="••••••••"
-                                    className="w-full bg-slate-900/50 border border-slate-800 text-white pl-12 pr-4 py-3.5 rounded-xl outline-none focus:ring-2 focus:ring-[#C59D4F]/50 focus:border-[#C59D4F] transition-all placeholder:text-slate-600"
+                                    className="w-full bg-slate-900/50 border border-slate-800 text-white pl-12 pr-12 py-3.5 rounded-xl outline-none focus:ring-2 focus:ring-[#C59D4F]/50 focus:border-[#C59D4F] transition-all placeholder:text-slate-600"
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-[#C59D4F] transition-colors focus:outline-none"
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
                             </div>
                         </div>
 

@@ -8,7 +8,7 @@ import { EligibilityFAQSection } from "../components/EligibilityFAQSection";
 
 export const EligibilityProcess = () => {
     return (
-        <main className="box-border caret-transparent pt-20">
+        <main className="box-border  pt-20">
             <EligibilityHero />
             <EligibilityRequirements />
             <DetailedProcessSection />

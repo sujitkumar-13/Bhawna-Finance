@@ -9,7 +9,7 @@ type AdminMainContentProps = {
 
 export const AdminMainContent = ({ isCollapsed, onToggleSidebar, onToggleMobile, children }: AdminMainContentProps) => {
     return (
-        <div className={`box-border caret-transparent transition-all duration-300 ease-in-out min-h-screen bg-gray-50 ${isCollapsed ? 'md:ml-20' : 'md:ml-64'}`}>
+        <div className={`box-border  transition-all duration-300 ease-in-out min-h-screen bg-gray-50 ${isCollapsed ? 'md:ml-20' : 'md:ml-64'}`}>
             <AdminHeader onToggle={onToggleSidebar} onToggleMobile={onToggleMobile} />
             {children}
         </div>

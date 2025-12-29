@@ -60,18 +60,18 @@ export const ProcessSection = () => {
     };
 
     return (
-        <section className="bg-slate-700 box-border caret-transparent py-20">
-            <div className="box-border caret-transparent max-w-screen-xl mx-auto px-8">
+        <section className="bg-slate-700 box-border  py-20">
+            <div className="box-border  max-w-screen-xl mx-auto px-8">
                 {/* ProcessGrid */}
-                <div className="box-border caret-transparent gap-x-16 grid grid-cols-[repeat(1,minmax(0px,1fr))] gap-y-16 md:grid-cols-[repeat(2,minmax(0px,1fr))]">
+                <div className="box-border  gap-x-16 grid grid-cols-[repeat(1,minmax(0px,1fr))] gap-y-16 md:grid-cols-[repeat(2,minmax(0px,1fr))]">
                     {/* EligibilityColumn */}
-                    <div className="box-border caret-transparent">
+                    <div className="box-border ">
                         <motion.h2
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
                             viewport={{ once: true }}
-                            className="text-white text-3xl font-bold box-border caret-transparent leading-9 mb-8 font-inter md:text-4xl md:leading-10"
+                            className="text-white text-3xl font-bold box-border  leading-9 mb-8 font-inter md:text-4xl md:leading-10"
                         >
                             Eligibility Requirements
                         </motion.h2>
@@ -80,18 +80,18 @@ export const ProcessSection = () => {
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true }}
-                            className="box-border caret-transparent"
+                            className="box-border "
                         >
                             {eligibilityRequirements.map((req, index) => (
                                 <motion.div
                                     key={index}
                                     variants={itemVariants}
-                                    className={`items-center box-border caret-transparent flex${index > 0 ? " mt-4" : ""}`}
+                                    className={`items-center box-border  flex${index > 0 ? " mt-4" : ""}`}
                                 >
-                                    <div className="items-center bg-[#C59D4F] box-border caret-transparent flex shrink-0 h-5 justify-center w-5 rounded-full">
+                                    <div className="items-center bg-[#C59D4F] box-border  flex shrink-0 h-5 justify-center w-5 rounded-full">
                                         <Check className="text-white w-3 h-3" strokeWidth={3} />
                                     </div>
-                                    <span className="text-white text-lg box-border caret-transparent block leading-7 ml-4">
+                                    <span className="text-white text-lg box-border  block leading-7 ml-4">
                                         {req}
                                     </span>
                                 </motion.div>
@@ -100,13 +100,13 @@ export const ProcessSection = () => {
                     </div>
 
                     {/* ProcessColumn */}
-                    <div className="box-border caret-transparent">
+                    <div className="box-border ">
                         <motion.h2
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
                             viewport={{ once: true }}
-                            className="text-white text-3xl font-bold box-border caret-transparent leading-9 mb-8 font-inter md:text-4xl md:leading-10"
+                            className="text-white text-3xl font-bold box-border  leading-9 mb-8 font-inter md:text-4xl md:leading-10"
                         >
                             Simple Application Process
                         </motion.h2>
@@ -115,27 +115,27 @@ export const ProcessSection = () => {
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true }}
-                            className="box-border caret-transparent"
+                            className="box-border "
                         >
                             {applicationSteps.map((step, index) => (
                                 <motion.div
                                     key={index}
                                     variants={stepVariants}
-                                    className={`items-start box-border caret-transparent flex${index > 0 ? " mt-8" : ""}`}
+                                    className={`items-start box-border  flex${index > 0 ? " mt-8" : ""}`}
                                 >
-                                    <div className="relative box-border caret-transparent">
-                                        <div className="text-white font-bold items-center bg-[#C59D4F] box-border caret-transparent flex h-10 justify-center w-10 rounded-full">
+                                    <div className="relative box-border ">
+                                        <div className="text-white font-bold items-center bg-[#C59D4F] box-border  flex h-10 justify-center w-10 rounded-full">
                                             {index + 1}
                                         </div>
                                         {index < applicationSteps.length - 1 && (
-                                            <div className="absolute bg-white/30 box-border caret-transparent h-8 translate-x-[-50.0%] w-px left-2/4 top-10"></div>
+                                            <div className="absolute bg-white/30 box-border  h-8 translate-x-[-50.0%] w-px left-2/4 top-10"></div>
                                         )}
                                     </div>
-                                    <div className="box-border caret-transparent basis-[0%] grow ml-4">
-                                        <h3 className="text-white text-lg font-semibold box-border caret-transparent leading-7 mb-2 font-inter">
+                                    <div className="box-border  basis-[0%] grow ml-4">
+                                        <h3 className="text-white text-lg font-semibold box-border  leading-7 mb-2 font-inter">
                                             {step.title}
                                         </h3>
-                                        <p className="text-white/80 text-sm box-border caret-transparent leading-[22.75px]">
+                                        <p className="text-white/80 text-sm box-border  leading-[22.75px]">
                                             {step.description}
                                         </p>
                                     </div>
@@ -151,11 +151,11 @@ export const ProcessSection = () => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
                     viewport={{ once: true }}
-                    className="box-border caret-transparent text-center mt-16"
+                    className="box-border  text-center mt-16"
                 >
                     <Link
                         to="/eligibility"
-                        className="text-white text-lg font-medium items-center bg-[#C59D4F] shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.05)_0px_1px_2px_0px] caret-transparent inline-flex h-14 justify-center leading-7 text-nowrap px-8 py-4 rounded-bl rounded-br rounded-tl rounded-tr hover:bg-[#B38C3D] hover:shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]"
+                        className="text-white text-lg font-medium items-center bg-[#C59D4F] shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.05)_0px_1px_2px_0px]  inline-flex h-14 justify-center leading-7 text-nowrap px-8 py-4 rounded-bl rounded-br rounded-tl rounded-tr hover:bg-[#B38C3D] hover:shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]"
                     >
                         Check Your Eligibility
                     </Link>

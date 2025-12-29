@@ -16,7 +16,7 @@ export const AdminApplications = () => {
     };
 
     return (
-        <div className="box-border caret-transparent bg-gray-50 min-h-screen">
+        <div className="box-border  bg-gray-50 min-h-screen">
             <AdminSidebar
                 isCollapsed={isSidebarCollapsed}
                 isMobileOpen={isMobileMenuOpen}

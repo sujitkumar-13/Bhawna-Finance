@@ -29,19 +29,19 @@ export const LoanRatesSection = () => {
     };
 
     return (
-        <section className="bg-white box-border caret-transparent py-20">
-            <div className="box-border caret-transparent max-w-screen-xl mx-auto px-8">
+        <section className="bg-white box-border  py-20">
+            <div className="box-border  max-w-screen-xl mx-auto px-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
-                    className="box-border caret-transparent text-center mb-12"
+                    className="box-border  text-center mb-12"
                 >
-                    <h2 className="text-slate-900 text-4xl font-bold box-border caret-transparent leading-10 mb-4 font-inter">
+                    <h2 className="text-slate-900 text-4xl font-bold box-border  leading-10 mb-4 font-inter">
                         Competitive Interest Rates
                     </h2>
-                    <p className="text-gray-400 text-lg box-border caret-transparent leading-7">
+                    <p className="text-gray-400 text-lg box-border  leading-7">
                         Compare our rates across different loan products
                     </p>
                 </motion.div>
@@ -50,21 +50,21 @@ export const LoanRatesSection = () => {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
-                    className="box-border caret-transparent gap-x-6 grid grid-cols-[repeat(1,minmax(0px,1fr))] gap-y-6 md:grid-cols-[repeat(4,minmax(0px,1fr))]"
+                    className="box-border  gap-x-6 grid grid-cols-[repeat(1,minmax(0px,1fr))] gap-y-6 md:grid-cols-[repeat(4,minmax(0px,1fr))]"
                 >
                     {rates.map((rate, index) => (
                         <motion.div
                             key={index}
                             variants={itemVariants}
-                            className="bg-slate-100 box-border caret-transparent text-center p-6 rounded-lg hover:shadow-lg transition-shadow duration-300"
+                            className="bg-slate-100 box-border  text-center p-6 rounded-lg hover:shadow-lg transition-shadow duration-300"
                         >
-                            <h4 className="text-slate-900 font-semibold box-border caret-transparent mb-2 font-inter">
+                            <h4 className="text-slate-900 font-semibold box-border  mb-2 font-inter">
                                 {rate.title}
                             </h4>
-                            <div className="text-[#C59D4F] text-2xl font-bold box-border caret-transparent leading-8 mb-1">
+                            <div className="text-[#C59D4F] text-2xl font-bold box-border  leading-8 mb-1">
                                 <Counter value={rate.rate} />
                             </div>
-                            <p className="text-gray-400 text-xs box-border caret-transparent leading-4">
+                            <p className="text-gray-400 text-xs box-border  leading-4">
                                 {rate.subtitle}
                             </p>
                         </motion.div>

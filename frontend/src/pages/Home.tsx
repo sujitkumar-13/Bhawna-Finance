@@ -8,7 +8,7 @@ import { CTASection } from "../components/CTASection";
 
 export const Home = () => {
     return (
-        <main className="box-border caret-transparent">
+        <main className="box-border ">
             <HeroSection />
             <StatsSection />
             <ServicesSection />
