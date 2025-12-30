@@ -304,3 +304,103 @@ exports.getApplicationById = async (req, res) => {
         });
     }
 };
+
+// Delete internal note
+exports.deleteNote = async (req, res) => {
+    try {
+        const { id, noteId } = req.params;
+
+        const application = await Application.findById(id);
+        if (!application) {
+            return res.status(404).json({
+                success: false,
+                message: 'Application not found'
+            });
+        }
+
+        // Remove the note with the given noteId
+        application.notes = application.notes.filter(note => note._id.toString() !== noteId);
+
+        const updatedApplication = await application.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Note deleted successfully',
+            data: updatedApplication
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Error deleting note',
+            error: error.message
+        });
+    }
+};
+
+// Add additional document
+exports.addDocument = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, category, url } = req.body;
+
+        const application = await Application.findById(id);
+        if (!application) {
+            return res.status(404).json({
+                success: false,
+                message: 'Application not found'
+            });
+        }
+
+        application.documents.push({
+            name,
+            category,
+            url,
+            status: 'Verified',
+            date: new Date()
+        });
+
+        const updatedApplication = await application.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Document added successfully',
+            data: updatedApplication
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Error adding document',
+            error: error.message
+        });
+    }
+};
+
+// Delete additional document
+exports.deleteDocument = async (req, res) => {
+    try {
+        const { id, docId } = req.params;
+
+        const application = await Application.findById(id);
+        if (!application) {
+            return res.status(404).json({
+                success: false,
+                message: 'Application not found'
+            });
+        }
+
+        application.documents = application.documents.filter(doc => doc._id.toString() !== docId);
+        const updatedApplication = await application.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Document deleted successfully',
+            data: updatedApplication
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Error deleting document',
+            error: error.message
+        });
+    }
+};

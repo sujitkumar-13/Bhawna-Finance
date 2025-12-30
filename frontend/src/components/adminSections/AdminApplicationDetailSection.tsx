@@ -15,6 +15,12 @@ export const AdminApplicationDetailSection = () => {
     const [noteText, setNoteText] = useState("");
     const [noteCategory, setNoteCategory] = useState("General");
     const [isSubmittingNote, setIsSubmittingNote] = useState(false);
+    const [isDocModalOpen, setIsDocModalOpen] = useState(false);
+    const [docName, setDocName] = useState("");
+    const [docCategory, setDocCategory] = useState("Aadhar Card");
+    const [isUploadingDoc, setIsUploadingDoc] = useState(false);
+    const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+    const [previewDoc, setPreviewDoc] = useState<any>(null);
 
     const fetchApplication = async () => {
         try {
@@ -68,6 +74,19 @@ export const AdminApplicationDetailSection = () => {
         }
     };
 
+    const handleDeleteNote = async (noteId: string) => {
+        try {
+            const response = await axios.delete(`${API_BASE_URL}/${id}/notes/${noteId}`);
+            if (response.data.success) {
+                toast.success("Note deleted successfully");
+                setApplication(response.data.data);
+            }
+        } catch (error) {
+            console.error("Error deleting note:", error);
+            toast.error("Failed to delete note");
+        }
+    };
+
     const handleDownloadReport = () => {
         if (!application) return;
         try {
@@ -76,6 +95,61 @@ export const AdminApplicationDetailSection = () => {
         } catch (error) {
             console.error("PDF error:", error);
             toast.error("Failed to generate report");
+        }
+    };
+
+    const handleAddDocument = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const fileInput = document.getElementById('docFile') as HTMLInputElement;
+        const file = fileInput?.files?.[0];
+
+        if (!docName || !file) {
+            toast.error("Please provide document name and select a file");
+            return;
+        }
+
+        setIsUploadingDoc(true);
+        try {
+            // Convert file to Base64
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const base64String = reader.result as string;
+
+                const response = await axios.post(`${API_BASE_URL}/${id}/documents`, {
+                    name: docName,
+                    category: docCategory,
+                    url: base64String
+                });
+
+                if (response.data.success) {
+                    toast.success("Document added successfully");
+                    setApplication(response.data.data);
+                    setIsDocModalOpen(false);
+                    setDocName("");
+                    setDocCategory("Aadhar Card");
+                }
+            };
+        } catch (error) {
+            console.error("Error uploading document:", error);
+            toast.error("Failed to upload document");
+        } finally {
+            setIsUploadingDoc(false);
+        }
+    };
+
+    const handleDeleteDocument = async (docId: string) => {
+        if (!window.confirm("Are you sure you want to delete this document?")) return;
+
+        try {
+            const response = await axios.delete(`${API_BASE_URL}/${id}/documents/${docId}`);
+            if (response.data.success) {
+                toast.success("Document deleted successfully");
+                setApplication(response.data.data);
+            }
+        } catch (error) {
+            console.error("Error deleting document:", error);
+            toast.error("Failed to delete document");
         }
     };
 
@@ -354,9 +428,11 @@ export const AdminApplicationDetailSection = () => {
                                     <motion.button
                                         whileHover={{ y: -2 }}
                                         whileTap={{ y: 0 }}
-                                        className="text-white text-sm font-semibold bg-[#C59D4F] px-4 py-2 rounded-lg hover:bg-[#B38C3D] transition-colors cursor-pointer border border-[#C59D4F] w-full md:w-auto font-inter"
+                                        onClick={() => setIsDocModalOpen(true)}
+                                        className="text-white text-sm font-semibold bg-[#C59D4F] px-4 py-2 rounded-lg hover:bg-[#B38C3D] transition-colors cursor-pointer border border-[#C59D4F] w-full md:w-auto font-inter flex items-center justify-center"
                                     >
-                                        Request Additional Documents
+                                        <i className="ri-add-line mr-2"></i>
+                                        Add Document
                                     </motion.button>
                                 </div>
                                 <div className="space-y-3">
@@ -384,18 +460,21 @@ export const AdminApplicationDetailSection = () => {
                                                     </span>
                                                     <div className="flex items-center space-x-2">
                                                         <button
-                                                            onClick={() => doc.url && window.open(doc.url, '_blank')}
+                                                            onClick={() => {
+                                                                setPreviewDoc(doc);
+                                                                setIsPreviewModalOpen(true);
+                                                            }}
                                                             title="View"
                                                             className="p-2 text-gray-500 hover:text-slate-900 hover:bg-white rounded-md transition-all shadow-sm border border-transparent hover:border-gray-200 cursor-pointer"
                                                         >
                                                             <i className="ri-eye-line text-lg"></i>
                                                         </button>
                                                         <button
-                                                            onClick={() => doc.url && window.open(doc.url, '_blank')}
-                                                            title="Download"
-                                                            className="p-2 text-gray-500 hover:text-slate-900 hover:bg-white rounded-md transition-all shadow-sm border border-transparent hover:border-gray-200 cursor-pointer"
+                                                            onClick={() => handleDeleteDocument(doc._id)}
+                                                            title="Delete"
+                                                            className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-all shadow-sm border border-transparent hover:border-red-200 cursor-pointer"
                                                         >
-                                                            <i className="ri-download-line text-lg"></i>
+                                                            <i className="ri-delete-bin-line text-lg"></i>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -476,6 +555,14 @@ export const AdminApplicationDetailSection = () => {
                                                 <p className="text-slate-700 text-sm leading-relaxed font-inter">
                                                     {note.text}
                                                 </p>
+                                                <div className="flex justify-end mt-3">
+                                                    <button
+                                                        onClick={() => handleDeleteNote(note._id)}
+                                                        className="px-4 py-1.5 bg-red-50 text-red-600 text-xs font-bold rounded-lg border border-red-100 hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-200 cursor-pointer shadow-sm"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
                                             </motion.div>
                                         ))
                                     ) : (
@@ -535,6 +622,189 @@ export const AdminApplicationDetailSection = () => {
                     </AnimatePresence>
                 </div>
             </motion.div>
+
+            {/* Add Document Modal */}
+            <AnimatePresence>
+                {isDocModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="bg-[#111F3B] p-6 text-white flex justify-between items-center">
+                                <h3 className="text-xl font-bold font-inter">Add Additional Document</h3>
+                                <button
+                                    onClick={() => setIsDocModalOpen(false)}
+                                    className="text-white/70 hover:text-white transition-colors"
+                                >
+                                    <i className="ri-close-line text-2xl"></i>
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleAddDocument} className="p-6 space-y-5">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-semibold text-slate-700 block font-inter">
+                                        Document Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={docName}
+                                        onChange={(e) => setDocName(e.target.value)}
+                                        placeholder="e.g., Aadhar Front"
+                                        className="w-full bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#C59D4F]/50 focus:border-[#C59D4F] transition-all font-inter"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-semibold text-slate-700 block font-inter">
+                                        Category
+                                    </label>
+                                    <select
+                                        value={docCategory}
+                                        onChange={(e) => setDocCategory(e.target.value)}
+                                        className="w-full bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#C59D4F]/50 focus:border-[#C59D4F] transition-all font-inter cursor-pointer"
+                                    >
+                                        <option value="Aadhar Card">Aadhar Card</option>
+                                        <option value="PAN Card">PAN Card</option>
+                                        <option value="Voter ID">Voter ID</option>
+                                        <option value="Income Proof">Income Proof</option>
+                                        <option value="Address Proof">Address Proof</option>
+                                        <option value="Employment Proof">Employment Proof</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-semibold text-slate-700 block font-inter">
+                                        Upload File
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type="file"
+                                            id="docFile"
+                                            accept="image/*,.pdf"
+                                            className="hidden"
+                                            onChange={(e) => {
+                                                const fileName = e.target.files?.[0]?.name;
+                                                const label = document.getElementById('file-label');
+                                                if (label && fileName) label.innerText = fileName;
+                                            }}
+                                            required
+                                        />
+                                        <label
+                                            htmlFor="docFile"
+                                            id="file-label"
+                                            className="w-full bg-slate-50 border border-dashed border-slate-300 px-4 py-6 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-slate-100 transition-all text-gray-500 font-inter"
+                                        >
+                                            <i className="ri-upload-cloud-2-line text-3xl mb-2 text-[#C59D4F]"></i>
+                                            <span className="text-sm">Click to choose or drag & drop</span>
+                                            <span className="text-[10px] mt-1">PDF, JPG, PNG (Max 5MB)</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div className="pt-4 flex gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsDocModalOpen(false)}
+                                        className="flex-1 px-4 py-2.5 border border-slate-200 text-slate-600 font-semibold rounded-xl hover:bg-slate-50 transition-all font-inter"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isUploadingDoc}
+                                        className="flex-1 px-4 py-2.5 bg-[#C59D4F] text-white font-bold rounded-xl hover:bg-[#B38C3D] shadow-lg shadow-[#C59D4F]/20 transition-all disabled:opacity-50 font-inter"
+                                    >
+                                        {isUploadingDoc ? (
+                                            <span className="flex items-center justify-center">
+                                                <i className="ri-loader-4-line animate-spin mr-2"></i>
+                                                Uploading...
+                                            </span>
+                                        ) : "Upload Document"}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Document Preview Modal */}
+            <AnimatePresence>
+                {isPreviewModalOpen && previewDoc && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="bg-[#111F3B] p-4 text-white flex justify-between items-center">
+                                <div className="flex items-center space-x-3">
+                                    <i className="ri-file-text-line text-xl text-[#C59D4F]"></i>
+                                    <div>
+                                        <h3 className="text-lg font-bold font-inter leading-none">{previewDoc.name}</h3>
+                                        <p className="text-white/60 text-[10px] mt-1 uppercase tracking-wider">{previewDoc.category}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <button
+                                        onClick={() => {
+                                            const link = document.createElement('a');
+                                            link.href = previewDoc.url;
+                                            link.download = previewDoc.name;
+                                            link.click();
+                                        }}
+                                        className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                                        title="Download"
+                                    >
+                                        <i className="ri-download-line text-xl"></i>
+                                    </button>
+                                    <button
+                                        onClick={() => setIsPreviewModalOpen(false)}
+                                        className="p-2 hover:bg-white/10 rounded-lg transition-colors font-bold"
+                                    >
+                                        <i className="ri-close-line text-2xl"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="flex-1 overflow-auto bg-gray-100 p-4 flex items-center justify-center">
+                                {previewDoc.url.startsWith('data:image/') ? (
+                                    <img
+                                        src={previewDoc.url}
+                                        alt={previewDoc.name}
+                                        className="max-w-full h-auto rounded-lg shadow-md"
+                                    />
+                                ) : previewDoc.url.startsWith('data:application/pdf') || previewDoc.url.includes('.pdf') ? (
+                                    <iframe
+                                        src={previewDoc.url}
+                                        className="w-full h-[70vh] rounded-lg"
+                                        title="PDF Preview"
+                                    ></iframe>
+                                ) : (
+                                    <div className="text-gray-500 font-inter">Preview not available for this file type.</div>
+                                )}
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 };

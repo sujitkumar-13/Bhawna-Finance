@@ -9,5 +9,8 @@ router.get('/stats', applicationController.getApplicationStats);
 router.get('/:id', applicationController.getApplicationById);
 router.put('/:id/status', applicationController.updateApplicationStatus);
 router.post('/:id/notes', applicationController.addNote);
+router.delete('/:id/notes/:noteId', applicationController.deleteNote);
+router.post('/:id/documents', applicationController.addDocument);
+router.delete('/:id/documents/:docId', applicationController.deleteDocument);
 
 module.exports = router;
