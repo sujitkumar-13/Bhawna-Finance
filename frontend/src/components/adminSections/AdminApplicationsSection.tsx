@@ -169,15 +169,6 @@ export const AdminApplicationsSection = () => {
                         Review and process incoming loan requests
                     </p>
                 </div>
-                <div className="flex items-center space-x-3">
-                    <button className="flex-1 sm:flex-none text-slate-700 font-semibold bg-white border border-slate-300 px-5 py-2.5 rounded-lg hover:bg-slate-50 transition-all flex items-center justify-center shadow-sm">
-                        <i className="ri-download-2-line mr-2"></i>
-                        Export Data
-                    </button>
-                    <button className="flex-1 sm:flex-none text-white font-semibold bg-[#C59D4F] px-5 py-2.5 rounded-lg hover:bg-[#B38C3D] transition-all shadow-md shadow-[#C59D4F]/10">
-                        Bulk Actions
-                    </button>
-                </div>
             </motion.div>
 
             {/* FilterSection */}
