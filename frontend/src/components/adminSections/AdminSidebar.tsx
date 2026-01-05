@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isCollapsed: boolean; isMobileOpen: boolean; onCloseMobile: () => void }) => {
     const navigate = useNavigate();
@@ -22,6 +23,12 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
     const handleNav = (path: string) => {
         navigate(path);
         onCloseMobile();
+    };
+
+    const handleLogout = () => {
+        sessionStorage.removeItem("adminToken");
+        toast.info("Logged out successfully");
+        navigate("/");
     };
 
     const isDashboard = location.pathname === "/admin";
@@ -163,17 +170,30 @@ export const AdminSidebar = ({ isCollapsed, isMobileOpen, onCloseMobile }: { isC
                 </nav>
 
                 {/* Sidebar Footer */}
-                <div className="absolute box-border  border-slate-700 p-4 border-t border-solid bottom-0 inset-x-0 bg-slate-900">
-                    <div className={`items-center box-border  flex ${(isCollapsed && !isMobileOpen) ? 'justify-center' : ''}`}>
-                        <div className="items-center bg-slate-700 box-border  flex h-8 justify-center w-8 rounded-full shrink-0">
+                <div className="absolute box-border border-slate-700 p-4 border-t border-solid bottom-0 inset-x-0 bg-slate-900">
+                    {/* Logout Item - Positioned ALWAYS above user info */}
+                    <div
+                        onClick={handleLogout}
+                        className={`text-red-400 items-center box-border flex px-4 py-2 mb-4 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors duration-200 cursor-pointer ${(isCollapsed && !isMobileOpen) ? 'justify-center px-0' : ''}`}
+                    >
+                        <i className={`text-lg transition-colors duration-200 block leading-none ${(isCollapsed && !isMobileOpen) ? 'mr-0' : 'mr-3'} ri-logout-box-line`}></i>
+                        {(!isCollapsed || isMobileOpen) && (
+                            <span className="text-sm font-medium box-border block basis-[0%] grow leading-5">
+                                Logout
+                            </span>
+                        )}
+                    </div>
+
+                    <div className={`items-center box-border flex ${(isCollapsed && !isMobileOpen) ? 'justify-center' : ''}`}>
+                        <div className="items-center bg-slate-700 box-border flex h-8 justify-center w-8 rounded-full shrink-0">
                             <i className="ri-user-line text-white text-sm"></i>
                         </div>
                         {(!isCollapsed || isMobileOpen) && (
-                            <div className="box-border  ml-3 overflow-hidden">
-                                <div className="text-white text-sm font-medium box-border  leading-5 font-inter truncate">
+                            <div className="box-border ml-3 overflow-hidden">
+                                <div className="text-white text-sm font-medium box-border leading-5 font-inter truncate">
                                     Admin User
                                 </div>
-                                <div className="text-gray-400 text-xs box-border  leading-4 font-inter truncate">
+                                <div className="text-gray-400 text-xs box-border leading-4 font-inter truncate">
                                     System Administrator
                                 </div>
                             </div>

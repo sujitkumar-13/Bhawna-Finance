@@ -3,7 +3,7 @@ import { User, Briefcase, Home, Coins, Check, ChevronRight, FileText, Car, Bike,
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useSearchParams } from "react-router-dom";
 
-const LOAN_DATA = {
+export const LOAN_DATA = {
     car: {
         title: "Car Loans",
         subtitle: "Drive your dream car with flexible financing",

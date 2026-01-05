@@ -242,15 +242,6 @@ export const AdminDashboardSection = () => {
                                         {data?.summary?.pendingCount || 0}
                                     </span>
                                 </button>
-                                <button className="items-center bg-transparent  flex justify-between text-center w-full border border-gray-200 p-3 rounded-lg border-solid hover:bg-gray-50 transition-colors group cursor-pointer">
-                                    <div className="items-center box-border  flex">
-                                        <i className="ri-bar-chart-line text-[#C59D4F] text-lg mr-3"></i>
-                                        <span className="text-slate-900 text-sm font-medium box-border  block leading-5 font-inter">
-                                            Generate Report
-                                        </span>
-                                    </div>
-                                    <i className="ri-arrow-right-s-line text-gray-400 text-lg group-hover:translate-x-1 transition-transform"></i>
-                                </button>
                             </div>
                         </motion.div>
 

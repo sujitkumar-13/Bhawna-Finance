@@ -4,33 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { API_BASE_URL } from "../apiConfig";
+import { LOAN_DATA } from "./LoanFilterSection";
 
-const LOAN_TYPES = [
-    {
-        id: "personal",
-        title: "Personal Loan",
-        rate: "Starting from 10.99%",
-        max: "Max: ₹25,00,000",
-    },
-    {
-        id: "business",
-        title: "Business Loan",
-        rate: "Starting from 12.99%",
-        max: "Max: ₹5,00,00,000",
-    },
-    {
-        id: "property",
-        title: "Loan Against Property",
-        rate: "Starting from 9.99%",
-        max: "Max: 70% of property value",
-    },
-    {
-        id: "gold",
-        title: "Gold Loan",
-        rate: "Starting from 8.99%",
-        max: "Max: 75% of gold value",
-    },
-];
+const LOAN_TYPES = Object.keys(LOAN_DATA).map(key => ({
+    id: key,
+    title: LOAN_DATA[key as keyof typeof LOAN_DATA].title,
+}));
 
 const FIELD_LABELS: Record<string, string> = {
     loanAmount: "Loan Amount",
@@ -53,6 +32,7 @@ const FIELD_LABELS: Record<string, string> = {
     designation: "Designation",
     experience: "Experience",
     income: "Monthly Income",
+    loanType: "Loan Type",
     existingEmi: "Existing EMI",
     bankName: "Bank Name",
     accountNumber: "Account Number",
@@ -60,7 +40,7 @@ const FIELD_LABELS: Record<string, string> = {
 };
 
 const DEFAULT_FORM_DATA = {
-    loanType: "personal",
+    loanType: "",
     loanAmount: "",
     tenure: "",
     purpose: "",
@@ -156,7 +136,7 @@ export const LoanApplicationFormSection = () => {
 
     const validateStep = (step: number) => {
         const requiredFields: Record<number, string[]> = {
-            1: ["loanAmount", "tenure", "purpose"],
+            1: ["loanType", "loanAmount", "tenure", "purpose"],
             2: ["firstName", "lastName", "email", "phone", "dob", "pan", "aadhar", "address", "city", "state", "pinCode"],
             3: ["employmentType", "companyName", "designation", "experience", "income", "existingEmi"],
             4: ["bankName", "accountNumber", "ifsc"]
@@ -274,34 +254,26 @@ export const LoanApplicationFormSection = () => {
                         className="space-y-6"
                     >
                         <div>
-                            <label className="text-slate-900 text-sm font-semibold block mb-4">Select Loan Type</label>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <label className="text-slate-900 text-sm font-semibold block mb-2">Select Loan Type</label>
+                            <select
+                                value={formData.loanType}
+                                onChange={(e) => updateFormData("loanType", e.target.value)}
+                                onFocus={() => clearError("loanType")}
+                                className={`w-full px-4 py-3 rounded-xl border focus:border-[#C59D4F] focus:ring-1 focus:ring-[#C59D4F] focus:outline-none text-sm bg-white transition-all appearance-none cursor-pointer ${fieldError("loanType") ? "border-red-500 bg-red-50" : "border-gray-200"}`}
+                                style={{
+                                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23C59D4F' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`,
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundPosition: 'right 1rem center',
+                                    backgroundSize: '1.25rem'
+                                }}
+                            >
+                                <option value="">Select loan type</option>
                                 {LOAN_TYPES.map((loan) => (
-                                    <motion.div
-                                        whileHover={{ y: -3 }}
-                                        whileTap={{ scale: 0.98 }}
-                                        key={loan.id}
-                                        onClick={() => updateFormData("loanType", loan.id)}
-                                        className={`p-5 rounded-xl border-2 cursor-pointer transition-all ${formData.loanType === loan.id
-                                            ? "bg-[#C59D4F]/10 border-[#C59D4F] shadow-md"
-                                            : "bg-white border-gray-100 hover:border-[#C59D4F]"
-                                            }`}
-                                    >
-                                        <div className="flex justify-between items-start">
-                                            <div>
-                                                <h4 className="font-bold text-slate-900">{loan.title}</h4>
-                                                <p className="text-[#C59D4F] font-semibold text-sm mt-1">{loan.rate}</p>
-                                                <p className="text-gray-400 text-xs mt-1">{loan.max}</p>
-                                            </div>
-                                            {formData.loanType === loan.id && (
-                                                <div className="bg-[#C59D4F] rounded-full p-1">
-                                                    <Check size={12} className="text-white" />
-                                                </div>
-                                            )}
-                                        </div>
-                                    </motion.div>
+                                    <option key={loan.id} value={loan.id}>
+                                        {loan.title}
+                                    </option>
                                 ))}
-                            </div>
+                            </select>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
                             <div>

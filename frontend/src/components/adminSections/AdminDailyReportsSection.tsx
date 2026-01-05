@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_BASE_URL } from "../../apiConfig";
 import { toast } from "react-toastify";
+import { generateApplicationPDF } from "../../utils/pdfGenerator";
 
 export const AdminDailyReportsSection = () => {
+    const navigate = useNavigate();
     const [stats, setStats] = useState({
         total: 0,
         underReview: 0,
@@ -14,6 +17,16 @@ export const AdminDailyReportsSection = () => {
     });
     const [loading, setLoading] = useState(true);
     const [todayApps, setTodayApps] = useState<any[]>([]);
+
+    const handleDownloadDocs = (app: any) => {
+        try {
+            generateApplicationPDF(app);
+            toast.success("Report downloaded successfully!");
+        } catch (error) {
+            console.error("PDF Generation error:", error);
+            toast.error("Failed to generate PDF report");
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -99,18 +112,19 @@ export const AdminDailyReportsSection = () => {
                                 <th className="px-6 py-4">Amount</th>
                                 <th className="px-6 py-4">Status</th>
                                 <th className="px-6 py-4">Time</th>
+                                <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50">
                             {loading ? (
                                 <tr>
-                                    <td colSpan={5} className="px-6 py-10 text-center">
+                                    <td colSpan={6} className="px-6 py-10 text-center">
                                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#C59D4F] mx-auto"></div>
                                     </td>
                                 </tr>
                             ) : todayApps.length === 0 ? (
                                 <tr>
-                                    <td colSpan={5} className="px-6 py-10 text-center text-gray-500">No applications received today yet.</td>
+                                    <td colSpan={6} className="px-6 py-10 text-center text-gray-500">No applications received today yet.</td>
                                 </tr>
                             ) : (
                                 todayApps.slice(0, 5).map((app) => (
@@ -131,6 +145,31 @@ export const AdminDailyReportsSection = () => {
                                         <td className="px-6 py-4 text-sm text-gray-500">
                                             {new Date(app.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
                                         </td>
+                                        <td className="px-6 py-4 text-right font-inter">
+                                            <div className="flex items-center justify-end space-x-2">
+                                                <button
+                                                    onClick={() => navigate(`/admin/applications/${app._id}`)}
+                                                    title="View Details"
+                                                    className="p-2 text-slate-600 hover:text-white hover:bg-slate-900 rounded-lg transition-all cursor-pointer shadow-sm"
+                                                >
+                                                    <i className="ri-eye-line text-lg"></i>
+                                                </button>
+                                                <button
+                                                    onClick={() => navigate(`/admin/applications/${app._id}`)}
+                                                    title="Edit"
+                                                    className="p-2 text-[#C59D4F] hover:text-white hover:bg-[#C59D4F] rounded-lg transition-all shadow-sm cursor-pointer"
+                                                >
+                                                    <i className="ri-edit-line text-lg"></i>
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDownloadDocs(app)}
+                                                    title="Download Documents"
+                                                    className="p-2 text-blue-600 hover:text-white hover:bg-blue-600 rounded-lg transition-all shadow-sm cursor-pointer"
+                                                >
+                                                    <i className="ri-download-line text-lg"></i>
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
                                 ))
                             )}
@@ -139,7 +178,12 @@ export const AdminDailyReportsSection = () => {
                 </div>
                 {todayApps.length > 5 && (
                     <div className="p-4 bg-gray-50 text-center">
-                        <button className="text-[#C59D4F] text-sm font-bold hover:underline">View All Today's Activity</button>
+                        <button
+                            onClick={() => navigate('/admin/applications')}
+                            className="text-[#C59D4F] text-sm font-bold hover:underline cursor-pointer"
+                        >
+                            View All Today's Activity
+                        </button>
                     </div>
                 )}
             </div>

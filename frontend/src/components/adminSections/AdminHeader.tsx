@@ -29,15 +29,6 @@ export const AdminHeader = ({ onToggle, onToggleMobile }: { onToggle: () => void
             {/* Header Right */}
             <div className="items-center box-border  flex">
                 <div className="flex items-center space-x-1 sm:space-x-2">
-                    {/* Inlined NotificationButton */}
-                    <div className="relative box-border ">
-                        <button className="bg-transparent  text-center p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
-                            <i className="ri-notification-3-line text-gray-600 text-xl"></i>
-                            <span className="absolute text-white text-[10px] items-center bg-red-500 box-border  flex h-4 justify-center leading-none w-4 rounded-full right-0.5 top-0.5">
-                                3
-                            </span>
-                        </button>
-                    </div>
 
                     {/* Inlined UserProfile */}
                     <div className="items-center box-border  flex border-gray-200 ml-2 md:ml-4 pl-2 md:pl-4 border-l border-solid">
