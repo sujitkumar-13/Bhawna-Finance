@@ -1,5 +1,6 @@
-import { User, Building2, Home, Coins } from "lucide-react";
+import { User, Building2, Coins, Map } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export const ServicesSection = () => {
     const services = [
@@ -7,7 +8,7 @@ export const ServicesSection = () => {
             title: "Personal Loans",
             description: "Quick approval for personal financial needs with competitive interest rates.",
             features: ["Minimal documentation", "Quick approval process", "Flexible repayment terms"],
-            linkHref: "/loan-products",
+            linkHref: "/loan-products?category=personal",
             linkText: "Learn More →",
             icon: <User className="w-6 h-6 text-slate-900 transition-colors duration-300 group-hover:text-white" />,
             iconBg: "bg-slate-100",
@@ -16,25 +17,25 @@ export const ServicesSection = () => {
             title: "Business Loans",
             description: "Fuel your business growth with tailored financing solutions.",
             features: ["Working capital loans", "Equipment financing", "Business expansion loans"],
-            linkHref: "/loan-products",
+            linkHref: "/loan-products?category=business",
             linkText: "Learn More →",
             icon: <Building2 className="w-6 h-6 text-slate-900 transition-colors duration-300 group-hover:text-white" />,
             iconBg: "bg-slate-100",
         },
         {
-            title: "Loan Against Property",
-            description: "Unlock the value of your property for various financial needs.",
-            features: ["High loan amounts", "Lower interest rates", "Longer tenure options"],
-            linkHref: "/loan-products",
+            title: "Plot Loans",
+            description: "Finance your land purchase for a secure future with easy EMI options.",
+            features: ["Easy plot financing", "Hassle-free documentation", "Competitive interest rates"],
+            linkHref: "/loan-products?category=plot",
             linkText: "Learn More →",
-            icon: <Home className="w-6 h-6 text-slate-900 transition-colors duration-300 group-hover:text-white" />,
+            icon: <Map className="w-6 h-6 text-slate-900 transition-colors duration-300 group-hover:text-white" />,
             iconBg: "bg-slate-100",
         },
         {
             title: "Gold Loans",
             description: "Instant liquidity against your gold ornaments and coins.",
             features: ["Instant approval", "Secure gold storage", "Flexible repayment"],
-            linkHref: "/loan-products",
+            linkHref: "/loan-products?category=gold",
             linkText: "Learn More →",
             icon: <Coins className="w-6 h-6 text-slate-900 transition-colors duration-300 group-hover:text-white" />,
             iconBg: "bg-slate-100",
@@ -124,14 +125,31 @@ export const ServicesSection = () => {
                                 ))}
                             </ul>
 
-                            <a
-                                href={service.linkHref}
+                            <Link
+                                to={service.linkHref}
                                 className="text-slate-900 text-sm font-bold inline-flex items-center transition-colors hover:text-[#2D4363]"
                             >
                                 {service.linkText}
-                            </a>
+                            </Link>
                         </motion.div>
                     ))}
+                </motion.div>
+
+                {/* View More Button */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                    viewport={{ once: true }}
+                    className="text-center mt-12"
+                >
+                    <Link
+                        to="/loan-products"
+                        className="inline-flex items-center px-8 py-4 bg-slate-900 text-white font-bold rounded-xl transition-all duration-300 hover:bg-slate-800 hover:shadow-lg transform hover:-translate-y-1"
+                    >
+                        View All Loan Products
+                        <span className="ml-2">→</span>
+                    </Link>
                 </motion.div>
             </div>
         </section>
