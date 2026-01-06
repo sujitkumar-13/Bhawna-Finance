@@ -1,13 +1,7 @@
 import { GallerySection } from "../components/GallerySection";
-import { useEffect } from "react";
 import { motion } from "framer-motion";
 
 export const Gallery = () => {
-    useEffect(() => {
-        window.scrollTo(0, 0);
-        document.title = "Gallery | Bhawan Finance - Our Work in Focus";
-    }, []);
-
     return (
         <main className="pt-20">
             {/* Gallery Hero Section */}
