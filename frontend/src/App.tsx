@@ -11,6 +11,7 @@ import { Gallery } from "./pages/Gallery";
 import { TrackApplication } from "./pages/TrackApplication";
 import { ApplyNow } from "./pages/ApplyNow";
 import { AdminDashboard } from "./pages/AdminDashboard";
+import { AdminInvoiceGenerator } from "./pages/AdminInvoiceGenerator";
 import { AdminApplications } from "./pages/AdminApplications";
 import { AdminApplicationDetail } from "./pages/AdminApplicationDetail";
 import { AdminDailyReports } from "./pages/AdminDailyReports";
@@ -55,6 +56,7 @@ function App() {
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/invoice-generator" element={<ProtectedRoute><AdminInvoiceGenerator /></ProtectedRoute>} />
             <Route path="/admin/applications" element={<ProtectedRoute><AdminApplications /></ProtectedRoute>} />
             <Route path="/admin/applications/:id" element={<ProtectedRoute><AdminApplicationDetail /></ProtectedRoute>} />
             <Route path="/admin/reports/daily" element={<ProtectedRoute><AdminDailyReports /></ProtectedRoute>} />
