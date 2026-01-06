@@ -1,23 +1,26 @@
 import { motion } from "framer-motion";
 import { Counter } from "./Counter";
+import amitAbout from "../assets/Amit_About.jpg";
+import Rajesh from "../assets/Rajesh.jpg";
+import sunitaAbout from "../assets/sunita_about.jpg"
 
 export const LeadershipSection = () => {
     const leaders = [
         {
             name: "Rajesh Bhawan",
-            imageUrl: "https://readdy.ai/api/search-image?query=professional%20Indian%20businessman%20in%20formal%20suit%2C%20corporate%20executive%20portrait%2C%20confident%20business%20leader%2C%20modern%20office%20background&width=300&height=400&seq=leader001&orientation=portrait",
+            imageUrl: Rajesh,
             title: "Chairman & Managing Director",
             experience: "30+ years in financial services"
         },
         {
             name: "Sunita Bhawan",
-            imageUrl: "https://readdy.ai/api/search-image?query=professional%20Indian%20businesswoman%20in%20formal%20attire%2C%20corporate%20executive%20portrait%2C%20confident%20female%20leader%2C%20modern%20office%20setting&width=300&height=400&seq=leader002&orientation=portrait",
+            imageUrl: sunitaAbout,
             title: "Executive Director",
             experience: "25+ years in operations and compliance"
         },
         {
             name: "Amit Sharma",
-            imageUrl: "https://readdy.ai/api/search-image?query=professional%20Indian%20CFO%20in%20business%20suit%2C%20finance%20executive%20portrait%2C%20corporate%20professional%2C%20modern%20office%20environment&width=300&height=400&seq=leader003&orientation=portrait",
+            imageUrl: amitAbout,
             title: "Chief Financial Officer",
             experience: "20+ years in finance and risk management"
         }

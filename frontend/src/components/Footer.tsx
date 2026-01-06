@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Logo from "../assets/logo.png"
 
 export const Footer = () => {
     return (
@@ -11,7 +12,7 @@ export const Footer = () => {
                     <div className="box-border ">
                         <img
                             alt="Bhawan Finance"
-                            src="https://c.animaapp.com/mjjkhccduLAQMw/assets/76eff229625bfb3e8a551fcf4d0cc342.png"
+                            src={Logo}
                             className="box-border  brightness-0 invert-[1] h-10 max-w-full"
                         />
                         <p className="text-white/70 text-sm box-border  leading-[22.75px] mt-4">
@@ -34,6 +35,7 @@ export const Footer = () => {
                                 { to: "/about", text: "About Us" },
                                 { to: "/loan-products", text: "Loan Products" },
                                 { to: "/eligibility", text: "Eligibility" },
+                                { to: "/gallery", text: "Gallery" },
                                 { to: "/contact", text: "Contact" },
                                 { to: "/apply-now", text: "Apply for Loan" },
                             ].map((link, index) => (

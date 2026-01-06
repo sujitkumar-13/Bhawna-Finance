@@ -37,6 +37,7 @@ export const Header = () => {
         { title: "Loan Products", path: "/loan-products" },
         { title: "Eligibility & Process", path: "/eligibility" },
         { title: "Contact & Support", path: "/contact" },
+        { title: "Gallery", path: "/gallery" },
     ];
 
     return (

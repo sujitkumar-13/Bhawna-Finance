@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import Amit from "../assets/Amit.jpg";
+import sunita from "../assets/sunita.jpg"
 
 export const TestimonialsSection = () => {
     const containerVariants = {
@@ -99,7 +101,7 @@ export const TestimonialsSection = () => {
                     <motion.div variants={itemVariants} className="relative box-border  h-70 overflow-hidden rounded-xl group shadow-sm">
                         <img
                             alt="Professional Testimonial"
-                            src="https://readdy.ai/api/search-image?query=professional%20businessman%20in%20corporate%20office%20setting%2C%20confident%20business%20person%2C%20financial%20success%2C%20modern%20office%20background%2C%20professional%20portrait&width=400&height=300&seq=test001&orientation=landscape"
+                            src={Amit}
                             className="box-border  h-full max-w-full object-cover w-full transition-transform duration-500 group-hover:scale-110"
                         />
                         <div className="absolute bg-[linear-gradient(to_top,rgba(0,0,0,0.7),rgba(0,0,0,0))] box-border  inset-0"></div>
@@ -126,7 +128,7 @@ export const TestimonialsSection = () => {
                     <motion.div variants={itemVariants} className="relative box-border  h-[400px] md:h-full overflow-hidden rounded-xl md:col-span-3 group shadow-sm">
                         <img
                             alt="Business Meeting"
-                            src="https://readdy.ai/api/search-image?query=professional%20business%20meeting%2C%20corporate%20handshake%2C%20financial%20consultation%2C%20modern%20office%20interior%2C%20business%20partnership%20success&width=600&height=200&seq=test002&orientation=landscape"
+                            src={sunita}
                             className="box-border  h-full max-w-full object-cover w-full transition-transform duration-500 group-hover:scale-105"
                         />
                         <div className="absolute bg-[linear-gradient(to_right,rgba(0,0,0,0.7),rgba(0,0,0,0))] box-border  inset-0"></div>

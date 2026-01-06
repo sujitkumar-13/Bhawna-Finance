@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Counter } from "./Counter";
+import AboutImage from "../assets/AboutImage.jpg"
 
 export const AboutHero = () => {
     return (
@@ -37,7 +38,7 @@ export const AboutHero = () => {
                     >
                         <img
                             alt="Bhawan Finance Office"
-                            src="https://public.readdy.ai/ai/img_res/2f0a5cca0d9e40995c8443fc553738a4.jpg"
+                            src={AboutImage}
                             className="shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_10px_15px_-3px,rgba(0,0,0,0.1)_0px_4px_6px_-4px] box-border  h-96 max-w-full object-cover w-full transition-transform duration-500 group-hover:scale-105"
                         />
                     </motion.div>

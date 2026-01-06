@@ -7,6 +7,7 @@ import { About } from "./pages/About";
 import { LoanProducts } from "./pages/LoanProducts";
 import { EligibilityProcess } from "./pages/EligibilityProcess";
 import { ContactSupport } from "./pages/ContactSupport";
+import { Gallery } from "./pages/Gallery";
 import { TrackApplication } from "./pages/TrackApplication";
 import { ApplyNow } from "./pages/ApplyNow";
 import { AdminDashboard } from "./pages/AdminDashboard";
@@ -25,14 +26,13 @@ import "react-toastify/dist/ReactToastify.css";
 function App() {
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith("/admin");
-  const publicRoutes = ["/", "/about", "/loan-products", "/eligibility", "/contact", "/track-application", "/apply-now"];
+  const publicRoutes = ["/", "/about", "/loan-products", "/eligibility", "/contact", "/gallery", "/track-application", "/apply-now"];
   const isPublicRoute = publicRoutes.includes(location.pathname);
 
   useEffect(() => {
-    // If we're not on an admin page, clear the admin session to force re-login upon return
     if (!isAdminPage) {
       sessionStorage.removeItem("adminToken");
-      localStorage.removeItem("adminToken"); // Clean up legacy storage if any
+      localStorage.removeItem("adminToken");
     }
   }, [isAdminPage]);
 
@@ -49,6 +49,7 @@ function App() {
             <Route path="/loan-products" element={<LoanProducts />} />
             <Route path="/eligibility" element={<EligibilityProcess />} />
             <Route path="/contact" element={<ContactSupport />} />
+            <Route path="/gallery" element={<Gallery />} />
             <Route path="/track-application" element={<TrackApplication />} />
             <Route path="/apply-now" element={<ApplyNow />} />
             {/* Admin Routes */}
@@ -56,8 +57,6 @@ function App() {
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
             <Route path="/admin/applications" element={<ProtectedRoute><AdminApplications /></ProtectedRoute>} />
             <Route path="/admin/applications/:id" element={<ProtectedRoute><AdminApplicationDetail /></ProtectedRoute>} />
-
-            {/* Admin Coming Soon Routes */}
             <Route path="/admin/reports/daily" element={<ProtectedRoute><AdminDailyReports /></ProtectedRoute>} />
             <Route path="/admin/reports/financial" element={<ProtectedRoute><AdminFinancialOverview /></ProtectedRoute>} />
             <Route path="/admin/reports/staff-performance" element={<ProtectedRoute><AdminStaffPerformance /></ProtectedRoute>} />
