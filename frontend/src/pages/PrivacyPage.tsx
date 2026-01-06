@@ -34,7 +34,7 @@ export const PrivacyPage = () => {
     ];
 
     return (
-        <div className="bg-white">
+        <main className="bg-slate-50 pt-20">
             <PageHero
                 title="Privacy Policy"
                 description="Your privacy is of paramount importance to us. This policy explains how we collect, use, and safeguard your personal information."
@@ -88,6 +88,6 @@ export const PrivacyPage = () => {
                     </motion.div>
                 </div>
             </section>
-        </div>
+        </main>
     );
 };

@@ -34,7 +34,7 @@ export const TermsPage = () => {
     ];
 
     return (
-        <div className="bg-white">
+        <main className="bg-slate-50 pt-20">
             <PageHero
                 title="Terms & Conditions"
                 description="Please read these terms carefully before using our services. They outline your rights, responsibilities, and our commitment to you."
@@ -78,6 +78,6 @@ export const TermsPage = () => {
                     </motion.div>
                 </div>
             </section>
-        </div>
+        </main>
     );
 };

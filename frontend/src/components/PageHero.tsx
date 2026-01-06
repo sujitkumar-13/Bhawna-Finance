@@ -7,7 +7,7 @@ interface PageHeroProps {
 
 export const PageHero = ({ title, description }: PageHeroProps) => {
     return (
-        <section className="relative bg-[linear-gradient(to_right_bottom,rgb(11,31,59),rgb(47,74,109))] box-border pt-32 pb-20 overflow-hidden">
+        <section className="relative bg-[linear-gradient(to_right_bottom,rgb(11,31,59),rgb(47,74,109))] box-border pt-20 pb-20 overflow-hidden">
             {/* Background elements */}
             <div className="absolute bg-[linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.1),rgba(0,0,0,0.2))] box-border inset-0"></div>
             <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -mr-48 -mt-48 blur-3xl"></div>

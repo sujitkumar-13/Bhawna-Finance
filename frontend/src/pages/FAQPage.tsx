@@ -74,7 +74,7 @@ export const FAQPage = () => {
     const allFaqs = faqs.flatMap(category => category.items);
 
     return (
-        <div className="bg-slate-50">
+        <main className="bg-slate-50 pt-20">
             <PageHero
                 title="Frequently Asked Questions"
                 description="Everything you need to know about our loans, processing, and how we can help you grow. Can't find an answer? Our team is just a call away."
@@ -163,6 +163,6 @@ export const FAQPage = () => {
                     </motion.div>
                 </div>
             </section>
-        </div>
+        </main>
     );
 };
