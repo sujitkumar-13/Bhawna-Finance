@@ -16,7 +16,7 @@ const getFlagEmoji = (countryCode: string) => {
 
 export const AdminInvoiceGeneratorSection = () => {
     const [formData, setFormData] = useState({
-        name: '',
+        receiptType: '',
         address: 'Vishwanath katra, Bhikharipur, Varanasi',
         receiptNo: '',
         date: new Date().toISOString().split('T')[0],
@@ -77,7 +77,7 @@ export const AdminInvoiceGeneratorSection = () => {
     };
 
     const validateForm = () => {
-        const required = ['receiptNo', 'mobileNo', 'receivedFrom', 'description', 'theSumOf', 'amount', 'modeOfPayment'];
+        const required = ['receiptType', 'receiptNo', 'mobileNo', 'receivedFrom', 'description', 'theSumOf', 'amount', 'modeOfPayment'];
         const newErrors = required.filter(field => !formData[field as keyof typeof formData]);
 
         if (newErrors.length > 0) {
@@ -106,6 +106,21 @@ export const AdminInvoiceGeneratorSection = () => {
 
         // Add Logo - Fixed width and height (square)
         doc.addImage(logo, 'PNG', 10, 10, 15, 15);
+
+        // Add Background Logo (Watermark) - Large, Colored and Faded
+        try {
+            const gState = new (doc as any).GState({ opacity: 0.08 });
+            doc.setGState(gState);
+            doc.addImage(logo, 'PNG', 65, 45, 80, 80);
+            doc.setGState(new (doc as any).GState({ opacity: 1.0 }));
+        } catch (e) {
+            console.warn("Watermark failed", e);
+        }
+
+        // Top-right Receipt Type Label
+        doc.setFontSize(8);
+        doc.setTextColor(100, 100, 100);
+        doc.text(formData.receiptType, 195, 15, { align: 'right' });
 
         // Header
         doc.setFontSize(24);
@@ -195,6 +210,24 @@ export const AdminInvoiceGeneratorSection = () => {
                     {/* Form Section */}
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-slate-100 max-w-2xl w-full">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2 md:col-span-2">
+                                <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                                    <Type size={16} className="text-[#C59D4F]" />
+                                    Receipt Type
+                                </label>
+                                <input
+                                    type="text"
+                                    name="receiptType"
+                                    value={formData.receiptType}
+                                    onChange={(e) => {
+                                        const val = e.target.value.replace(/[0-9]/g, '');
+                                        setFormData(prev => ({ ...prev, receiptType: val }));
+                                        if (errors.includes('receiptType')) setErrors(prev => prev.filter(err => err !== 'receiptType'));
+                                    }}
+                                    className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 outline-none transition-all ${errors.includes('receiptType') ? 'border-red-500 focus:ring-red-200 focus:border-red-500' : 'border-slate-200 focus:ring-[#C59D4F]/20 focus:border-[#C59D4F]'}`}
+                                    placeholder="e.g. OFFICIAL RECEIPT"
+                                />
+                            </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
                                     <Hash size={16} className="text-[#C59D4F]" />

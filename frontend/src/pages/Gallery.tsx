@@ -3,13 +3,23 @@ import { motion } from "framer-motion";
 
 export const Gallery = () => {
     return (
-        <main className="pt-20">
+        <motion.main
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            className="pt-20"
+        >
             {/* Gallery Hero Section */}
             <section className="bg-slate-900 py-24 md:py-32 px-6 relative overflow-hidden">
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 1.5, ease: "easeOut" }}
+                    initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
+                    animate={{ opacity: 1, scale: 1.1, rotate: 0 }}
+                    transition={{
+                        ease: "easeOut",
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        duration: 5
+                    }}
                     className="absolute top-0 right-0 w-1/2 h-full bg-[#C59D4F]/10 skew-x-12 translate-x-1/2"
                 ></motion.div>
                 <div className="max-w-screen-xl mx-auto relative z-10">
@@ -72,6 +82,6 @@ export const Gallery = () => {
                     </div>
                 </motion.div>
             </section>
-        </main>
+        </motion.main>
     );
 };
