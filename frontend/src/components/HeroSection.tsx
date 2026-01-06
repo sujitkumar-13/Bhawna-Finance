@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import homeImage from "../assets/Home1.jpg"
+import homeImage from "../assets/Gallery/image9.avif"
 
 export const HeroSection = () => {
     return (
         <section className="relative bg-white box-border  pt-32 pb-20">
             <div className="box-border  max-w-screen-xl mx-auto px-8">
                 {/* HeroContent */}
-                <div className="items-center box-border  gap-x-12 grid grid-cols-[repeat(1,minmax(0px,1fr))] gap-y-12 md:grid-cols-[repeat(2,minmax(0px,1fr))]">
+                <div className="items-center box-border gap-x-12 grid grid-cols-[repeat(1,minmax(0px,1fr))] gap-y-12 md:grid-cols-[repeat(2,minmax(0px,1fr))]">
                     {/* HeroText */}
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
@@ -53,7 +53,7 @@ export const HeroSection = () => {
                             <img
                                 alt="Professional Corporate Office"
                                 src={homeImage}
-                                className="box-border  h-96 max-w-full object-cover w-full transition-transform duration-500 hover:scale-105"
+                                className="box-border h-96 max-w-full w-full transition-transform duration-500 hover:scale-105"
                             />
                         </div>
                     </motion.div>
