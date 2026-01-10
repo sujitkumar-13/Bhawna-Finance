@@ -4,6 +4,7 @@ import { Upload, Download, Hash, Calendar, Phone, User, FileText, Type, IndianRu
 import logo from '../../assets/logo.png';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { INVOICE_API_URL } from '../../apiConfig';
 
 const getFlagEmoji = (countryCode: string) => {
     if (!countryCode) return "🌐";
@@ -129,9 +130,8 @@ export const AdminInvoiceGeneratorSection = () => {
 
         try {
             // Save to database first
-            const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-            await axios.post(`${backendUrl}/invoices`, formData);
-            toast.success("Invoice saved to history");
+            await axios.post(INVOICE_API_URL, formData);
+            toast.success("Invoice saved");
 
             const doc = new jsPDF({
                 orientation: 'landscape',
@@ -233,9 +233,32 @@ export const AdminInvoiceGeneratorSection = () => {
             doc.line(160, 130, 190, 130);
 
             doc.save(`Invoice_${formData.receiptNo || 'draft'}.pdf`);
+            resetForm();
         } catch (error) {
             console.error("Error saving/generating invoice:", error);
-            toast.error("Failed to save invoice to history");
+            toast.error("Failed to save invoice");
+        }
+    };
+
+    const resetForm = () => {
+        setFormData({
+            receiptType: '',
+            address: 'Vishwanath katra, Bhikharipur, Varanasi',
+            receiptNo: '',
+            date: new Date().toISOString().split('T')[0],
+            countryCode: 'IN',
+            phoneCode: '+91',
+            mobileNo: '',
+            receivedFrom: '',
+            description: '',
+            theSumOf: '',
+            amount: '',
+            modeOfPayment: '',
+            signature: null as string | null
+        });
+        setErrors([]);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
         }
     };
 

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { INVOICE_API_URL } from '../../apiConfig';
 import { Search, FileText, Calendar, Phone, IndianRupee, ChevronLeft, ChevronRight, Hash } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const AdminAllInvoicesSection = () => {
     const [invoices, setInvoices] = useState<any[]>([]);
@@ -13,8 +15,7 @@ export const AdminAllInvoicesSection = () => {
     const fetchInvoices = async () => {
         try {
             setLoading(true);
-            const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-            const res = await axios.get(`${backendUrl}/invoices?page=${page}&limit=10`);
+            const res = await axios.get(`${INVOICE_API_URL}?page=${page}&limit=10`);
             setInvoices(res.data.invoices);
             setTotalPages(res.data.pages);
         } catch (err) {
@@ -29,34 +30,59 @@ export const AdminAllInvoicesSection = () => {
         fetchInvoices();
     }, [page]);
 
-    const filteredInvoices = invoices.filter(invoice =>
+    const filteredInvoices = invoices.filter((invoice: any) =>
         invoice.receivedFrom.toLowerCase().includes(searchTerm.toLowerCase()) ||
         invoice.receiptNo.includes(searchTerm) ||
         invoice.mobileNo.includes(searchTerm)
     );
 
+    const containerVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.5,
+                staggerChildren: 0.05
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, x: -10 },
+        visible: { opacity: 1, x: 0 }
+    };
+
     return (
-        <div className="p-6 bg-slate-50 min-h-screen">
+        <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            className="p-6 bg-slate-50 min-h-screen"
+        >
             <div className="max-w-8xl mx-auto">
                 <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
+                    <motion.div variants={itemVariants}>
                         <h1 className="text-2xl font-bold text-slate-900">All Invoices</h1>
                         <p className="text-slate-500">View and manage history of all generated receipts</p>
-                    </div>
+                    </motion.div>
 
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                    <motion.div variants={itemVariants} className="relative group">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5 group-focus-within:text-[#C59D4F] transition-colors" />
                         <input
                             type="text"
                             placeholder="Search by name, no, or mobile..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10 pr-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#C59D4F]/20 focus:border-[#C59D4F] outline-none w-full md:w-80"
+                            className="pl-10 pr-4 py-2 border border-slate-200 rounded-xl focus:ring-4 focus:ring-[#C59D4F]/10 focus:border-[#C59D4F] outline-none w-full md:w-80 transition-all shadow-sm group-hover:shadow-md"
                         />
-                    </div>
+                    </motion.div>
                 </div>
 
-                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <motion.div
+                    variants={itemVariants}
+                    className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
+                >
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
                             <thead className="bg-slate-50 border-b border-slate-200">
@@ -70,68 +96,87 @@ export const AdminAllInvoicesSection = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
-                                {loading ? (
-                                    <tr>
-                                        <td colSpan={6} className="px-6 py-10 text-center text-slate-500">
-                                            <div className="flex flex-col items-center gap-2">
-                                                <div className="w-8 h-8 border-4 border-[#C59D4F] border-t-transparent rounded-full animate-spin"></div>
-                                                <span>Loading invoices...</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ) : filteredInvoices.length > 0 ? (
-                                    filteredInvoices.map((invoice) => (
-                                        <tr key={invoice._id} className="hover:bg-slate-50 transition-colors">
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-2 font-medium text-slate-900">
-                                                    <Hash className="w-4 h-4 text-[#C59D4F]" />
-                                                    {invoice.receiptNo}
+                                <AnimatePresence mode='wait'>
+                                    {loading ? (
+                                        <motion.tr
+                                            key="loading"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                        >
+                                            <td colSpan={6} className="px-6 py-10 text-center text-slate-500">
+                                                <div className="flex flex-col items-center gap-2">
+                                                    <div className="w-8 h-8 border-4 border-[#C59D4F] border-t-transparent rounded-full animate-spin"></div>
+                                                    <span>Loading invoices...</span>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-2 text-slate-600">
-                                                    <Calendar className="w-4 h-4 text-slate-400" />
-                                                    {new Date(invoice.date).toLocaleDateString('en-GB')}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="space-y-0.5">
-                                                    <div className="font-medium text-slate-900">{invoice.receivedFrom}</div>
-                                                    <div className="text-xs text-slate-500 flex items-center gap-1">
-                                                        <Phone className="w-3 h-3" />
-                                                        {invoice.phoneCode} {invoice.mobileNo}
+                                        </motion.tr>
+                                    ) : filteredInvoices.length > 0 ? (
+                                        filteredInvoices.map((invoice: any, index) => (
+                                            <motion.tr
+                                                key={invoice._id}
+                                                variants={itemVariants}
+                                                initial="hidden"
+                                                animate="visible"
+                                                transition={{ delay: index * 0.03 }}
+                                                whileHover={{ backgroundColor: "rgba(248, 250, 252, 1)", x: 4 }}
+                                                className="hover:bg-slate-50 transition-colors cursor-default"
+                                            >
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-2 font-medium text-slate-900">
+                                                        <Hash className="w-4 h-4 text-[#C59D4F]" />
+                                                        {invoice.receiptNo}
                                                     </div>
-                                                </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-2 text-slate-600">
+                                                        <Calendar className="w-4 h-4 text-slate-400" />
+                                                        {new Date(invoice.date).toLocaleDateString('en-GB')}
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="space-y-0.5">
+                                                        <div className="font-medium text-slate-900">{invoice.receivedFrom}</div>
+                                                        <div className="text-xs text-slate-500 flex items-center gap-1">
+                                                            <Phone className="w-3 h-3" />
+                                                            {invoice.phoneCode} {invoice.mobileNo}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-2 text-slate-600 truncate max-w-[200px]">
+                                                        <FileText className="w-4 h-4 text-slate-400 shrink-0" />
+                                                        {invoice.description}
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-1 font-semibold text-[#C59D4F]">
+                                                        <IndianRupee className="w-4 h-4" />
+                                                        {invoice.amount.toLocaleString()}
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium transition-transform hover:scale-105 inline-block ${invoice.modeOfPayment === 'UPI' ? 'bg-blue-50 text-blue-600' :
+                                                        invoice.modeOfPayment === 'Cash' ? 'bg-green-50 text-green-600' :
+                                                            'bg-orange-50 text-orange-600'
+                                                        }`}>
+                                                        {invoice.modeOfPayment}
+                                                    </span>
+                                                </td>
+                                            </motion.tr>
+                                        ))
+                                    ) : (
+                                        <motion.tr
+                                            key="empty"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                        >
+                                            <td colSpan={6} className="px-6 py-10 text-center text-slate-500">
+                                                No invoices found
                                             </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-2 text-slate-600 truncate max-w-[200px]">
-                                                    <FileText className="w-4 h-4 text-slate-400 shrink-0" />
-                                                    {invoice.description}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-1 font-semibold text-[#C59D4F]">
-                                                    <IndianRupee className="w-4 h-4" />
-                                                    {invoice.amount.toLocaleString()}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${invoice.modeOfPayment === 'UPI' ? 'bg-blue-50 text-blue-600' :
-                                                    invoice.modeOfPayment === 'Cash' ? 'bg-green-50 text-green-600' :
-                                                        'bg-orange-50 text-orange-600'
-                                                    }`}>
-                                                    {invoice.modeOfPayment}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan={6} className="px-6 py-10 text-center text-slate-500">
-                                            No invoices found
-                                        </td>
-                                    </tr>
-                                )}
+                                        </motion.tr>
+                                    )}
+                                </AnimatePresence>
                             </tbody>
                         </table>
                     </div>
@@ -142,24 +187,28 @@ export const AdminAllInvoicesSection = () => {
                             Page <span className="font-medium">{page}</span> of <span className="font-medium">{totalPages}</span>
                         </p>
                         <div className="flex gap-2">
-                            <button
-                                onClick={() => setPage(p => Math.max(1, p - 1))}
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => setPage((p: number) => Math.max(1, p - 1))}
                                 disabled={page === 1}
-                                className="p-2 border border-slate-200 rounded-lg bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                className="p-2 border border-slate-200 rounded-lg bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow"
                             >
                                 <ChevronLeft className="w-5 h-5" />
-                            </button>
-                            <button
-                                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                            </motion.button>
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => setPage((p: number) => Math.min(totalPages, p + 1))}
                                 disabled={page === totalPages}
-                                className="p-2 border border-slate-200 rounded-lg bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                className="p-2 border border-slate-200 rounded-lg bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow"
                             >
                                 <ChevronRight className="w-5 h-5" />
-                            </button>
+                            </motion.button>
                         </div>
                     </div>
-                </div>
+                </motion.div>
             </div>
-        </div>
+        </motion.div>
     );
 };
